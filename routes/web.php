@@ -1,20 +1,23 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\web\UserController;
+use App\Http\Controllers\web\ManagementController;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::middleware('auth')->group(function () {
-    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
-    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-});
 
-require __DIR__.'/auth.php';
+Route::get('management/dashboard', [ManagementController::class, 'dashboard'])->name('management.dashboard');
+
+Route::post('/user/add', [UserController::class, 'createUser'])->name('user.add');
+Route::post('/user/update', [UserController::class, 'updateUser'])->name('user.update');
+Route::post('/user/distroy', [UserController::class, 'distroyUser'])->name('user.distroy');
+Route::get('/user/list', [UserController::class, 'usersList'])->name('user.list');
+
+Route::post('/user/freeRoute', [UserController::class, 'freeRoute'])->name('user.freeRoute');
+
+
+// require __DIR__.'/auth.php';
