@@ -1,0 +1,210 @@
+
+php artisan make:model Region -m
+php artisan make:model District -m
+php artisan make:model Town -m
+php artisan make:model Role -m
+php artisan make:model Permission -m
+php artisan make:model UserOtpToken -m
+php artisan make:model UserApiToken -m
+php artisan make:model UserPermission -m
+php artisan make:model IdentityType -m
+php artisan make:model Author -m
+php artisan make:model EventType -m
+php artisan make:model Event -m
+php artisan make:model Ticket -m
+php artisan make:model UserTicket -m
+php artisan make:model EventComment -m
+php artisan make:model EventLikes -m
+php artisan make:model EventStars -m
+php artisan make:model Payment -m
+php artisan make:model Notification -m
+php artisan make:model PortraitAdvert -m
+php artisan make:model LandscapeAdvert -m
+php artisan make:model ApiRoute -m
+
+
+
+models based on the table structure you provided:
+
+    Region Model:
+
+php
+
+protected $fillable = ['name', 'status'];
+
+    District Model:
+
+php
+
+protected $fillable = ['region_id', 'name', 'status'];
+
+    Town Model:
+
+php
+
+protected $fillable = ['district_id', 'name', 'status'];
+
+    Role Model:
+
+php
+
+protected $fillable = ['title', 'description', 'status'];
+
+    Permission Model:
+
+php
+
+protected $fillable = ['title', 'role_id', 'description', 'status'];
+
+    User Model:
+
+php
+
+protected $fillable = ['name', 'email', 'password', 'key', 'verified', 'token'];
+
+    UserOTPToken Model:
+
+php
+
+protected $fillable = ['token', 'status', 'user_id'];
+
+    UserAPIToken Model:
+
+php
+
+protected $fillable = ['raw_token', 'user_id', 'hash_token', 'status'];
+
+    UserPermission Model:
+
+php
+
+protected $fillable = ['permission_id', 'user_id', 'creator_id', 'description', 'status'];
+
+    IdentityType Model:
+
+php
+
+protected $fillable = ['name', 'status'];
+
+    Author Model:
+
+php
+
+protected $fillable = [
+    'title', 'initials', 'region_id', 'district_id', 'town_id', 'first_name', 'last_name',
+    'gender', 'dob', 'phone', 'tel', 'identity_type_id', 'id_number', 'id_scan', 'email',
+    'acc_owner', 'acc_num', 'account_type', 'acc_host', 'acc_branch', 'profile', 'status',
+    'verified', 'approved'
+];
+
+    EventType Model:
+
+php
+
+protected $fillable = ['event', 'description', 'status'];
+
+    Event Model:
+
+php
+
+protected $fillable = [
+    'title', 'sub_title', 'content', 'creator_id', 'views', 'stars', 'comments', 'description',
+    'reason', 'event_type_id', 'start_date', 'end_date', 'initials', 'venue', 'banner',
+    'large_image', 'medium_image', 'small_image', 'promo_video', 'status', 'verified', 'approved'
+];
+
+    Ticket Model:
+
+php
+
+protected $fillable = ['event_id', 'price', 'total', 'remaining', 'description', 'status', 'user_id'];
+
+    UserTicket Model:
+
+php
+
+protected $fillable = ['user_id', 'event_id', 'ticket_type', 'seat', 'ticket_no', 'qr_code', 'status'];
+
+    EventComment Model:
+
+php
+
+protected $fillable = ['user_id', 'event_id', 'date', 'status'];
+
+    EventLikes Model:
+
+php
+
+protected $fillable = ['user_id', 'event_id', 'date', 'status'];
+
+    EventStars Model:
+
+php
+
+protected $fillable = ['user_id', 'event_id', 'date', 'status'];
+
+    Payment Model:
+
+php
+
+protected $fillable = ['user_id', 'event_id', 'amount', 'acc_number', 'acc_host', 'date', 'ipaddress'];
+
+    Notification Model:
+
+php
+
+protected $fillable = ['logo', 'image', 'title', 'content', 'message', 'description'];
+
+    PortraitAdvert Model:
+
+php
+
+protected $fillable = ['image', 'title', 'sub_title', 'description', 'verified', 'status'];
+
+    LandscapeAdvert Model:
+
+php
+
+protected $fillable = ['image', 'title', 'sub_title', 'description', 'verified', 'status'];
+
+    ApiRoutes Model:
+
+php
+
+protected $fillable = ['route', 'param', 'description', 'action', 'status'];
+
+
+
+
+
+
+
+
+
+
+
+public function handle(Request $request, Closure $next): Response
+    {
+        $apiKey = $request->header('apikey');
+        $userKey = $request->header('userkey');
+
+        // $decoded = base64_decode($encryptedToken);
+        // $iv = substr($decoded, 0, 8);
+        // $encryptedToken = substr($decoded, 8);
+        // $decryptedToken = openssl_decrypt($encryptedToken, 'des-cbc', $encryptionKey, 0, $iv);
+
+        if (!$apiKey || !$userKey) {
+            return response()->json(['message' => 'Missing API key or user key'], 403);
+        }
+
+        $isValid = DB::table('user_api_tokens')
+            ->where('apikey', $apiKey)
+            ->where('userkey', $userKey)
+            ->exists();
+
+        if (!$isValid) {
+            return response()->json(['message' => 'Invalid API key or user key'], 403);
+        }
+
+        return $next($request);
+    }

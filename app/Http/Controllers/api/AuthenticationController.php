@@ -71,20 +71,20 @@ class AuthenticationController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'User created successfully',
-                'token' => $userToken
+                'token' => $userToken,
+                'user' => $user,
             ], 201);
 
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
             ], 422);
         } catch (\Exception $e) {
             Log::error('User creation error: ' . $e->getMessage());
             return response()->json([
                 'success' => false,
-                'message' => 'Failed to create user. Please try again later.',
+                'message' => 'Failed to create user because: ' . json_encode($e->getMessage()),
             ], 500);
         }
     }

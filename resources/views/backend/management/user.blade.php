@@ -67,11 +67,28 @@
             </div>
             <form id="my-form" method="post" action="save_data.php" class="form-horizontal" enctype="multipart/form-data">
                 <div class="modal-body">
+                    @csrf
                     <input type="hidden" id="gottenid" />
                     <div class="row g-9">
                         <div class="col-md-12 fv-row">
                             <label class="form-label" for="username">Username</label>
                             <input type="text" id="username" class="form-control" name="username" placeholder="Enter Username"  />
+                        </div>
+                        <div class="col-md-12 fv-row">
+                            <label class="form-label" for="username">Gender</label>
+                            <input type="text" id="gender" class="form-control" name="gender" placeholder="Enter Gender"  />
+                        </div>
+                        <div class="col-md-12 fv-row">
+                            <label class="form-label" for="username">Dob</label>
+                            <input type="text" id="dob" class="form-control" name="dob" placeholder="Enter Dob"  />
+                        </div>
+                        <div class="col-md-12 fv-row">
+                            <label class="form-label" for="username">Image</label>
+                            <input type="text" id="image" class="form-control" name="image" placeholder="Enter Image"  />
+                        </div>
+                        <div class="col-md-12 fv-row">
+                            <label class="form-label" for="username">Phone</label>
+                            <input type="text" id="phone" class="form-control" name="phone" placeholder="Enter Phone" maxlength="10"  />
                         </div>
                         <div class="col-md-12 fv-row">
                             <label class="form-label" for="password">Password</label>
@@ -110,6 +127,7 @@
         var dataTable = "";
         var counter = 0;
 
+
         //calling the model to add new
         $('#btnNew').click(function() {
             $('#my-form')[0].reset();
@@ -118,7 +136,6 @@
             $('#state-view').hide();
             $('#edit-data').hide();
             $('#save-data').show();
-            $('#description').text('');
         });
 
         // Event listener for edit button
@@ -146,6 +163,7 @@
             var username = $('#username').val();
             var password = $('#password').val();
             var email = $('#email').val();
+            var csrfToken = $('meta[name="csrf-token"]').attr('content');
 
             // Check if fields are not empty
             if (!password || !username || !email) {
@@ -158,10 +176,14 @@
 
             // Create FormData object
             var formData = new FormData();
-            formData.append('_token', '{{ csrf_token() }}');
             formData.append('name', username);
             formData.append('password', password);
             formData.append('email', email);
+            formData.append('dob', $('#dob').val());
+            formData.append('gender', $('#gender').val());
+            formData.append('phone', $('#phone').val());
+            formData.append('image', $('#image').val());
+            formData.append('_token', '{{ csrf_token() }}');
 
             $.ajax({
                 type: 'POST',
@@ -177,8 +199,8 @@
                     $('#my-modal').modal('hide');
 
                     if (response.success) {
-                        // Swal.fire({ icon: 'success', title: 'Good Job', text: response.message + " Token: " + response.token + " User: " + response.user});
-                        Swal.fire({icon: 'success',title: 'Good Job', text: response.message + " Token: " + response.token + " User: " + JSON.stringify(response.user, null, 2)});
+                        // Swal.fire({ icon: 'success', title: 'Good Job', text: response.message + " Token: " + response.token});
+                        Swal.fire({icon: 'success',title: 'Good Job', text: response.message });
                     } else {
                         Swal.fire({ icon: 'error', title: 'Error', text: response.message });
                     }

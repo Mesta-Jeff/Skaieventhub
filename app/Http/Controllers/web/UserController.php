@@ -41,6 +41,8 @@ class UserController extends Controller
             $customRequest = Request::create($apiURL, 'POST', $body);
             $customRequest->headers->set('Accept', 'application/json');
             $customRequest->headers->set('Authorization', 'Bearer ' . $token);
+            $customRequest->headers->set('ApiKey', 'your_api_key_here');
+            $customRequest->headers->set('UserKey', 'your_user_key_here');
 
             $response = app()->handle($customRequest);
             $data = json_decode($response->getContent(), true);
@@ -71,9 +73,13 @@ class UserController extends Controller
     {
         // Validate the request inputs
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'password' => 'required|string|min:6',
+            'name' => ['required', 'string'],
+            'email' => ['required', 'email', 'unique:users'],
+            'password' => ['required', 'min:6'],
+            'dob' => ['required', 'string'],
+            'gender' => ['required', 'string'],
+            'phone' => ['required', 'string'],
+            'image' => ['required', 'string'],
         ]);
 
         if ($validator->fails()) {
@@ -85,11 +91,15 @@ class UserController extends Controller
         }
 
         try {
-            $apiURL = 'http://127.0.0.1:8000/api/v2/user/register';
+            $apiURL = '127.0.0.1:8000/api/v2/users/new/registration';
             $body = [
                 'name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'password' => $request->input('password'),
+                'dob' => $request->input('dob'),
+                'phone' => $request->input('phone'),
+                'image' => $request->input('image'),
+                'gender' => $request->input('gender'),
             ];
 
             $customRequest = Request::create($apiURL, 'POST', $body);
@@ -103,7 +113,7 @@ class UserController extends Controller
                     'success' => true,
                     'message' => 'User created successfully',
                     'user' => $data['user'],
-                    'token' => $data['token'],
+                    'token' => $data['apikey'],
                 ], 201);
             } else {
                 return response()->json([
@@ -119,8 +129,6 @@ class UserController extends Controller
             ], 500);
         }
     }
-
-
 
 
 

@@ -13,13 +13,24 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id')->startingValue(42000);
+            $table->foreignId('role_id')->constrained()->nullable()->onDelete('cascade');
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
+            $table->date('dob');
+            $table->string('gender', 7)->nullable();
+            $table->string('phone', 10);
             $table->string('password');
             $table->rememberToken();
+            $table->boolean('two_factor_enabled')->default(false);
+            $table->string('two_factor_pin', 6)->nullable();
+            $table->string('image', 255)->nullable();
+            $table->boolean('verified')->default(false);
+            $table->string('token', 255)->nullable();
             $table->timestamps();
         });
+
+        // 2024_05_18_044135_create_roles_table.php
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
@@ -30,6 +41,9 @@ return new class extends Migration
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
             $table->foreignId('user_id')->nullable()->index();
+            $table->date('date');
+            $table->string('time_in', 13)->nullable();
+            $table->string('time_out', 13)->nullable();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');
