@@ -11,7 +11,7 @@ class Author extends Model
         'title', 'initials', 'region_id', 'district_id', 'town_id', 'first_name', 'last_name',
         'gender', 'dob', 'phone', 'tel', 'identity_type_id', 'id_number', 'id_scan', 'email',
         'acc_owner', 'acc_num', 'account_type', 'acc_host', 'acc_branch', 'profile', 'status',
-        'verified', 'approved'
+        'verified', 'approved', 'balance'
     ];
 
 

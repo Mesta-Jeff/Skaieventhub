@@ -11,9 +11,9 @@
                     <span class="logo-lg">
                         <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt="logo">
                         <strong
-                            style="font-size: 22px; font-weight: bold; color: white; font-family: 'Segoe UI';">e</strong><span
+                            style="font-size: 22px; font-weight: bold; color: white; font-family: 'Segoe UI';">skai</strong><span
                             class="logo-lg-text-dark"
-                            style="font-family: 'Segoe UI'; color: white;">Work</span>
+                            style="font-family: 'Segoe UI'; color: white;">HUB</span>
                     </span>
                     <span class="logo-sm">
                         <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt="small logo">
@@ -25,11 +25,11 @@
                 <!-- Logo Dark -->
                 <a href="" class="logo-dark">
                     <span class="logo-lg">
-                        <img src="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}" alt="dark logo">
+                        <img src="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}" alt="dark logo" style="padding-bottom: 5px">
                         <strong
-                            style="font-size: 22px; font-weight: bold; color: #4C52A3; font-family: 'Segoe UI';">e</strong><span
+                            style="font-size: 22px; font-weight: bold; color: #04c58f; font-family: 'Segoe UI';">skai</strong><span
                             class="logo-lg-text-dark"
-                            style="font-family: 'Segoe UI'; color: #4C52A3;">Work</span>
+                            style="font-family: 'Segoe UI'; color: #04c58f;">HUB</span>
                     </span>
                     <span class="logo-sm">
                         <img src="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}" alt="small logo">

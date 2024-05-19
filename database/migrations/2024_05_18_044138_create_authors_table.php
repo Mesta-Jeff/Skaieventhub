@@ -34,6 +34,7 @@ return new class extends Migration
             $table->string('acc_host', 100)->nullable();
             $table->string('acc_branch', 100)->nullable();
             $table->string('profile')->nullable();
+            $table->decimal('balance', 8,2)->nullable();
             $table->string('status', 10)->default('Active');
             $table->boolean('verified')->default(false);
             $table->boolean('approved')->default(false);

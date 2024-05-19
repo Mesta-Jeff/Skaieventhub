@@ -7,26 +7,12 @@
                 <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt=""
                     height="25">
                 <strong
-                    style="font-size: 22px; font-weight: bold; color: white; font-family: 'Segoe UI';">e</strong><span
-                    class="logo-lg-text-dark" style="font-family: 'Segoe UI'; color: white;">Work</span>
+                    style="font-size: 22px; font-weight: bold; color: white; font-family: 'Segoe UI';">skai</strong><span
+                    class="logo-lg-text-dark" style="font-family: 'Segoe UI'; color: white;">HUB</span>
             </span>
             <span class="logo-sm">
                 <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt=""
                     height="25">
-            </span>
-        </a>
-
-        <!-- Brand Logo Dark -->
-        <a href="" class="logo logo-dark">
-            <span class="logo-lg">
-                <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt=""
-                    height="25">
-                <strong
-                    style="font-size: 22px; font-weight: bold; color: #4C52A3; font-family: 'Segoe UI';">e</strong><span
-                    class="logo-lg-text-dark" style="font-family: 'Segoe UI'; color: #4C52A3;">Work</span>
-            </span>
-            <span class="logo-sm">
-                <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt="small logo">
             </span>
         </a>
     </section>
@@ -84,21 +70,18 @@
                     <div class="collapse sidebarAccount">
                         <ul class="side-nav-second-level">
                             <li id="issue-concern"><a href="#">Issue Concern</a></li>
-                            <li id="my-days"><a href="#">My Days</a></li>
-                            <li id="my-attendance"><a href="#">My Attendance</a></li>
-                            <li id="my-payslip"><a href="#">My Payslip</a></li>
-                            <li id="print-payslip"><a href="#">Print Payslip</a></li>
+                            <li id="request-refund"><a href="#">Request Refund</a></li>
+                            <li id="enable-2fa"><a href="#">Enable 2FA</a></li>
                             <li id="my-profile"><a href="#">My Profile</a></li>
-                            <li id="approve-withdrawal"><a href="#">Approve Withdrawal</a></li>
-                            <li id="request-new-contract"><a href="#">Request New Contract</a></li>
-                            <li id="contract-statistics"><a href="#">Contract Statistics</a></li>
-                            <li id="request-leave"><a href="#">Request Leave</a></li>
-                            <li id="request-days"><a href="#">Request Days</a></li>
-                            <li id="contract-statistics-2"><a href="#">Contract Statistics</a></li>
-                            <li id="request-promotion"><a href="#">Request Promotion</a></li>
-                            <li id="request-bank-statement"><a href="#">Request Bank Statement</a>
-                            </li>
-                        </ul>
+                            <li id="cash-out"><a href="#">Cash Out</a></li>
+                            <li id="bank-statement"><a href="#">Bank Statement</a></li>
+                            <li id="live-event"><a href="#">Live Event</a></li>
+                            <li id="cast-stream"><a href="#">Cast Stream</a></li>
+                            <li id="alert-management"><a href="#">Alert Management</a></li>
+                            <li id="chat-friend"><a href="#">Chat Friend</a></li>
+                            <li id="read-policy"><a href="#">Read Policy</a></li>
+                            <li id="contact-management"><a href="#">Contact Management</a></li>
+                        </ul>                        
                     </div>
                 </li>
 
@@ -112,149 +95,110 @@
                         <ul class="side-nav-second-level">
                             <li id="view-roles"><a href="#">View Roles</a></li>
                             <li id="view-permissions"><a href="#">View Permissions</a></li>
-                            <li id="set-contract"><a href="#">Set Contract</a></li>
-                            <li id="set-payslip"><a href="#">Set Payslip</a></li>
-                            <li id="set-leave"><a href="#">Set Leave</a></li>
-                            <li id="set-leave-claims"><a href="#">Set Leave Claims</a></li>
-                            <li id="set-wage"><a href="#">Set Wage</a></li>
-                            <li id="view-groups"><a href="#">View Groups</a></li>
-                            <li id="configure-system"><a href="#">Configure System</a></li>
-
-                        </ul>
+                            <li id="view-events"><a href="#">View Events</a></li>
+                            <li id="view-tickets"><a href="#">View Tickets</a></li>
+                            <li id="view-regions"><a href="#">View Regions</a></li>
+                            <li id="view-districts"><a href="#">View Districts</a></li>
+                            <li id="view-towns"><a href="#">View Towns</a></li>
+                            <li id="view-identities"><a href="#">View Identities</a></li>
+                            <li id="view-notifications"><a href="#">View Notifications</a></li>
+                        </ul>                        
                     </div>
                 </li>
 
-                <li class="side-nav-item" id="Full-Workers">
+                <li class="side-nav-item" id="Full-Users">
                     <a data-bs-toggle="collapse" href=".sidebarUser" aria-expanded="false"
                         aria-controls="sidebarUser" class="side-nav-link">
                         <i class="uil-users-alt"></i>
-                        <span> Workers Management </span><span class="menu-arrow"></span>
+                        <span> User Management </span><span class="menu-arrow"></span>
                     </a>
                     <div class="collapse sidebarUser">
                         <ul class="side-nav-second-level">
-                            <li id="view-casual-workers"><a href="#">View Casual Workers</a></li>
-                            <li id="view-contract-workers"><a href="#">View Contract Workers</a></li>
-                            <li id="view-permanent-workers"><a href="#">View Permanent Workers</a></li>
-                            <li id="assign-worker-permission"><a href="#">Assign Worker Permission</a></li>
-                            <li id="effect-promotion"><a href="#">Effect Promotion</a></li>
-
-                        </ul>
+                            <li id="view-user"><a href="#">View Users</a></li>
+                            <li id="suspended-users"><a href="#">Suspended User</a></li>
+                            <li id="reset-password"><a href="#">Reset Password</a></li>
+                            <li id="verify-user"><a href="#">Verify User</a></li>
+                            <li id="assign-user-role"><a href="#">Assign User Role</a></li>
+                            <li id="assign-user-permission"><a href="#">Assign User Permission</a></li>
+                            <li id="remove-user-permission"><a href="#">Remove User Permission</a></li>
+                            <li id="user-logs"><a href="#">User Logs</a></li>
+                            <li id="user-event-history"><a href="#">User Event History</a></li>
+                            <li id="approve-user"><a href="#">Approve User</a></li>
+                            <li id="view-tokens"><a href="#">User Tokens</a></li>
+                            <li id="user-apikeys"><a href="#">User Apikeys</a></li>
+                            <li id="user-statistics"><a href="#">Users Statistics</a></li>
+                        </ul>                        
                     </div>
                 </li>
 
-                <li class="side-nav-item" id="Full-Contracts">
+                <li class="side-nav-item" id="Full-Events">
                     <a data-bs-toggle="collapse" href=".sidebarContract" aria-expanded="false"
                         aria-controls="sidebarContract" class="side-nav-link">
                         <i class="uil-link"></i>
-                        <span> Contract Manager</span><span class="menu-arrow"></span>
+                        <span> Event Manager</span><span class="menu-arrow"></span>
                     </a>
                     <div class="collapse sidebarContract">
                         <ul class="side-nav-second-level">
-                            <li id="sign-contract"><a href="#">Sign Contract</a></li>
-                            <li id="terminate-contract"><a href="#">Terminate Contract</a></li>
-                            <li id="pending-contract-request"><a href="#">Pending Contract Request</a></li>
-                            <li id="contract-review"><a href="#">Contract Review</a></li>
-                            <li id="batch-assignment"><a href="#">Batch Assignment</a></li>
-                            <li id="issue-contract-statement"><a href="#">Issue Contract Statement</a></li>
-                            <li id="extend-contract-individual"><a href="#">Extend Contract Individual</a></li>
-                            <li id="extend-group-contract"><a href="#">Extend Group Contract</a></li>
-
-                        </ul>
+                            <li id="view-event"><a href="#">View Event</a></li>
+                            <li id="create-event"><a href="#">Create Event</a></li>
+                            <li id="view-ticket"><a href="#">View Ticket</a></li>
+                            <li id="view-event-type"><a href="#">View Event Type</a></li>
+                            <li id="view-comments"><a href="#">View Comments</a></li>
+                            <li id="view-likes"><a href="#">View Likes</a></li>
+                            <li id="view-star"><a href="#">View Star</a></li>
+                            <li id="view-author"><a href="#">View Author</a></li>
+                            <li id="event-statistics"><a href="#">Event Statistics</a></li>
+                        </ul>                        
                     </div>
                 </li>
 
-                <li class="side-nav-item" id="Full-Requests">
+                <li class="side-nav-item" id="Full-Payments">
                     <a data-bs-toggle="collapse" href=".sidebarCrm" aria-expanded="false"
                         aria-controls="sidebarCrm" class="side-nav-link">
                         <i class="uil uil-tachometer-fast"></i>
                         <span class="badge bg-info text-white float-end">All</span>
-                        <span> Requests </span>
+                        <span> Payments </span>
                     </a>
                     <div class="collapse sidebarCrm">
                         <ul class="side-nav-second-level">
-                            <li id="attendance-list"><a href="#">Attendance list</a></li>
-                            <li id="workers-records"><a href="#">Workers Records</a></li>
-                            <li id="requested-loans"><a href="#">Requested Loans</a></li>
-                            <li id="account-minute"><a href="#">Account Minute</a></li>
-                            <li id="promotion-claims"><a href="#">Promotion Claims</a></li>
-                            <li id="leave-claims"><a href="#">Leave Claims</a></li>
-                            <li id="excuse-duties"><a href="#">Excuse Duties</a></li>
-                            <li id="requested-days"><a href="#">Requested Days</a></li>
-
-                        </ul>
+                            <li id="sold-tickets"><a href="#">Sold Tickets</a></li>
+                            <li id="view-refund"><a href="#">View Refund</a></li>
+                            <li id="view-payout"><a href="#">View Payout</a></li>
+                            <li id="approve-payout"><a href="#">Approve Payout</a></li>
+                            <li id="decline-payout"><a href="#">Decline Payout</a></li>
+                            <li id="approve-refund"><a href="#">Approve Refund</a></li>
+                            <li id="request-payout"><a href="#">Request Payout</a></li>
+                            <li id="request-refund"><a href="#">Request Refund</a></li>
+                            <li id="payment-statistics"><a href="#">Payment Statistics</a></li>
+                            <li id="credit-user"><a href="#">Credit User</a></li>
+                            <li id="initialize-payment"><a href="#">Initialize Payment</a></li>
+                            <li id="authorize-payment"><a href="#">Authorize Payment</a></li>
+                            <li id="my-approvals"><a href="#">My Approvals</a></li>
+                            <li id="pending-user-approvals"><a href="#">Pending User Approvals</a></li>
+                        </ul>                        
                     </div>
                 </li>
 
-                <li class="side-nav-item" id="Full-Leaves">
+                <li class="side-nav-item" id="Full-Configuration">
                     <a data-bs-toggle="collapse" href=".sidebarLeave" aria-expanded="false" aria-controls="sidebarLeave" class="side-nav-link">
                         <i class="uil-sliders-v-alt"></i>
-                        <span> Leave Management </span><span class="menu-arrow"></span>
+                        <span> General Confuguration </span><span class="menu-arrow"></span>
                     </a>
                     <div class="collapse sidebarLeave">
                         <ul class="side-nav-second-level">
-                            <li id="leave-requests"><a href="#">Leave Requests</a></li>
-                            <li id="requests-days"><a href="#">Requests Days</a></li>
-                            <li id="pending-leaves"><a href="#">Pending Leaves</a></li>
-                            <li id="due-leaves"><a href="#">Due Leaves</a></li>
-                            <li id="enforce-leave"><a href="#">Enforce Leave</a></li>
-                            <li id="reschedule-leave"><a href="#">Re-Schedule Leave</a></li>
-                        </ul>
+                            <li id="sms-subscribers"><a href="#">SMS Subscribers</a></li>
+                            <li id="sms"><a href="#">SMS</a></li>
+                            <li id="email"><a href="#">Email</a></li>
+                            <li id="users-concerns"><a href="#">Users Concerns</a></li>
+                            <li id="advertisements"><a href="#">Advertisements</a></li>
+                            <li id="api-routes"><a href="#">API Routes</a></li>
+                            <li id="documentations"><a href="#">Documentations</a></li>
+                            <li id="policy"><a href="#">Policy</a></li>
+                            <li id="about-us"><a href="#">About Us</a></li>
+                            <li id="messages"><a href="#">Messages</a></li>
+                        </ul>                        
                     </div>
                 </li>
-
-                <li class="side-nav-item" id="Full-Attendances">
-                    <a data-bs-toggle="collapse" href=".sidebarAttendace" aria-expanded="false" aria-controls="sidebarAttendace" class="side-nav-link">
-                        <i class="mdi mdi-barcode-scan"></i>
-                        <span> Attendance Manager </span><span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse sidebarAttendace">
-                        <ul class="side-nav-second-level">
-                            <li id="upload-attendance"><a href="#">Upload Attendance</a></li>
-                            <li id="remark-attendance"><a href="#">Remark Attendance</a></li>
-                            <li id="review-attendance"><a href="#">Review Attendance</a></li>
-                            <li id="check-days-worker"><a href="#">Check Days Worker</a></li>
-                            <li id="check-group-days"><a href="#">Check Group Days</a></li>
-                            <li id="days-claims"><a href="#">Days Claims</a></li>
-                            <li id="generate-timetable"><a href="#">Generate Timetable</a></li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="side-nav-item" id="Full-Loans">
-                    <a data-bs-toggle="collapse" href=".sidebarLoan" aria-expanded="false" aria-controls="sidebarLoan" class="side-nav-link">
-                        <i class="mdi mdi-apple-keyboard-command"></i>
-                        <span class="badge bg-info text-white float-end">Manager</span>
-                        <span> Loan </span>
-                    </a>
-                    <div class="collapse sidebarLoan">
-                        <ul class="side-nav-second-level">
-                            <li id="process-loan"><a href="#">Process Loan</a></li>
-                            <li id="approve-loan"><a href="#">Approve Loan</a></li>
-                            <li id="loan-statements"><a href="#">Loan Statements</a></li>
-                        </ul>
-                    </div>
-                </li>
-
-                <li class="side-nav-item" id="Full-Payslips">
-                    <a data-bs-toggle="collapse" href=".sidebarPayslip" aria-expanded="false" aria-controls="sidebarPayslip" class="side-nav-link">
-                        <i class="mdi mdi-cash-multiple"></i>
-                        <span> Payslip </span><span class="menu-arrow"></span>
-                    </a>
-                    <div class="collapse sidebarPayslip">
-                        <ul class="side-nav-second-level">
-                            <li id="approve-payslip"><a href="#">Approve Payslip</a></li>
-                            <li id="financial-ticket"><a href="#">Financial Ticket</a></li>
-                            <li id="generate-pincode"><a href="#">Generate Pincode</a></li>
-                            <li id="prepare-payslip"><a href="#">Prepare Payslip</a></li>
-                            <li id="release-salary"><a href="#">Release Salary</a></li>
-                            <li id="release-pincode"><a href="#">Release Pincode</a></li>
-                            <li id="verify-payslip"><a href="#">Verify Payslip</a></li>
-                            <li id="view-slip-ticket"><a href="#">View Slip Ticket</a></li>
-                            <li id="withheld-payslip"><a href="#">Withheld Payslip</a></li>
-                        </ul>
-                    </div>
-                </li>
-
 
                 <li class="side-nav-item">
                     <a href="#" class="side-nav-link">
@@ -274,7 +218,7 @@
                 </a>
                 <img src="{{ asset('root/hyp/assets/images/svg/help-icon.svg') }}" height="90"
                     alt="Helper Icon Image" />
-                <h5 class="mt-3">eWork Upgrade Plan</h5>
+                <h5 class="mt-3">{{ env('APP_NAME')}} Upgrade Plan</h5>
                 <p class="mb-3">Upgrade to plan to get access to unlimited reports</p>
                 <a href="javascript: void(0);" class="btn btn-secondary btn-sm">Approve</a>
             </div>

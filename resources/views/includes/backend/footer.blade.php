@@ -6,7 +6,7 @@
                 <p class="mb-0 text-muted">All Right Reserved. &copy; 2010 -
                     <script>
                         document.write(new Date().getFullYear())
-                    </script> <strong>eWork.</strong> Crafted with <i
+                    </script> <strong>{{ env('APP_NAME') }}</strong> Crafted with <i
                         class="mdi mdi-heart text-danger"></i> by <a href="#">SkaiMount</a>
                 </p>
             </div>

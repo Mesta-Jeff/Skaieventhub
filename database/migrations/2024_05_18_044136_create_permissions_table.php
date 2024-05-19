@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('permissions', function (Blueprint $table) {
             $table->bigIncrements('id')->startingValue(1600);
             $table->string('title', 100);
+            $table->string('keys', 100);
             $table->foreignId('role_id')->constrained()->onDelete('cascade');
             $table->text('description')->nullable();
             $table->string('status', 10)->default('Active');
