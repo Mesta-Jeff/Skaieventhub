@@ -11,79 +11,54 @@ class EndAdvertisementController extends Controller
     // Portrait Adverts
     public function viewPortraitAdvert()
     {
-        $portraitAdverts = PortraitAdvert::all();
-        return response()->json($portraitAdverts);
+        // Code to handle viewing portrait adverts
     }
 
     public function createPortraitAdvert(Request $request)
     {
-        $portraitAdvert = PortraitAdvert::create($request->only(['title', 'content', 'image_url']));
-        return response()->json($portraitAdvert, 201);
+        // Code to handle creating a portrait advert
     }
 
     public function updatePortraitAdvert(Request $request)
     {
-        $portraitAdvert = PortraitAdvert::find($request->id);
-        if ($portraitAdvert) {
-            $portraitAdvert->update($request->only(['title', 'content', 'image_url']));
-            return response()->json($portraitAdvert);
-        }
-        return response()->json(['error' => 'Portrait Advert not found'], 404);
+        // Code to handle updating a portrait advert
     }
 
     public function destroyPortraitAdvert(Request $request)
     {
-        $portraitAdvert = PortraitAdvert::find($request->id);
-        if ($portraitAdvert) {
-            $portraitAdvert->delete();
-            return response()->json(['message' => 'Portrait Advert deleted']);
-        }
-        return response()->json(['error' => 'Portrait Advert not found'], 404);
+        // Code to handle deleting a portrait advert
     }
 
-    public function sortPortraitAdvert()
+    public function getPortraitAdvert(Request $request)
     {
-        $portraitAdverts = PortraitAdvert::orderBy('title')->get();
-        return response()->json($portraitAdverts);
+        // Code to handle getting a portrait advert
     }
 
     // Landscape Adverts
     public function viewLandscapeAdvert()
     {
-        $landscapeAdverts = LandscapeAdvert::all();
-        return response()->json($landscapeAdverts);
+        // Code to handle viewing landscape adverts
     }
 
     public function createLandscapeAdvert(Request $request)
     {
-        $landscapeAdvert = LandscapeAdvert::create($request->only(['title', 'content', 'image_url']));
-        return response()->json($landscapeAdvert, 201);
+        // Code to handle creating a landscape advert
     }
 
     public function updateLandscapeAdvert(Request $request)
     {
-        $landscapeAdvert = LandscapeAdvert::find($request->id);
-        if ($landscapeAdvert) {
-            $landscapeAdvert->update($request->only(['title', 'content', 'image_url']));
-            return response()->json($landscapeAdvert);
-        }
-        return response()->json(['error' => 'Landscape Advert not found'], 404);
+        // Code to handle updating a landscape advert
     }
 
     public function destroyLandscapeAdvert(Request $request)
     {
-        $landscapeAdvert = LandscapeAdvert::find($request->id);
-        if ($landscapeAdvert) {
-            $landscapeAdvert->delete();
-            return response()->json(['message' => 'Landscape Advert deleted']);
-        }
-        return response()->json(['error' => 'Landscape Advert not found'], 404);
+        // Code to handle deleting a landscape advert
     }
 
-    public function sortLandscapeAdvert()
+    public function getLandscapeAdvert(Request $request)
     {
-        $landscapeAdverts = LandscapeAdvert::orderBy('title')->get();
-        return response()->json($landscapeAdverts);
+        // Code to handle getting a landscape advert
     }
 }
+
 

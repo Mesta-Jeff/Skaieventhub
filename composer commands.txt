@@ -211,3 +211,31 @@ protected $fillable = ['route', 'param', 'description', 'action', 'status'];
 
 
 
+php artisan make:view backend.account.issue-concern
+php artisan make:view backend.account.request-refund
+php artisan make:view backend.account.enable-2fa
+php artisan make:view backend.account.cash-out
+php artisan make:view backend.account.skai-statement
+php artisan make:view backend.account.live-event
+php artisan make:view backend.account.cast-stream
+php artisan make:view backend.account.alert-management
+php artisan make:view backend.account.chat-friend
+php artisan make:view backend.account.skai-policy
+php artisan make:view backend.account.contact-management
+
+
+
+php artisan make:view backend.configuration.sms
+php artisan make:view backend.configuration.sms-subscriptions
+php artisan make:view backend.configuration.user-concerns
+php artisan make:view backend.configuration.emails
+php artisan make:view backend.configuration.messages
+php artisan make:view backend.configuration.refunds
+php artisan make:view backend.configuration.payouts
+php artisan make:view backend.configuration.subscription
+php artisan make:view backend.configuration.event-managers
+php artisan make:view backend.configuration.subscription-packages
+
+
+
+

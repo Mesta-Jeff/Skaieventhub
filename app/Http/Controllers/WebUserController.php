@@ -8,12 +8,19 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 
+
+
+
 class WebUserController extends Controller
 {
-    //
+    // Users
+    public function showUser()
+    {
+        // Code to handle showing users
+    }
 
     //  Talking to api route encripted
-    public function createUser(Request $request)
+    public function addUser(Request $request)
     {
         // Validate the request inputs
         $validator = Validator::make($request->all(), [
@@ -131,10 +138,70 @@ class WebUserController extends Controller
         }
     }
 
-
-    public function usersList(Request $request)
+    public function modifyUser(Request $request)
     {
-        //
-        return view('backend.management.user');
+        // Code to handle modifying a user
+    }
+
+    public function removeUser(Request $request)
+    {
+        // Code to handle removing a user
+    }
+
+    public function getUser(Request $request)
+    {
+        // Code to handle getting a user
+    }
+
+    // User OTP Tokens
+    public function showUserOTPToken()
+    {
+        // Code to handle showing user OTP tokens
+    }
+
+    public function addUserOTPToken(Request $request)
+    {
+        // Code to handle adding a user OTP token
+    }
+
+    public function modifyUserOTPToken(Request $request)
+    {
+        // Code to handle modifying a user OTP token
+    }
+
+    public function removeUserOTPToken(Request $request)
+    {
+        // Code to handle removing a user OTP token
+    }
+
+    public function getUserOTPToken(Request $request)
+    {
+        // Code to handle getting a user OTP token
+    }
+
+    // User API Tokens
+    public function showUserAPIToken()
+    {
+        // Code to handle showing user API tokens
+    }
+
+    public function addUserAPIToken(Request $request)
+    {
+        // Code to handle adding a user API token
+    }
+
+    public function modifyUserAPIToken(Request $request)
+    {
+        // Code to handle modifying a user API token
+    }
+
+    public function removeUserAPIToken(Request $request)
+    {
+        // Code to handle removing a user API token
+    }
+
+    public function getUserAPIToken(Request $request)
+    {
+        // Code to handle getting a user API token
     }
 }

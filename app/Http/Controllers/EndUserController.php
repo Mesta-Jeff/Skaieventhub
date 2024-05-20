@@ -11,14 +11,13 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
+
 class EndUserController extends Controller
 {
-    //
     // Users
     public function viewUser()
     {
-        $users = User::all();
-        return response()->json($users);
+        // Code to handle viewing users
     }
 
     //Open route to create user
@@ -63,20 +62,19 @@ class EndUserController extends Controller
             DB::commit();
 
             return response()->json([
-                'success'=> true,
-                'message'=> 'User Account has been created successfully',
+                'success' => true,
+                'message' => 'User Account has been created successfully',
             ], 201);
-
         } catch (ValidationException $e) {
             DB::rollBack();
             return response()->json([
-                'success'=> false,
-                'message' => 'Validation failed because: '. json_encode($e->errors()),
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
             ], 422);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
-                'success'=> false,
+                'success' => false,
                 'message' => 'An error occurred: ' . json_encode($e->getMessage()),
             ], 500);
         }
@@ -125,128 +123,89 @@ class EndUserController extends Controller
             DB::commit();
 
             return response()->json([
-                'success'=> true,
-                'message'=> 'User Account has been created successfully',
+                'success' => true,
+                'message' => 'User Account has been created successfully',
                 'apikey' => $encryptedToken,
                 'user' => $user,
             ], 201);
-
         } catch (ValidationException $e) {
             DB::rollBack();
             return response()->json([
-                'success'=> false,
-                'message' => 'Validation failed because: '. json_encode($e->errors()),
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
             ], 422);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
-                'success'=> false,
+                'success' => false,
                 'message' => 'An error occurred: ' . json_encode($e->getMessage()),
             ], 500);
         }
     }
-
     public function updateUser(Request $request)
     {
-        $user = User::find($request->id);
-        if ($user) {
-            $user->update($request->only(['name', 'email', 'password']));
-            return response()->json($user);
-        }
-        return response()->json(['error' => 'User not found'], 404);
+        // Code to handle updating a user
     }
 
     public function destroyUser(Request $request)
     {
-        $user = User::find($request->id);
-        if ($user) {
-            $user->delete();
-            return response()->json(['message' => 'User deleted']);
-        }
-        return response()->json(['error' => 'User not found'], 404);
+        // Code to handle deleting a user
     }
 
-    public function sortUser()
+    public function getUser(Request $request)
     {
-        $users = User::orderBy('name')->get();
-        return response()->json($users);
+        // Code to handle getting a user
     }
 
     // User OTP Tokens
     public function viewUserOTPToken()
     {
-        $otpTokens = UserOTPToken::all();
-        return response()->json($otpTokens);
+        // Code to handle viewing user OTP tokens
     }
 
     public function createUserOTPToken(Request $request)
     {
-        $otpToken = UserOTPToken::create($request->only(['user_id', 'token']));
-        return response()->json($otpToken, 201);
+        // Code to handle creating a user OTP token
     }
 
     public function updateUserOTPToken(Request $request)
     {
-        $otpToken = UserOTPToken::find($request->id);
-        if ($otpToken) {
-            $otpToken->update($request->only(['user_id', 'token']));
-            return response()->json($otpToken);
-        }
-        return response()->json(['error' => 'OTP Token not found'], 404);
+        // Code to handle updating a user OTP token
     }
 
     public function destroyUserOTPToken(Request $request)
     {
-        $otpToken = UserOTPToken::find($request->id);
-        if ($otpToken) {
-            $otpToken->delete();
-            return response()->json(['message' => 'OTP Token deleted']);
-        }
-        return response()->json(['error' => 'OTP Token not found'], 404);
+        // Code to handle deleting a user OTP token
     }
 
-    public function sortUserOTPToken()
+    public function getUserOTPToken(Request $request)
     {
-        $otpTokens = UserOTPToken::orderBy('user_id')->get();
-        return response()->json($otpTokens);
+        // Code to handle getting a user OTP token
     }
 
     // User API Tokens
     public function viewUserAPIToken()
     {
-        $apiTokens = UserAPIToken::all();
-        return response()->json($apiTokens);
+        // Code to handle viewing user API tokens
     }
 
     public function createUserAPIToken(Request $request)
     {
-        $apiToken = UserAPIToken::create($request->only(['user_id', 'token']));
-        return response()->json($apiToken, 201);
+        // Code to handle creating a user API token
     }
 
     public function updateUserAPIToken(Request $request)
     {
-        $apiToken = UserAPIToken::find($request->id);
-        if ($apiToken) {
-            $apiToken->update($request->only(['user_id', 'token']));
-            return response()->json($apiToken);
-        }
-        return response()->json(['error' => 'API Token not found'], 404);
+        // Code to handle updating a user API token
     }
 
     public function destroyUserAPIToken(Request $request)
     {
-        $apiToken = UserAPIToken::find($request->id);
-        if ($apiToken) {
-            $apiToken->delete();
-            return response()->json(['message' => 'API Token deleted']);
-        }
-        return response()->json(['error' => 'API Token not found'], 404);
+        // Code to handle deleting a user API token
     }
 
-    public function sortUserAPIToken()
+    public function getUserAPIToken(Request $request)
     {
-        $apiTokens = UserAPIToken::orderBy('user_id')->get();
-        return response()->json($apiTokens);
+        // Code to handle getting a user API token
     }
 }

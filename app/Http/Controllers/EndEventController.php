@@ -14,316 +14,212 @@ use Illuminate\Http\Request;
 
 class EndEventController extends Controller
 {
-    //
     // Authors
     public function viewAuthor()
     {
-        $authors = Author::all();
-        return response()->json($authors);
+        // Code to handle viewing authors
     }
 
     public function createAuthor(Request $request)
     {
-        $author = Author::create($request->only('name'));
-        return response()->json($author, 201);
+        // Code to handle creating an author
     }
 
     public function updateAuthor(Request $request)
     {
-        $author = Author::find($request->id);
-        if ($author) {
-            $author->update($request->only('name'));
-            return response()->json($author);
-        }
-        return response()->json(['error' => 'Author not found'], 404);
+        // Code to handle updating an author
     }
 
     public function destroyAuthor(Request $request)
     {
-        $author = Author::find($request->id);
-        if ($author) {
-            $author->delete();
-            return response()->json(['message' => 'Author deleted']);
-        }
-        return response()->json(['error' => 'Author not found'], 404);
+        // Code to handle deleting an author
     }
 
-    public function sortAuthor()
+    public function getAuthor(Request $request)
     {
-        $authors = Author::orderBy('name')->get();
-        return response()->json($authors);
+        // Code to handle getting an author
     }
 
     // Event Types
     public function viewEventType()
     {
-        $eventTypes = EventType::all();
-        return response()->json($eventTypes);
+        // Code to handle viewing event types
     }
 
     public function createEventType(Request $request)
     {
-        $eventType = EventType::create($request->only('name'));
-        return response()->json($eventType, 201);
+        // Code to handle creating an event type
     }
 
     public function updateEventType(Request $request)
     {
-        $eventType = EventType::find($request->id);
-        if ($eventType) {
-            $eventType->update($request->only('name'));
-            return response()->json($eventType);
-        }
-        return response()->json(['error' => 'Event Type not found'], 404);
+        // Code to handle updating an event type
     }
 
     public function destroyEventType(Request $request)
     {
-        $eventType = EventType::find($request->id);
-        if ($eventType) {
-            $eventType->delete();
-            return response()->json(['message' => 'Event Type deleted']);
-        }
-        return response()->json(['error' => 'Event Type not found'], 404);
+        // Code to handle deleting an event type
     }
 
-    public function sortEventType()
+    public function getEventType(Request $request)
     {
-        $eventTypes = EventType::orderBy('name')->get();
-        return response()->json($eventTypes);
+        // Code to handle getting an event type
     }
 
     // Events
     public function viewEvent()
     {
-        $events = Event::all();
-        return response()->json($events);
+        // Code to handle viewing events
     }
 
     public function createEvent(Request $request)
     {
-        $event = Event::create($request->only(['name', 'description', 'date', 'author_id', 'event_type_id']));
-        return response()->json($event, 201);
+        // Code to handle creating an event
     }
 
     public function updateEvent(Request $request)
     {
-        $event = Event::find($request->id);
-        if ($event) {
-            $event->update($request->only(['name', 'description', 'date', 'author_id', 'event_type_id']));
-            return response()->json($event);
-        }
-        return response()->json(['error' => 'Event not found'], 404);
+        // Code to handle updating an event
     }
 
     public function destroyEvent(Request $request)
     {
-        $event = Event::find($request->id);
-        if ($event) {
-            $event->delete();
-            return response()->json(['message' => 'Event deleted']);
-        }
-        return response()->json(['error' => 'Event not found'], 404);
+        // Code to handle deleting an event
     }
 
-    public function sortEvent()
+    public function getEvent(Request $request)
     {
-        $events = Event::orderBy('date')->get();
-        return response()->json($events);
+        // Code to handle getting an event
     }
 
-    // Event Tickets
+    // Tickets
     public function viewEventTicket()
     {
-        $eventTickets = Ticket::all();
-        return response()->json($eventTickets);
+        // Code to handle viewing event tickets
     }
 
     public function createEventTicket(Request $request)
     {
-        $eventTicket = Ticket::create($request->only(['event_id', 'price', 'quantity']));
-        return response()->json($eventTicket, 201);
+        // Code to handle creating an event ticket
     }
 
     public function updateEventTicket(Request $request)
     {
-        $eventTicket = Ticket::find($request->id);
-        if ($eventTicket) {
-            $eventTicket->update($request->only(['event_id', 'price', 'quantity']));
-            return response()->json($eventTicket);
-        }
-        return response()->json(['error' => 'Event Ticket not found'], 404);
+        // Code to handle updating an event ticket
     }
 
     public function destroyEventTicket(Request $request)
     {
-        $eventTicket = Ticket::find($request->id);
-        if ($eventTicket) {
-            $eventTicket->delete();
-            return response()->json(['message' => 'Event Ticket deleted']);
-        }
-        return response()->json(['error' => 'Event Ticket not found'], 404);
+        // Code to handle deleting an event ticket
     }
 
-    public function sortEventTicket()
+    public function getEventTicket(Request $request)
     {
-        $eventTickets = Ticket::orderBy('price')->get();
-        return response()->json($eventTickets);
+        // Code to handle getting an event ticket
     }
 
     // User Tickets
     public function viewUserTicket()
     {
-        $userTickets = UserTicket::all();
-        return response()->json($userTickets);
+        // Code to handle viewing user tickets
     }
 
     public function createUserTicket(Request $request)
     {
-        $userTicket = UserTicket::create($request->only(['user_id', 'event_ticket_id']));
-        return response()->json($userTicket, 201);
+        // Code to handle creating a user ticket
     }
 
     public function updateUserTicket(Request $request)
     {
-        $userTicket = UserTicket::find($request->id);
-        if ($userTicket) {
-            $userTicket->update($request->only(['user_id', 'event_ticket_id']));
-            return response()->json($userTicket);
-        }
-        return response()->json(['error' => 'User Ticket not found'], 404);
+        // Code to handle updating a user ticket
     }
 
     public function destroyUserTicket(Request $request)
     {
-        $userTicket = UserTicket::find($request->id);
-        if ($userTicket) {
-            $userTicket->delete();
-            return response()->json(['message' => 'User Ticket deleted']);
-        }
-        return response()->json(['error' => 'User Ticket not found'], 404);
+        // Code to handle deleting a user ticket
     }
 
-    public function sortUserTicket()
+    public function getUserTicket(Request $request)
     {
-        $userTickets = UserTicket::orderBy('user_id')->get();
-        return response()->json($userTickets);
+        // Code to handle getting a user ticket
     }
 
     // Event Comments
     public function viewEventComment()
     {
-        $eventComments = EventComment::all();
-        return response()->json($eventComments);
+        // Code to handle viewing event comments
     }
 
     public function createEventComment(Request $request)
     {
-        $eventComment = EventComment::create($request->only(['event_id', 'user_id', 'comment']));
-        return response()->json($eventComment, 201);
+        // Code to handle creating an event comment
     }
 
     public function updateEventComment(Request $request)
     {
-        $eventComment = EventComment::find($request->id);
-        if ($eventComment) {
-            $eventComment->update($request->only(['event_id', 'user_id', 'comment']));
-            return response()->json($eventComment);
-        }
-        return response()->json(['error' => 'Event Comment not found'], 404);
+        // Code to handle updating an event comment
     }
 
     public function destroyEventComment(Request $request)
     {
-        $eventComment = EventComment::find($request->id);
-        if ($eventComment) {
-            $eventComment->delete();
-            return response()->json(['message' => 'Event Comment deleted']);
-        }
-        return response()->json(['error' => 'Event Comment not found'], 404);
+        // Code to handle deleting an event comment
     }
 
-    public function sortEventComment()
+    public function getEventComment(Request $request)
     {
-        $eventComments = EventComment::orderBy('created_at')->get();
-        return response()->json($eventComments);
+        // Code to handle getting an event comment
     }
 
     // Event Likes
     public function viewEventLike()
     {
-        $eventLikes = EventLikes::all();
-        return response()->json($eventLikes);
+        // Code to handle viewing event likes
     }
 
     public function createEventLike(Request $request)
     {
-        $eventLike = EventLikes::create($request->only(['event_id', 'user_id']));
-        return response()->json($eventLike, 201);
+        // Code to handle creating an event like
     }
 
     public function updateEventLike(Request $request)
     {
-        $eventLike = EventLikes::find($request->id);
-        if ($eventLike) {
-            $eventLike->update($request->only(['event_id', 'user_id']));
-            return response()->json($eventLike);
-        }
-        return response()->json(['error' => 'Event Like not found'], 404);
+        // Code to handle updating an event like
     }
 
     public function destroyEventLike(Request $request)
     {
-        $eventLike = EventLikes::find($request->id);
-        if ($eventLike) {
-            $eventLike->delete();
-            return response()->json(['message' => 'Event Like deleted']);
-        }
-        return response()->json(['error' => 'Event Like not found'], 404);
+        // Code to handle deleting an event like
     }
 
-    public function sortEventLike()
+    public function getEventLike(Request $request)
     {
-        $eventLikes = EventLikes::orderBy('event_id')->get();
-        return response()->json($eventLikes);
+        // Code to handle getting an event like
     }
 
     // Event Stars
     public function viewEventStar()
     {
-        $eventStars = EventStars::all();
-        return response()->json($eventStars);
+        // Code to handle viewing event stars
     }
 
     public function createEventStar(Request $request)
     {
-        $eventStar = EventStars::create($request->only(['event_id', 'user_id', 'stars']));
-        return response()->json($eventStar, 201);
+        // Code to handle creating an event star
     }
 
     public function updateEventStar(Request $request)
     {
-        $eventStar = EventStars::find($request->id);
-        if ($eventStar) {
-            $eventStar->update($request->only(['event_id', 'user_id', 'stars']));
-            return response()->json($eventStar);
-        }
-        return response()->json(['error' => 'Event Star not found'], 404);
+        // Code to handle updating an event star
     }
 
     public function destroyEventStar(Request $request)
     {
-        $eventStar = EventStars::find($request->id);
-        if ($eventStar) {
-            $eventStar->delete();
-            return response()->json(['message' => 'Event Star deleted']);
-        }
-        return response()->json(['error' => 'Event Star not found'], 404);
+        // Code to handle deleting an event star
     }
 
-    public function sortEventStar()
+    public function getEventStar(Request $request)
     {
-        $eventStars = EventStars::orderBy('stars', 'desc')->get();
-        return response()->json($eventStars);
+        // Code to handle getting an event star
     }
 }
+

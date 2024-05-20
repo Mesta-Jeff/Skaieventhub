@@ -11,7 +11,7 @@
 
 
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ asset('root/hyp/assets/images/favicon.ico') }}">
+    <link rel="shortcut icon" href="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}">
 
 
     <!-- Theme Config Js -->
