@@ -9,6 +9,9 @@ class UserTicket extends Model
 {
     protected $fillable = ['user_id', 'ticket_id', 'ticket_type', 'seat', 'ticket_no', 'qr_code', 'status', 'quantity'];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
 
     public function user()
     {

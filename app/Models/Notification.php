@@ -9,4 +9,8 @@ class Notification extends Model
 {
     protected $fillable = ['logo', 'image', 'title', 'content', 'message', 'description', 'type'];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
+
 }

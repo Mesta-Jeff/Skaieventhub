@@ -9,4 +9,8 @@ class LandscapeAdvert extends Model
 {
     protected $fillable = ['image', 'title', 'sub_title', 'description', 'verified', 'status','user_id'];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
+
 }

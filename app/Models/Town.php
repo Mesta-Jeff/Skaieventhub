@@ -9,6 +9,10 @@ class Town extends Model
 {
     protected $fillable = ['district_id', 'name', 'status'];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
+
     public function district()
     {
         return $this->belongsTo(District::class);

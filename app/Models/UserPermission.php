@@ -9,6 +9,9 @@ class UserPermission extends Model
 {
     protected $fillable = ['permission_id', 'user_id', 'creator_id', 'description', 'status'];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
     
     public function user()
     {

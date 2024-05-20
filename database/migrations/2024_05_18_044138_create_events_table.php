@@ -36,6 +36,7 @@ return new class extends Migration
             $table->boolean('verified')->default(false);
             $table->boolean('approved')->default(false);
             $table->timestamps();
+            $table->string('is_deleted', 3)->default('No');
         });
     }
 

@@ -32,33 +32,33 @@ const sections = [
 
     {
         parentId: 'Full-Settings', innerPermissions:
-        ['view-roles', 'add-role', 'modify-role', 'remove-role', 'view-permissions', 'add-permission', 'modify-permission', 'remove-permission', 'view-events', 'add-event', 'modify-event', 'remove-event', 'view-tickets', 'add-ticket', 'modify-ticket', 'remove-ticket', 'view-regions', 'add-region', 'modify-region', 'remove-region', 'view-districts', 'add-district', 'modify-district', 'remove-district', 'view-towns', 'add-town', 'modify-town', 'remove-town', 'view-identities', 'add-identity', 'modify-identity', 'remove-identity', 'view-notifications', 'add-notification', 'modify-notification', 'remove-notification']
+        ['view-roles', 'add-role', 'modify-role', 'remove-role', 'view-permissions', 'add-permission', 'modify-permission', 'remove-permission', 'view-regions', 'add-region', 'modify-region', 'remove-region', 'view-districts', 'add-district', 'modify-district', 'remove-district', 'view-towns', 'add-town', 'modify-town', 'remove-town', 'view-identities', 'add-identity', 'modify-identity', 'remove-identity', 'view-notifications', 'add-notification', 'modify-notification', 'remove-notification']
     },
 
 
-    {   parentId: 'Full-Users', innerPermissions: 
+    {   parentId: 'Full-Users', innerPermissions:
         ['view-user', 'add-user', 'modify-user', 'remove-user', 'block-user', 'unblock-user', 'suspended-users', 'reset-password', 'verify-user', 'assign-user-role', 'assign-user-permission', 'remove-user-permission', 'user-logs', 'user-event-history', 'approve-user', 'view-tokens', 'user-apikeys', 'user-statistics']
     },
 
-    {   parentId: 'Full-Events', innerPermissions: 
+    {   parentId: 'Full-Events', innerPermissions:
         ['view-event', 'create-event', 'modify-event', 'remove-event', 'suspend-event', 'approve-event', 'view-ticket', 'add-ticket', 'modify-ticket', 'remove-ticket', 'view-event-type', 'add-event-type', 'modify-event-type', 'remove-event-type', 'view-comments', 'modify-comment', 'remove-comment', 'answer-comment', 'view-likes', 'modify-likes', 'remove-likes', 'add-likes', 'view-star', 'modify-star', 'remove-star', 'add-star', 'view-author', 'modify-author', 'remove-author','subscribe-sms','event-statistics']
- 
+
     },
 
     {
-        parentId: 'Full-Payments', innerPermissions: 
+        parentId: 'Full-Payments', innerPermissions:
         ['sold-tickets', 'view-refund', 'view-payout', 'approve-payout', 'decline-payout', 'approve-refund', 'request-payout', 'request-refund', 'payment-statistics', 'credit-user', 'initialize-payment', 'authorize-payment', 'my-approvals', 'pending-user-approvals']
 
     },
 
     {
-        parentId: 'Full-Configuration', innerPermissions: 
+        parentId: 'Full-Configuration', innerPermissions:
         ['sms-subscribers', 'sms', 'send-sms', 'remove-sms', 'email', 'send-email', 'remove', 'users-concerns', 'answer-concern', 'decline-concern', 'advertisements', 'add-advert', 'modify-advert', 'remove-advert', 'approve-advert', 'api-routes', 'add-routes', 'modify-routes', 'remove-routes', 'documentations', 'policy', 'about-us', 'messages', 'reply-message', 'remove-message']
 
     }
 
 
-    
+
 ];
 
 

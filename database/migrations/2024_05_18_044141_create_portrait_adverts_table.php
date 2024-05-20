@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('status', 10)->default('Active');
             $table->boolean('verified')->default(false);
             $table->timestamps();
+            $table->string('is_deleted', 3)->default('No');
         });
     }
 

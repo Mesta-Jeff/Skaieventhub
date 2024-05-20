@@ -9,6 +9,10 @@ class EventComment extends Model
 {
     protected $fillable = ['user_id', 'event_id', 'comment', 'status'];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
+
 
     public function user()
     {

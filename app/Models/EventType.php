@@ -9,6 +9,10 @@ class EventType extends Model
 {
     protected $fillable = ['event', 'description', 'status'];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
+
     
     public function events()
     {

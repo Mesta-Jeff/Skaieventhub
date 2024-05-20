@@ -9,6 +9,9 @@ class District extends Model
 {
     protected $fillable = ['region_id', 'name', 'status'];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
     
     public function region()
     {

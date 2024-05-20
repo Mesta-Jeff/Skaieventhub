@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('ipaddress', 20);
             $table->string('status', 10)->default('Pending');
             $table->timestamps();
+            $table->string('is_deleted', 3)->default('No');
         });
     }
 

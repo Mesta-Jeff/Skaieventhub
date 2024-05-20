@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('image', 255)->nullable();
             $table->string('type', 50);
             $table->timestamps();
+            $table->string('is_deleted', 3)->default('No');
         });
     }
 

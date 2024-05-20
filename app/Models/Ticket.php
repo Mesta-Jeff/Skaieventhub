@@ -9,6 +9,10 @@ class Ticket extends Model
 {
     protected $fillable = ['event_id', 'price', 'total', 'remaining', 'description', 'status', 'user_id', 'title'];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
+
 
     public function event()
     {

@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('cover_image', 100)->nullable();
             $table->boolean('verified')->default(false);
             $table->string('token', 255)->nullable();
+            $table->string('is_deleted', 3)->default('No');
             $table->timestamps();
         });
 

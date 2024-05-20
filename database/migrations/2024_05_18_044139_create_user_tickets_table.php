@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('ticket_no',25)->unique();
             $table->string('status', 10)->default('Active');
             $table->timestamps();
+            $table->string('is_deleted', 3)->default('No');
         });
     }
 

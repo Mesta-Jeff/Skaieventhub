@@ -1,8 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\web\UserController;
-use App\Http\Controllers\web\ManagementController;
+use App\Http\Controllers\WebUserController;
+use App\Http\Controllers\WebManagementController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -10,14 +10,14 @@ Route::get('/', function () {
 
 
 
-Route::get('management/dashboard', [ManagementController::class, 'dashboard'])->name('management.dashboard');
+Route::get('management/dashboard', [WebManagementController::class, 'dashboard'])->name('management.dashboard');
 
-Route::post('/user/add', [UserController::class, 'createUser'])->name('user.add');
-Route::post('/user/update', [UserController::class, 'updateUser'])->name('user.update');
-Route::post('/user/distroy', [UserController::class, 'distroyUser'])->name('user.distroy');
-Route::get('/user/list', [UserController::class, 'usersList'])->name('user.list');
+Route::post('/user/add', [WebUserController::class, 'createUser'])->name('user.add');
+Route::post('/user/update', [WebUserController::class, 'updateUser'])->name('user.update');
+Route::post('/user/distroy', [WebUserController::class, 'distroyUser'])->name('user.distroy');
+Route::get('/user/list', [WebUserController::class, 'usersList'])->name('user.list');
 
-Route::post('/user/freeRoute', [UserController::class, 'freeRoute'])->name('user.freeRoute');
+Route::post('/user/freeRoute', [WebUserController::class, 'freeRoute'])->name('user.freeRoute');
 
 
 // require __DIR__.'/auth.php';

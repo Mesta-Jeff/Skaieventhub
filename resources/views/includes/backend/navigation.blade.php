@@ -81,7 +81,7 @@
                             <li id="chat-friend"><a href="#">Chat Friend</a></li>
                             <li id="read-policy"><a href="#">Read Policy</a></li>
                             <li id="contact-management"><a href="#">Contact Management</a></li>
-                        </ul>                        
+                        </ul>
                     </div>
                 </li>
 
@@ -95,14 +95,12 @@
                         <ul class="side-nav-second-level">
                             <li id="view-roles"><a href="#">View Roles</a></li>
                             <li id="view-permissions"><a href="#">View Permissions</a></li>
-                            <li id="view-events"><a href="#">View Events</a></li>
-                            <li id="view-tickets"><a href="#">View Tickets</a></li>
                             <li id="view-regions"><a href="#">View Regions</a></li>
                             <li id="view-districts"><a href="#">View Districts</a></li>
                             <li id="view-towns"><a href="#">View Towns</a></li>
                             <li id="view-identities"><a href="#">View Identities</a></li>
                             <li id="view-notifications"><a href="#">View Notifications</a></li>
-                        </ul>                        
+                        </ul>
                     </div>
                 </li>
 
@@ -127,7 +125,7 @@
                             <li id="view-tokens"><a href="#">User Tokens</a></li>
                             <li id="user-apikeys"><a href="#">User Apikeys</a></li>
                             <li id="user-statistics"><a href="#">Users Statistics</a></li>
-                        </ul>                        
+                        </ul>
                     </div>
                 </li>
 
@@ -148,7 +146,7 @@
                             <li id="view-star"><a href="#">View Star</a></li>
                             <li id="view-author"><a href="#">View Author</a></li>
                             <li id="event-statistics"><a href="#">Event Statistics</a></li>
-                        </ul>                        
+                        </ul>
                     </div>
                 </li>
 
@@ -175,7 +173,7 @@
                             <li id="authorize-payment"><a href="#">Authorize Payment</a></li>
                             <li id="my-approvals"><a href="#">My Approvals</a></li>
                             <li id="pending-user-approvals"><a href="#">Pending User Approvals</a></li>
-                        </ul>                        
+                        </ul>
                     </div>
                 </li>
 
@@ -196,7 +194,7 @@
                             <li id="policy"><a href="#">Policy</a></li>
                             <li id="about-us"><a href="#">About Us</a></li>
                             <li id="messages"><a href="#">Messages</a></li>
-                        </ul>                        
+                        </ul>
                     </div>
                 </li>
 

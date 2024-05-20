@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('status', 10)->default('Active');
             $table->timestamps();
+            $table->string('is_deleted', 3)->default('No');
         });
     }
 

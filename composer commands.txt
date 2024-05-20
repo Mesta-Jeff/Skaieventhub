@@ -24,6 +24,30 @@ php artisan make:model ApiRoute -m
 
 
 
+php artisan make:controller EndAccountController
+php artisan make:controller EndAdvertisementController
+php artisan make:controller EndUserController
+php artisan make:controller EndAuthenticationController
+php artisan make:controller EndConfigurationController
+php artisan make:controller EndEventController
+php artisan make:controller EndPaymentController
+php artisan make:controller EndSettingsController
+
+
+
+php artisan make:controller WebAccountController
+php artisan make:controller WebAdvertisementController
+php artisan make:controller WebUserController
+php artisan make:controller WebAuthenticationController
+php artisan make:controller WebConfigurationController
+php artisan make:controller WebEventController
+php artisan make:controller WebPaymentController
+php artisan make:controller WebSettingsController
+php artisan make:controller WebClientController
+php artisan make:controller WebManagementController
+
+
+
 models based on the table structure you provided:
 
     Region Model:
@@ -176,35 +200,3 @@ protected $fillable = ['route', 'param', 'description', 'action', 'status'];
 
 
 
-
-
-
-
-
-
-
-public function handle(Request $request, Closure $next): Response
-    {
-        $apiKey = $request->header('apikey');
-        $userKey = $request->header('userkey');
-
-        // $decoded = base64_decode($encryptedToken);
-        // $iv = substr($decoded, 0, 8);
-        // $encryptedToken = substr($decoded, 8);
-        // $decryptedToken = openssl_decrypt($encryptedToken, 'des-cbc', $encryptionKey, 0, $iv);
-
-        if (!$apiKey || !$userKey) {
-            return response()->json(['message' => 'Missing API key or user key'], 403);
-        }
-
-        $isValid = DB::table('user_api_tokens')
-            ->where('apikey', $apiKey)
-            ->where('userkey', $userKey)
-            ->exists();
-
-        if (!$isValid) {
-            return response()->json(['message' => 'Invalid API key or user key'], 403);
-        }
-
-        return $next($request);
-    }

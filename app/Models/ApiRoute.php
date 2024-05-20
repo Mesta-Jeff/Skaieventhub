@@ -9,4 +9,8 @@ class ApiRoute extends Model
 {
     protected $fillable = ['name', 'param','method', 'description', 'endpoint', 'status'];
 
+    protected $hidden = [
+        'updated_at',
+        'is_deleted'
+    ];
 }

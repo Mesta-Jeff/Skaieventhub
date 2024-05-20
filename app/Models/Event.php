@@ -13,6 +13,9 @@ class Event extends Model
         'large_image', 'medium_image', 'small_image', 'promo_video', 'status', 'verified', 'approved'
     ];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
     
     public function eventType()
     {

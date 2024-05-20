@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('comment');
             $table->string('status', 10)->default('Active');
             $table->timestamps();
+            $table->string('is_deleted', 3)->default('No');
         });
     }
 

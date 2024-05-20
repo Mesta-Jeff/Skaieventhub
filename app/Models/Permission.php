@@ -10,6 +10,10 @@ class Permission extends Model
 
     protected $fillable = ['title', 'role_id', 'description', 'status', 'keys'];
 
+    protected $hidden = [
+        'updated_at','is_deleted'
+    ];
+
     
     public function role()
     {

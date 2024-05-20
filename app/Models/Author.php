@@ -15,6 +15,10 @@ class Author extends Model
     ];
 
 
+    protected $hidden = [
+        'updated_at',
+        'is_deleted'
+    ];
     
     public function region()
     {

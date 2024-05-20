@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title', 20);
             $table->text('description')->nullable();
             $table->string('status', 10)->default('Active');
+            $table->string('is_deleted', 3)->default('No');
             $table->timestamps();
         });
     }
