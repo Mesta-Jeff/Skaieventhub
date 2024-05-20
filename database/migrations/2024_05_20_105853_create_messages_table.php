@@ -11,13 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_otp_tokens', function (Blueprint $table) {
-            $table->bigIncrements('id')->startingValue(1700);
-            $table->string('token', 20);
-            $table->string('token_type', 50);
+        Schema::create('messages', function (Blueprint $table) {
+            $table->bigIncrements('id')->startingValue(1040);
+            $table->text('content');
+            $table->foreignId('sender_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('referenced_message_id')->nullable()->constrained('messages', 'id')->onDelete('cascade');
             $table->string('status', 10)->default('Active');
-            $table->string('is_used', 3)->default('No');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->timestamps();
             $table->string('is_deleted', 3)->default('No');
         });
@@ -28,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_otp_tokens');
+        Schema::dropIfExists('messages');
     }
 };

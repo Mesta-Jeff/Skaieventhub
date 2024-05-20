@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Payment extends Model
 {
-    protected $fillable = ['user_id', 'ticket_id', 'amount', 'acc_number', 'acc_host', 'status', 'ipaddress'];
+    protected $fillable = ['user_id', 'ticket_id', 'amount', 'acc_number', 'acc_host', 'status', 'ipaddress','ref_number'];
 
     protected $hidden = [
         'updated_at','is_deleted'

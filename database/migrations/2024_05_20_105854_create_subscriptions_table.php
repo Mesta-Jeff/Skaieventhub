@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('user_otp_tokens', function (Blueprint $table) {
-            $table->bigIncrements('id')->startingValue(1700);
-            $table->string('token', 20);
-            $table->string('token_type', 50);
-            $table->string('status', 10)->default('Active');
-            $table->string('is_used', 3)->default('No');
+        Schema::create('subscriptions', function (Blueprint $table) {
+            $table->bigIncrements('id')->startingValue(1080);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->decimal('amount', 8, 2);
+            $table->string('acc_number', 20);
+            $table->string('ref_number', 30);
+            $table->string('acc_host', 100);
+            $table->string('ipaddress', 20)->nullable();
+            $table->text('reason')->nullable();
+            $table->string('status', 10)->default('Pending');
             $table->timestamps();
             $table->string('is_deleted', 3)->default('No');
         });
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('user_otp_tokens');
+        Schema::dropIfExists('subscriptions');
     }
 };

@@ -21,6 +21,17 @@ php artisan make:model Notification -m
 php artisan make:model PortraitAdvert -m
 php artisan make:model LandscapeAdvert -m
 php artisan make:model ApiRoute -m
+php artisan make:model Sms -m
+php artisan make:model SmsSubscription -m
+php artisan make:model UserConcern -m
+php artisan make:model Email -m
+php artisan make:model Message -m
+php artisan make:model Refund -m
+php artisan make:model Payout -m
+php artisan make:model Subscription -m
+php artisan make:model EventManager -m
+php artisan make:model SubscriptionPackage -m
+
 
 
 

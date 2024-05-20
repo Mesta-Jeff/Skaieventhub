@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('event_types', function (Blueprint $table) {
             $table->bigIncrements('id')->startingValue(2200);
-            $table->string('event', 30);
+            $table->string('event', 50);
+            $table->decimal('price', 8,2);
             $table->text('description')->nullable();
             $table->string('status', 10)->default('Active');
             $table->timestamps();

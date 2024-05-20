@@ -15,8 +15,9 @@ return new class extends Migration
             $table->bigIncrements('id')->startingValue(29000);
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->foreignId('ticket_id')->constrained()->onDelete('cascade');
-            $table->decimal('amount', 10, 2);
-            $table->string('acc_number', 17);
+            $table->decimal('amount', 8, 2);
+            $table->string('acc_number', 20);
+            $table->string('ref_number', 30);
             $table->string('acc_host', 100);
             $table->string('ipaddress', 20);
             $table->string('status', 10)->default('Pending');
