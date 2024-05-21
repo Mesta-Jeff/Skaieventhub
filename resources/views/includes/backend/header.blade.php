@@ -23,8 +23,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('root/dek/assets/icon/feather/css/feather.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('root/dek/assets/icon/themify-icons/themify-icons.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('root/dek/assets/icon/icofont/css/icofont.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('root/dek/assets/icon/font-awesome/css/font-awesome.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('root/dek/assets/icon/font-awesome/css/font-awesome.min.css') }}">
 
 
 
@@ -33,15 +32,12 @@
 
 
     <link rel="stylesheet" type="text/css" href="{{ asset('root/dek/assets/css/component.css') }}">
-    <link rel="stylesheet" type="text/css"
-        href="{{ asset('root/dek/bower_components/sweetalert/css/sweetalert.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('root/dek/bower_components/sweetalert/css/sweetalert.css') }}">
 
     <!-- Datatable css -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css"
-        href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
-    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet"
-        type="text/css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
+    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
 
 
 

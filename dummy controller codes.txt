@@ -1,0 +1,110 @@
+    public function addRole(Request $request)
+    {
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:30',
+            'description' => 'required|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $apiStartPoint = env('API_START_POINT');
+            $apiURL = $apiStartPoint.'/settings/roles';
+            $body = [
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+            ];
+
+            $customRequest = Request::create($apiURL, 'POST', $body);
+            $customRequest->headers->set('Accept', 'application/json');
+
+            $response = app()->handle($customRequest);
+            $data = json_decode($response->getContent(), true);
+
+            if ($response->getStatusCode() === 201) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $data['message'] ?? 'Operetion Performed',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $data['message'] ?? 'Failed to perform transanction',
+                    'errors' => $data['errors'] ?? [],
+                ], $response->getStatusCode());
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+
+
+
+
+
+
+public function modifyRole(Request $request)
+    {
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'role_id' => ['required', 'numeric'],
+            'title' => 'required|string|max:30',
+            'description' => 'required|string|max:1000',
+            'status' => 'required|string|max:10',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $apiStartPoint = env('API_START_POINT');
+            $apiURL = $apiStartPoint.'/settings/roles/update';
+            $body = [
+                'role_id' => $request->input('role_id'),
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'status' => $request->input('status'),
+            ];
+
+            $customRequest = Request::create($apiURL, 'POST', $body);
+            $customRequest->headers->set('Accept', 'application/json');
+
+            $response = app()->handle($customRequest);
+            $data = json_decode($response->getContent(), true);
+
+            if ($response->getStatusCode() === 201) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $data['message'] ?? 'Operetion Performed',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $data['message'] ?? 'Failed to perform transanction',
+                    'errors' => $data['errors'] ?? [],
+                ], $response->getStatusCode());
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
+    }

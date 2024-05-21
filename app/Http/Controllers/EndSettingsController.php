@@ -21,7 +21,7 @@ class EndSettingsController extends Controller
     public function viewRole()
     {
         try {
-            $data = Role::where('is_deleted', '!=', 'Yes')->get();
+            $data = Role::where('is_deleted', '!=', 'Yes')->orderby('id', 'DESC')->get();
             return response()->json([
                 'success' => true,
                 'message' => 'Data retrieved successfully',
@@ -39,10 +39,17 @@ class EndSettingsController extends Controller
     {
         try {
             $data = $request->validate([
-                'title' => 'required|string|max:255',
+                'title' => 'required|string|max:30',
                 'description' => 'required|string|max:1000',
             ]);
 
+            // Check if a role with the same title already exists
+            if (Role::where('title', $data['title'])->exists() && Role::where('title', $data['title'])->where('is_deleted', 'NO')->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Similar record already exists in the database, try a different one.'
+                ], 422);
+            }
             $dbRequest = Role::create($data);
             if ($dbRequest) {
                 return response()->json([
@@ -72,29 +79,32 @@ class EndSettingsController extends Controller
     {
         try {
             $data = $request->validate([
-
+                'role_id' => 'required|integer|exists:roles,id',
+                'title' => 'required|string|max:30',
+                'description' => 'required|string|max:1000',
+                'status' => 'required|string|max:10',
             ]);
-
-            $dbRequest = Role::create($data);
-            if ($dbRequest) {
+            $role = Role::find($data['role_id']);
+            if ($role) {
+                $role->update($data);
                 return response()->json([
-                    'success'=> true,
-                    'message'=> 'Request to perform database operation has gone through successful',
-                ], 201);
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
             } else {
                 return response()->json([
-                    'success'=> false,
-                    'message'=> 'Sorry request to the database has declined, try again later',
-                ], 409);
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
             }
         } catch (ValidationException $e) {
             return response()->json([
-                'success'=> false,
-                'message' => 'Validation failed because: '. json_encode($e->errors()),
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
-                'success'=> false,
+                'success' => false,
                 'message' => 'An error occurred: ' . json_encode($e->getMessage()),
             ], 500);
         }

@@ -14,7 +14,11 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         //
         $middleware->validateCsrfTokens(except: [
-            'user/freeRoute',
+            // 'user/freeRoute',
+            // 'settings/roles',
+            // 'settings/roles/delete',
+            '*'
+
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

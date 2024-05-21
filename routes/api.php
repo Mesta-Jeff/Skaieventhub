@@ -30,6 +30,9 @@ Route::prefix('v2')->group(function () {
     // Roles:  free routes
     Route::get('/settings/roles', [EndSettingsController::class, 'viewRole']);
     Route::post('/settings/roles', [EndSettingsController::class, 'createRole']);
+    Route::post('/settings/roles/update', [EndSettingsController::class, 'updateRole']);
+        Route::post('/settings/roles/delete', [EndSettingsController::class, 'destroyRole']);
+        Route::get('/settings/roles/fetch', [EndSettingsController::class, 'fetchRole']);
 
     // End of free routes    =====================================================================================
 
@@ -57,8 +60,9 @@ Route::prefix('v2')->group(function () {
         Route::get('/users/api-tokens/get', [EndUserController::class, 'getUserAPIToken']);
 
         // Roles Route
-        Route::post('/settings/roles/update', [EndSettingsController::class, 'updateRole']);
-        Route::post('/settings/roles/delete', [EndSettingsController::class, 'destroyRole']);
+        // Route::post('/settings/roles/update', [EndSettingsController::class, 'updateRole']);
+        // Route::post('/settings/roles/delete', [EndSettingsController::class, 'destroyRole']);
+        // Route::get('/settings/roles/fetch', [EndSettingsController::class, 'fetchRole']);
 
         // Regions:
         Route::get('/settings/regions', [EndSettingsController::class, 'viewRegion']);

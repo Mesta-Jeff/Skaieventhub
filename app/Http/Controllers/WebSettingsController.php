@@ -3,28 +3,200 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class WebSettingsController extends Controller
 {
-    // Roles
-    public function showRole()
+    // GET FROM API universal function
+    public function getViewDataFromApi($endpoint)
     {
-        // Code to handle showing roles
+        try {
+            $apiStartPoint = env('API_START_POINT');
+            $apiURL = $apiStartPoint . $endpoint;
+
+            // Make the API request
+            $customRequest = Request::create($apiURL, 'GET');
+            $customRequest->headers->set('Accept', 'application/json');
+
+            $response = app()->handle($customRequest);
+            $data = json_decode($response->getContent(), true);
+
+            if ($response->getStatusCode() === 200) {
+                return [
+                    'status' => true,
+                    'data' => $data['data'],
+                    'message' => 'Data retrieved successfully',
+                ];
+            } else {
+                return [
+                    'status' => false,
+                    'message' => $data['message'] ?? 'Failed to retrieve data',
+                    'data' => $data['errors'] ?? [],
+                ];
+            }
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+                'data' => [],
+            ];
+        }
     }
+
+    // POST TO API universal function
+    public function handleApiRequest($endpoint, $method, $body)
+    {
+        $apiStartPoint = env('API_START_POINT');
+        $apiURL = $apiStartPoint . $endpoint;
+
+        try {
+            $customRequest = Request::create($apiURL, $method, $body);
+            $customRequest->headers->set('Accept', 'application/json');
+
+            $response = app()->handle($customRequest);
+            $data = json_decode($response->getContent(), true);
+
+            if ($response->getStatusCode() === 201) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $data['message'] ?? 'Operation Performed',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $data['message'] ?? 'Failed to perform transaction',
+                    'errors' => $data['errors'] ?? [],
+                ], $response->getStatusCode());
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    // Roles
+    public function showRole(Request $request)
+    {
+        $endpoint = '/settings/roles';
+        $apiResponse = $this->getViewDataFromApi($endpoint);
+
+        $roles = $apiResponse['status'] ? $apiResponse['data'] : [];
+
+        if ($request->ajax()) {
+            return response()->json(['roles' => $roles]);
+        }
+
+        return view('backend.settings.roles', ['roles' => $roles]);
+    }
+
 
     public function addRole(Request $request)
     {
-        // Code to handle adding a role
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string|max:30',
+            'description' => 'required|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/roles';
+        $method = 'POST';
+        $body = [
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+        ];
+
+        return $this->handleApiRequest($endpoint, $method, $body);
     }
 
+    
     public function modifyRole(Request $request)
     {
-        // Code to handle modifying a role
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'role_id' => ['required', 'numeric'],
+            'title' => 'required|string|max:30',
+            'description' => 'required|string|max:1000',
+            'status' => 'required|string|max:10',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/roles/update';
+        $method = 'POST';
+        $body = [
+            'role_id' => $request->input('role_id'),
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'status' => $request->input('status'),
+        ];
+
+        return $this->handleApiRequest($endpoint, $method, $body);
     }
 
     public function removeRole(Request $request)
     {
-        // Code to handle removing a role
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'role_id' => ['required', 'numeric'],
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $apiStartPoint = env('API_START_POINT');
+            $apiURL = $apiStartPoint.'/settings/roles/delete';
+            $body = [
+                'role_id' => $request->input('role_id'),
+            ];
+
+            $customRequest = Request::create($apiURL, 'POST', $body);
+            $customRequest->headers->set('Accept', 'application/json');
+
+            $response = app()->handle($customRequest);
+            $data = json_decode($response->getContent(), true);
+
+            if ($response->getStatusCode() === 201) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $data['message'] ?? 'Operetion Performed',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $data['message'] ?? 'Failed to perform transanction',
+                    'errors' => $data['errors'] ?? [],
+                ], $response->getStatusCode());
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     // Regions
@@ -108,7 +280,7 @@ class WebSettingsController extends Controller
     // Permissions
     public function showPermission()
     {
-        // Code to handle showing permissions
+        return view('backend.settings.permissions');
     }
 
     public function addPermission(Request $request)

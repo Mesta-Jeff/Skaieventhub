@@ -9,9 +9,11 @@
 <script src="https://apexcharts.com/samples/assets/irregular-data-series.js"></script>
 
 <!-- Wallet Dashboard js -->
+
 <script src="{{ asset('root/hyp/assets/js/pages/demo.dashboard-wallet.js') }}"></script>
 <script src="{{ asset('root/hyp/assets/js/app.min.js') }}"></script>
 <script src="{{ asset('root/hyp/assets/js/ui/component.todo.js') }}"></script>
+
 
 
 <!-- Include jQuery -->
@@ -25,6 +27,7 @@
 {{-- THE LINK TO THE PERMISSIONS --}}
 <script src="{{ asset('root/js/permission-access.js') }}"></script>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 <script src="{{ asset('root/hyp/assets/vendor/datatables.net/js/jquery.dataTables.min.js') }}"></script>
 <script src="{{ asset('root/hyp/assets/vendor/datatables.net-bs4/js/dataTables.bootstrap4.min.js') }}"></script>
 
@@ -37,9 +40,9 @@
 <script src="{{ asset('root/hyp/assets/vendor/datatables.net-buttons/js/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('root/hyp/assets/vendor/datatables.net-buttons/js/buttons.print.min.js') }}"></script>
 <script src="{{ asset('root/hyp/assets/vendor/datatables.net-buttons/js/buttons.colVis.min.js') }}"></script>
-
-
 <script src="https://cdn.datatables.net/responsive/2.2.3/js/dataTables.responsive.min.js"></script>
+
+
 <script src="{{ asset('root/hyp/assets/vendor/select2/js/select2.min.js') }}"></script>
 
 @yield('additional-js')
