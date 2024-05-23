@@ -31,7 +31,7 @@
                         <!--end col-->
                         <div class="col-xxl-9 ms-auto">
                             <div>
-                                <select id="filter2" class="select2 form-control">
+                                <select id="filter2" class="select2 form-control" data-placeholder="Your Placeholder">
                                     <option value="" selected>Filter by Status...</option>
                                 </select>
                             </div>
@@ -97,11 +97,20 @@
                         <div class="col-md-12 fv-row">
                             <select id="role" class="select2 form-control mb-2" data-toggle="select2">
                                 <option value="" selected disabled>---- Select Option ----</option>
-                                <option value="Casual-Worker">Casual Worker</option>
-                                <option value="Contract-Worker">Contract Worker</option>
-                                <option value="Permanent-Worker">Permanent Worker</option>
-                                <option value="Office-Assistant">Office Assistant</option>
-                            </select>
+                                <optgroup label="Management">
+                                    <option value="Developer">Developer</option>
+                                    <option value="Oversear">Oversear</option>
+                                    <option value="Kernel">Kernel</option>
+                                </optgroup>
+                                <optgroup label="Clients">
+                                    <option value="Author">Author</option>
+                                    <option value="Event Manager">Event Manager</option>
+                                    <option value="State Director">State Director</option>
+                                </optgroup>
+                                <optgroup label="Other">
+                                    <option value="Private">Private</option>
+                                </optgroup>
+                            </select>                            
                         </div>
                         <div class="form-outline col-md-12 fv-row mb-2">
                             <label class="form-label" for="ides">Role Description</label>

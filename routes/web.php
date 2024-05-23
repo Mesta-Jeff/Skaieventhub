@@ -19,13 +19,13 @@ Route::get('/', function () {
 
 Route::get('management/dashboard', [WebManagementController::class, 'dashboard'])->name('management.dashboard');
 
-Route::post('/user/freeRoute', [WebUserController::class, 'freeRoute'])->name('user.freeRoute');
 
 // Roles:
 Route::get('/settings/roles', [WebSettingsController::class, 'showRole'])->name('settings.roles.show');
 Route::post('/settings/roles', [WebSettingsController::class, 'addRole'])->name('settings.roles.create');
 Route::post('/settings/roles/update', [WebSettingsController::class, 'modifyRole'])->name('settings.roles.update');
 Route::post('/settings/roles/delete', [WebSettingsController::class, 'removeRole'])->name('settings.roles.destroy');
+Route::get('/settings/roles/fetch', [WebSettingsController::class, 'fetchRole'])->name('settings.roles.fetch');
 
 // Regions:
 Route::get('/settings/regions', [WebSettingsController::class, 'showRegion'])->name('settings.regions.show');

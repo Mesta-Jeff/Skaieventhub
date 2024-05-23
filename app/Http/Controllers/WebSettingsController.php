@@ -45,6 +45,42 @@ class WebSettingsController extends Controller
         }
     }
 
+    // FETCH DATA for dropdown
+    public function fetchDataFromApiForDropdown($endpoint)
+    {
+        try {
+            $apiStartPoint = env('API_START_POINT');
+            $apiURL = $apiStartPoint . $endpoint;
+
+            // Make the API request
+            $customRequest = Request::create($apiURL, 'GET');
+            $customRequest->headers->set('Accept', 'application/json');
+
+            $response = app()->handle($customRequest);
+            $data = json_decode($response->getContent(), true);
+
+            if ($response->getStatusCode() === 200) {
+                return [
+                    'status' => true,
+                    'data' => $data['data'],
+                    'message' => 'Data retrieved successfully',
+                ];
+            } else {
+                return [
+                    'status' => false,
+                    'message' => $data['message'] ?? 'Failed to retrieve data',
+                    'data' => $data['errors'] ?? [],
+                ];
+            }
+        } catch (\Exception $e) {
+            return [
+                'status' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+                'data' => [],
+            ];
+        }
+    }
+
     // POST TO API universal function
     public function handleApiRequest($endpoint, $method, $body)
     {
@@ -196,6 +232,18 @@ class WebSettingsController extends Controller
                 'success' => false,
                 'message' => 'An error occurred: ' . $e->getMessage()
             ], 500);
+        }
+    }
+    
+    public function fetchRole(Request $request){
+
+        $endpoint = '/settings/roles/fetch';
+        $apiResponse = $this->getViewDataFromApi($endpoint);
+
+        $roles = $apiResponse['status'] ? $apiResponse['data'] : [];
+
+        if ($request->ajax()) {
+            return response()->json(['roles' => $roles]);
         }
     }
 

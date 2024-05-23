@@ -11,6 +11,7 @@ use App\Http\Controllers\EndPaymentController;
 use App\Http\Controllers\EndSettingsController;
 use App\Http\Controllers\EndAdvertisementController;
 use App\Http\Controllers\EndConfigurationController;
+use App\Http\Controllers\EndAuthenticationController;
 
 
 
@@ -31,8 +32,11 @@ Route::prefix('v2')->group(function () {
     Route::get('/settings/roles', [EndSettingsController::class, 'viewRole']);
     Route::post('/settings/roles', [EndSettingsController::class, 'createRole']);
     Route::post('/settings/roles/update', [EndSettingsController::class, 'updateRole']);
-        Route::post('/settings/roles/delete', [EndSettingsController::class, 'destroyRole']);
-        Route::get('/settings/roles/fetch', [EndSettingsController::class, 'fetchRole']);
+    Route::post('/settings/roles/delete', [EndSettingsController::class, 'destroyRole']);
+    Route::get('/settings/roles/fetch', [EndSettingsController::class, 'fetchRole']);
+
+    //
+    Route::get('/authentication/login', [EndAuthenticationController::class, 'getCrendential']);
 
     // End of free routes    =====================================================================================
 

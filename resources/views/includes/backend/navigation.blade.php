@@ -93,7 +93,7 @@
                     </a>
                     <div class="collapse sidebarSystem">
                         <ul class="side-nav-second-level">
-                            <li id="view-roles"><a href="#">View Roles</a></li>
+                            <li id="view-roles"><a href="{{ route("settings.roles.show")}}">View Roles</a></li>
                             <li id="view-permissions"><a href="#">View Permissions</a></li>
                             <li id="view-regions"><a href="#">View Regions</a></li>
                             <li id="view-districts"><a href="#">View Districts</a></li>
@@ -112,7 +112,7 @@
                     </a>
                     <div class="collapse sidebarUser">
                         <ul class="side-nav-second-level">
-                            <li id="view-user"><a href="#">View Users</a></li>
+                            <li id="view-user"><a href="{{route("users.show")}}">View Users</a></li>
                             <li id="suspended-users"><a href="#">Suspended User</a></li>
                             <li id="reset-password"><a href="#">Reset Password</a></li>
                             <li id="verify-user"><a href="#">Verify User</a></li>

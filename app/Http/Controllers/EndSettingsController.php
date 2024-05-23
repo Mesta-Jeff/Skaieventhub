@@ -47,7 +47,7 @@ class EndSettingsController extends Controller
             if (Role::where('title', $data['title'])->exists() && Role::where('title', $data['title'])->where('is_deleted', 'NO')->exists()) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Similar record already exists in the database, try a different one.'
+                    'message' => 'Record already exists in the database, try a different one.'
                 ], 422);
             }
             $dbRequest = Role::create($data);
@@ -143,6 +143,28 @@ class EndSettingsController extends Controller
             ], 500);
         }
     }
+
+    public function fetchRole()
+    {
+        try {
+            $data = Role::where('is_deleted', '!=', 'Yes')
+                        ->orderBy('title', 'ASC')
+                        ->orderBy('id', 'ASC')
+                        ->get(['id', 'title']);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
 
     // Regions
     public function viewRegion()

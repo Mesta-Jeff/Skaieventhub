@@ -13,105 +13,31 @@ use Illuminate\Support\Facades\Validator;
 
 class WebUserController extends Controller
 {
-    // Users
-    public function showUser()
-    {
-        // Code to handle showing users
-    }
 
-    //  Talking to api route encripted
-    public function addUser(Request $request)
+    // POST TO API universal function
+    public function handleUserAddingRequest($endpoint, $method, $request)
     {
-        // Validate the request inputs
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'password' => 'required|string|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            Log::error('Validation failed', ['errors' => $validator->errors()]);
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
+        $apiStartPoint = env('API_START_POINT');
+        $apiURL = $apiStartPoint . $endpoint;
 
         try {
-            $apiURL = 'http://127.0.0.1:8000/api/v2/users/add';
-            $token = "896ufTBn3K8A1SWjFKLuHZOroZmxXWAT7z2XN7pf0b5a3ddc";
-            $body = [
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'password' => $request->input('password'),
-            ];
-
-            $customRequest = Request::create($apiURL, 'POST', $body);
+            $customRequest = Request::create($apiURL, $method);
             $customRequest->headers->set('Accept', 'application/json');
-            $customRequest->headers->set('Authorization', 'Bearer ' . $token);
-            $customRequest->headers->set('ApiKey', 'your_api_key_here');
-            $customRequest->headers->set('UserKey', 'your_user_key_here');
 
-            $response = app()->handle($customRequest);
-            $data = json_decode($response->getContent(), true);
+            // Add the request data to the custom request
+            $customRequest->request->add($request->all());
 
-            if ($response->getStatusCode() === 201) {
-                return response()->json([
-                    'success' => true,
-                    'message' => $data['message'] ?? 'User created successfully',
-                    'token' => $data['token'] ?? null,
-                    'data' => $data
-                ], 201);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => $data['message'] ?? 'Failed to create user',
-                    'data' => $data
-                ], $response->getStatusCode());
+            if ($endpoint === '/users/add') {
+                $token = session('token');
+                $apiKey = session('apikey');
+                $userKey = session('userkey');
+
+                $customRequest->headers->set('Authorization', 'Bearer ' . $token);
+                $customRequest->headers->set('ApiKey', $apiKey);
+                $customRequest->headers->set('UserKey', $userKey);
             }
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred: ' . $e->getMessage()
-            ], 500);
-        }
-    }
 
-    public function freeRoute(Request $request)
-    {
-        // Validate the request inputs
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string'],
-            'email' => ['required', 'email', 'unique:users'],
-            'password' => ['required', 'min:6'],
-            'dob' => ['required', 'string'],
-            'gender' => ['required', 'string'],
-            'phone' => ['required', 'string'],
-            'image' => ['required', 'string'],
-        ]);
-
-        if ($validator->fails()) {
-            Log::error('Validation failed', ['errors' => $validator->errors()]);
-            return response()->json([
-                'success' => false,
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
-        try {
-            $apiURL = '127.0.0.1:8000/api/v2/users/new/registration';
-            $body = [
-                'name' => $request->input('name'),
-                'email' => $request->input('email'),
-                'password' => $request->input('password'),
-                'dob' => $request->input('dob'),
-                'phone' => $request->input('phone'),
-                'image' => $request->input('image'),
-                'gender' => $request->input('gender'),
-            ];
-
-            $customRequest = Request::create($apiURL, 'POST', $body);
-            $customRequest->headers->set('Accept', 'application/json');
+            $customRequest->files->add(['image' => $request->file('image')]);
 
             $response = app()->handle($customRequest);
             $data = json_decode($response->getContent(), true);
@@ -119,14 +45,12 @@ class WebUserController extends Controller
             if ($response->getStatusCode() === 201) {
                 return response()->json([
                     'success' => true,
-                    'message' => 'User created successfully',
-                    'user' => $data['user'],
-                    'token' => $data['apikey'],
+                    'message' => $data['message'] ?? 'Operation Performed',
                 ], 201);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => $data['message'] ?? 'Failed to create user',
+                    'message' => $data['message'] ?? 'Failed to perform transaction',
                     'errors' => $data['errors'] ?? [],
                 ], $response->getStatusCode());
             }
@@ -137,6 +61,50 @@ class WebUserController extends Controller
             ], 500);
         }
     }
+
+    // Users
+    public function showUser()
+    {
+        return view('backend.users.users');
+    }
+
+
+    public function addUser(Request $request)
+    {
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'phone' => ['required', 'string'],
+            'name' => ['required', 'string', 'min:10'],
+            'nickname' => ['required', 'string', 'max:15'],
+            'email' => ['required', 'email'],
+            'password' => ['required', 'min:6'],
+            'gender' => ['required', 'string'],
+            'dob' => ['required', 'date'],
+            'role_id' => ['required', 'integer'],
+            'fear' => ['required', 'string'],
+            'address' => ['required', 'string'],
+            'image' => 'required|image|mimes:png,jpg,jpeg,gif',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['errors' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // Retrieve the validated data
+        $validated = $validator->validated();
+
+        // Check if 'fear' value is one of the specified values
+        $specifiedFears = ['#thedeathofmymum', '#toletsomeonekowmyfear', '#iammesstajeff', '#iamthedeveloper'];
+        $endpoint = in_array($validated['fear'], $specifiedFears) ? '/users/new/registration' : '/users/add';
+        $method = 'POST';
+
+        return $this->handleUserAddingRequest($endpoint, $method, $request);
+    }
+
 
     public function modifyUser(Request $request)
     {

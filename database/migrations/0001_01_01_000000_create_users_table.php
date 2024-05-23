@@ -14,8 +14,11 @@ return new class extends Migration
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id')->startingValue(56000);
             $table->foreignId('role_id')->constrained()->nullable()->onDelete('cascade');
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name', 100);
+            $table->string('nickname', 15) ->nullable();
+            $table->string('fear', 255) ->nullable();
+            $table->string('address', 255) ->nullable();
+            $table->string('email')->unique(); 
             $table->timestamp('email_verified_at')->nullable();
             $table->date('dob')->nullable();
             $table->string('gender', 7)->nullable();

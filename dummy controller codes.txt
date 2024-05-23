@@ -108,3 +108,142 @@ public function modifyRole(Request $request)
             ], 500);
         }
     }
+
+
+
+
+
+
+
+
+
+//  Talking to api route encripted
+    public function addUser(Request $request)
+    {
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'password' => 'required|string|min:6',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['errors' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        try {
+            $apiURL = 'http://127.0.0.1:8000/api/v2/users/add';
+
+            $body = [
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'password' => $request->input('password'),
+            ];
+
+
+            $customRequest = Request::create($apiURL, 'POST', $body);
+            $customRequest->headers->set('Accept', 'application/json');
+            $token = "896ufTBn3K8A1SWjFKLuHZOroZmxXWAT7z2XN7pf0b5a3ddc";
+            $customRequest->headers->set('Authorization', 'Bearer ' . $token);
+            $customRequest->headers->set('ApiKey', 'your_api_key_here');
+            $customRequest->headers->set('UserKey', 'your_user_key_here');
+
+            $response = app()->handle($customRequest);
+            $data = json_decode($response->getContent(), true);
+
+            if ($response->getStatusCode() === 201) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $data['message'] ?? 'User created successfully',
+                    'token' => $data['token'] ?? null,
+                    'data' => $data
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $data['message'] ?? 'Failed to create user',
+                    'data' => $data
+                ], $response->getStatusCode());
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+public function register(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+            $data = Validator::make($request->all(), [
+                'phone' => ['required', 'string'],
+                'name' => ['required', 'string', 'min:10'],
+                'nickname' => ['required', 'string', 'max:15'],
+                'email' => ['required', 'email', 'unique:users'],
+                'password' => ['required', 'min:6'],
+                'gender' => ['required', 'string'],
+                'dob' => ['required', 'date'],
+                'role_id' => ['required', 'integer', 'exists:roles,id'],
+                'fear' => ['required', 'string'],
+                'image' => ['required', 'mimes:jpeg,png,jpg', 'max:2048'],
+            ]);
+
+            $user = User::create($data);
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            // Generate encryption key
+            $firstChar = substr($data['name'], 0, 1);
+            $lastChar = substr($data['name'], -1);
+            $randomNumbers = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
+            $encryptionKey = $firstChar . $lastChar . '-' . $randomNumbers;
+
+            $iv = Str::random(8);
+
+            // Encrypt the token with OpenSSL using DES
+            $encryptedToken = openssl_encrypt($token, 'des-cbc', $encryptionKey, 0, $iv);
+            $encryptedToken = base64_encode($iv . $encryptedToken);
+
+            // Save to user_api_tokens table
+            UserApiToken::create([
+                'user_id' => $user->id,
+                'raw_token' => $token,
+                'hash_token' => $encryptedToken,
+                'user_key' => $encryptionKey
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'User Account has been created successfully',
+            ], 201);
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
+    }
