@@ -603,7 +603,7 @@
 
         // Gett user information
         $.get("https://ipinfo.io", function(response) {
-            address = response.country + ", " + response.region+ " " + response.city
+            address = response.country + ", " + response.region+ " Region " + response.city
             console.log('City:', address);
         }, "json");
 

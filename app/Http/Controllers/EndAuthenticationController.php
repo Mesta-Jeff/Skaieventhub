@@ -53,14 +53,16 @@ class EndAuthenticationController extends Controller
             $user = User::where('users.id', $user->id)
                 ->join('roles as r', 'users.role_id', '=', 'r.id')
                 ->join('user_api_tokens as uat', 'users.id', '=', 'uat.user_id')
-                ->select('users.name', 'users.email', 'users.phone', 'users.image', 'r.title as role', 'uat.raw_token', 'uat.user_key', 'uat.hash_token')
+                ->select('users.id','users.name','users.nickname', 'users.email', 'users.phone', 'users.image', 'r.title as role', 'uat.raw_token', 'uat.user_key', 'uat.hash_token')
                 ->first();
 
             // Prepare response data
             $imageUrl = asset('storage/images/users/' . $user->image);
 
             $responseData = [
+                'user-id' => $user->id,
                 'name' => $user->name,
+                'nickname' => $user->nickname,
                 'email' => $user->email,
                 'phone' => $user->phone,
                 'image' => $imageUrl,

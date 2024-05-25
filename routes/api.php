@@ -27,6 +27,7 @@ Route::prefix('v2')->group(function () {
     // Free and Open Routes   ===================================================================================
 
     Route::post('/users/new/registration', [EndUserController::class, 'register']);
+    Route::post('/users/mobile/createaccount', [EndUserController::class, 'mobileRequestAccount']);
 
     // Roles:  free routes
     Route::get('/settings/roles', [EndSettingsController::class, 'viewRole']);
