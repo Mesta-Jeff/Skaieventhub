@@ -128,7 +128,7 @@ html[data-bs-theme=dark][data-topbar-color=light] {
     --ct-gray-700: #6c757d;
     --ct-gray-800: #343a40;
     --ct-gray-900: #313a46;
-    --ct-primary: #0a8543;
+    --ct-primary: #00c68c;
     --ct-secondary: #6c757d;
     --ct-success: #0fd46c;
     --ct-info: #39afd1;
@@ -276,6 +276,9 @@ html[data-bs-theme=dark][data-topbar-color=light] {
     --ct-form-invalid-color: #fc9db0;
     --ct-form-invalid-border-color: #fc9db0
 }
+
+
+
 
 *,
 ::after,
@@ -7052,6 +7055,7 @@ fieldset:disabled .btn {
 }
 
 .modal-header {
+    background-color: var(--ct-primary);
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -7075,6 +7079,8 @@ fieldset:disabled .btn {
 }
 
 .modal-title {
+    font-weight: bold;
+    color: white !important;
     margin-bottom: 0;
     line-height: var(--ct-modal-title-line-height)
 }

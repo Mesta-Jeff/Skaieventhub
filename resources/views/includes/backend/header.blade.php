@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>@yield('title') | SkaieventHub a product from Skaimount</title>
+    <title>@yield('title') | Skai-Tick a product from Skaimount</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="SkaiTheme" name="author" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
@@ -36,8 +36,9 @@
 
     <!-- Datatable css -->
     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css">
-    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.0.1/css/buttons.dataTables.min.css">
-    <link href="https://cdn.datatables.net/responsive/2.2.3/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
+    {{-- <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.0.1/css/buttons.dataTables.min.css"> --}}
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/1.0.1/css/buttons.dataTables.min.css">
+    <link href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.dataTables.min.css" rel="stylesheet" type="text/css" />
 
 
 

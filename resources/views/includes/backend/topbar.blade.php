@@ -13,7 +13,7 @@
                         <strong
                             style="font-size: 22px; font-weight: bold; color: white; font-family: 'Segoe UI';">skai</strong><span
                             class="logo-lg-text-dark"
-                            style="font-family: 'Segoe UI'; color: white;">HUB</span>
+                            style="font-family: 'Segoe UI'; color: white;">-TICK</span>
                     </span>
                     <span class="logo-sm">
                         <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt="small logo">
@@ -29,7 +29,7 @@
                         <strong
                             style="font-size: 22px; font-weight: bold; color: #04c58f; font-family: 'Segoe UI';">skai</strong><span
                             class="logo-lg-text-dark"
-                            style="font-family: 'Segoe UI'; color: #04c58f;">HUB</span>
+                            style="font-family: 'Segoe UI'; color: #04c58f;">-TICK</span>
                     </span>
                     <span class="logo-sm">
                         <img src="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}" alt="small logo">
@@ -204,7 +204,7 @@
 
             <li class="d-none d-sm-inline-block">
                 <a class="nav-link" data-bs-toggle="offcanvas"
-                    href="dashboard-wallet.html#theme-settings-offcanvas">
+                    href="/#theme-settings-offcanvas">
                     <i class="ri-settings-3-line font-18"></i>
                 </a>
             </li>
@@ -218,28 +218,27 @@
 
 
             <li class="d-none d-md-inline-block">
-                <a class="nav-link" href="dashboard-wallet.html" data-toggle="fullscreen">
+                <a class="nav-link" href="/" data-toggle="fullscreen">
                     <i class="ri-fullscreen-line font-18"></i>
                 </a>
             </li>
 
             <li class="dropdown">
                 <a class="nav-link dropdown-toggle arrow-none nav-user px-2" data-bs-toggle="dropdown"
-                    href="dashboard-wallet.html#" role="button" aria-haspopup="false"
-                    aria-expanded="false">
+                    href="/#" role="button" aria-haspopup="false"
+                    aria-expanded="false" style="background-color: white !important; border-width: 0px">
                     <span class="account-user-avatar">
-                        <img src="{{ asset('root/hyp/assets/images/users/avatar-1.jpg') }}"
-                            alt="user-image" width="32" class="rounded-circle">
+                        <img src="{{ session('image') ? asset(session('image')) : asset('root/hyp/assets/images/users/avatar-1.jpg') }}"
+                            alt="user" width="32" class="rounded-circle">
                     </span>
-                    <span class="d-lg-flex flex-column gap-1 d-none">
-                        <h5 class="my-0">Username here...</h5>
-                        <h6 class="my-0 fw-normal">role here...</h6>
-                    </span>
+                    <span class="d-lg-flex flex-column gap-1 d-none" data-bs-toggle="tooltip" data-bs-placement="left" title="As {{ session('role') ?? 'User' }}">
+                        {{ session('name') ?? 'User' }}
+                    </span>                    
                 </a>
                 <div class="dropdown-menu dropdown-menu-end dropdown-menu-animated profile-dropdown">
                     <!-- item-->
                     <div class=" dropdown-header noti-title">
-                        <h6 class="text-overflow m-0">Welcome !</h6>
+                        <h6 class="text-overflow m-0">Welcome ! {{ session('nickname') ?? 'User' }}</h6>
                     </div>
 
                     <!-- item-->

@@ -32,16 +32,25 @@ Route::prefix('v2')->group(function () {
     // Roles:  free routes
     Route::get('/settings/roles', [EndSettingsController::class, 'viewRole']);
     Route::post('/settings/roles', [EndSettingsController::class, 'createRole']);
-    Route::post('/settings/roles/update', [EndSettingsController::class, 'updateRole']);
-    Route::post('/settings/roles/delete', [EndSettingsController::class, 'destroyRole']);
     Route::get('/settings/roles/fetch', [EndSettingsController::class, 'fetchRole']);
 
-    //
+    // GetbyID
+    Route::get('/settings/districts/byRegion', [EndSettingsController::class, 'getDistrictByRegion']);
+    Route::get('/settings/regions/get', [EndSettingsController::class, 'getRegion']);
+    Route::get('/settings/identity-types/get', [EndSettingsController::class, 'getIdentityType']);
+
+    // Authentication
     Route::get('/authentication/login', [EndAuthenticationController::class, 'getCrendential']);
+    Route::post('/authentication/sessions', [EndAuthenticationController::class, 'createSessions']);
 
     // End of free routes    =====================================================================================
 
     Route::middleware([CheckApiKey::class, 'auth:sanctum'])->group(function () {
+
+        // Sessions
+        Route::get('/authentication/sessions', [EndAuthenticationController::class, 'getSessions']);
+        // Bulk Remove
+        Route::post('/commands/bulk-remove', [EndSettingsController::class, 'bulkRemove']);
 
         // Users:
         Route::get('/users', [EndUserController::class, 'viewUser']);
@@ -65,16 +74,14 @@ Route::prefix('v2')->group(function () {
         Route::get('/users/api-tokens/get', [EndUserController::class, 'getUserAPIToken']);
 
         // Roles Route
-        // Route::post('/settings/roles/update', [EndSettingsController::class, 'updateRole']);
-        // Route::post('/settings/roles/delete', [EndSettingsController::class, 'destroyRole']);
-        // Route::get('/settings/roles/fetch', [EndSettingsController::class, 'fetchRole']);
+        Route::post('/settings/roles/update', [EndSettingsController::class, 'updateRole']);
+        Route::post('/settings/roles/delete', [EndSettingsController::class, 'destroyRole']);
 
         // Regions:
         Route::get('/settings/regions', [EndSettingsController::class, 'viewRegion']);
         Route::post('/settings/regions', [EndSettingsController::class, 'createRegion']);
         Route::post('/settings/regions/update', [EndSettingsController::class, 'updateRegion']);
         Route::post('/settings/regions/delete', [EndSettingsController::class, 'destroyRegion']);
-        Route::get('/settings/regions/get', [EndSettingsController::class, 'getRegion']);
 
         // Districts:
         Route::get('/settings/districts', [EndSettingsController::class, 'viewDistrict']);
@@ -109,7 +116,6 @@ Route::prefix('v2')->group(function () {
         Route::post('/settings/identity-types', [EndSettingsController::class, 'createIdentityType']);
         Route::post('/settings/identity-types/update', [EndSettingsController::class, 'updateIdentityType']);
         Route::post('/settings/identity-types/delete', [EndSettingsController::class, 'destroyIdentityType']);
-        Route::get('/settings/identity-types/get', [EndSettingsController::class, 'getIdentityType']);
 
         // Notifications:
         Route::get('/settings/notifications', [EndSettingsController::class, 'viewNotification']);

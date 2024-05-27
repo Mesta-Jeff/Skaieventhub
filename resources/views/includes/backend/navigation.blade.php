@@ -8,7 +8,7 @@
                     height="25">
                 <strong
                     style="font-size: 22px; font-weight: bold; color: white; font-family: 'Segoe UI';">skai</strong><span
-                    class="logo-lg-text-dark" style="font-family: 'Segoe UI'; color: white;">HUB</span>
+                    class="logo-lg-text-dark" style="font-family: 'Segoe UI'; color: white;">-TICK</span>
             </span>
             <span class="logo-sm">
                 <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt=""
@@ -18,8 +18,7 @@
     </section>
 
     <!-- Sidebar Hover Menu Toggle Button -->
-    <div class="button-sm-hover" data-bs-toggle="tooltip" data-bs-placement="right"
-        title="Show Full Sidebar">
+    <div class="button-sm-hover" data-bs-toggle="tooltip" data-bs-placement="right" title="Show Full Sidebar">
         <i class="ri-checkbox-blank-circle-line align-middle"></i>
     </div>
 
@@ -94,12 +93,12 @@
                     <div class="collapse sidebarSystem">
                         <ul class="side-nav-second-level">
                             <li id="view-roles"><a href="{{ route("settings.roles.show")}}">View Roles</a></li>
-                            <li id="view-permissions"><a href="#">View Permissions</a></li>
-                            <li id="view-regions"><a href="#">View Regions</a></li>
-                            <li id="view-districts"><a href="#">View Districts</a></li>
-                            <li id="view-towns"><a href="#">View Towns</a></li>
-                            <li id="view-identities"><a href="#">View Identities</a></li>
-                            <li id="view-notifications"><a href="#">View Notifications</a></li>
+                            <li id="view-permissions"><a href="{{ route('settings.permissions.show')}}">View Permissions</a></li>
+                            <li id="view-regions"><a href="{{ route('settings.regions.show')}}">View Regions</a></li>
+                            <li id="view-districts"><a href="{{ route('settings.districts.show')}}">View Districts</a></li>
+                            <li id="view-towns"><a href="{{ route('settings.towns.show')}}">View Towns</a></li>
+                            <li id="view-identities"><a href="{{ route('settings.identitytypes.show')}}">View Identities</a></li>
+                            <li id="view-notifications"><a href="{{ route('settings.notifications.show')}}">View Notifications</a></li>
                         </ul>
                     </div>
                 </li>

@@ -31,7 +31,7 @@
                         <!--end col-->
                         <div class="col-xxl-9 ms-auto">
                             <div>
-                                <select id="filter2" class="select2 form-control" data-placeholder="Your Placeholder">
+                                <select id="filter2" class="select2 form-control" data-placeholder="Filter by Status...">
                                     <option value="" selected>Filter by Status...</option>
                                 </select>
                             </div>
@@ -39,7 +39,7 @@
                         <!--end col-->
                         <div class="col-xxl-3 ms-auto">
                             <div class="hstack gap-2">
-                                <button type="button" id="btnref" class="btn btn-secondary"><i class="mdi mdi-atom-letiant spin"></i> Reload</button>
+                                <button type="button" id="btnref" class="btn btn-soft-secondary"><i class="mdi mdi-atom-letiant spin"></i> Reload</button>
                                 <button type="button" id="btnNew" class="btn btn-outline-success waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
                             </div>
                         </div>
@@ -110,7 +110,7 @@
                                 <optgroup label="Other">
                                     <option value="Private">Private</option>
                                 </optgroup>
-                            </select>                            
+                            </select>
                         </div>
                         <div class="form-outline col-md-12 fv-row mb-2">
                             <label class="form-label" for="ides">Role Description</label>
@@ -126,9 +126,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="edit-data">Proceed</button>
-                    <button type="button" class="btn btn-primary btn-sm" id="save-data">Proceed</button>
+                    <button type="button" class="btn btn-soft-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-soft-info btn-sm" id="edit-data">Proceed</button>
+                    <button type="button" class="btn btn-soft-success btn-sm" id="save-data">Proceed</button>
                 </div>
             </form>
         </div>
@@ -146,7 +146,7 @@
         //calling the model to add new
         $('#btnNew').click(function() {
             $('#my-form')[0].reset();
-            $('#modal-title').text('Add New Records');
+            $('#modal-title').text('Add New Record');
             $('#my-modal').modal('show');
             $('#state-view').hide();
             $('#edit-data').hide();
@@ -214,8 +214,6 @@
                             '<hr style="margin-top: 1px;" />'+
                             '<a class="dropdown-item edit-btn" href="javascript: void(0);" data-id="' + data.id + '" data-role="' + data.title + '" data-description="' + data.description + '" data-status="' + data.status + '"><i class="mdi mdi-pen-plus mx-1"></i>Modify Record </a>' +
                             '<a class="dropdown-item text-danger delete-btn" href="javascript: void(0);" data-id="' + data.id + '" data-rol="' + data.title + '"><i class="mdi mdi-delete mx-1"></i>Remove Record</a>' +
-                            '<a class="dropdown-item" href="javascript: void(0);">Add Star</a>' +
-                            '<a class="dropdown-item" href="javascript: void(0);">Mute</a>' +
                             '</div>' +
                             '</div>';
                     }
@@ -228,7 +226,7 @@
             lengthChange: false,
             responsive: true,
             buttons: ["copy", "excel", "csv", "print", "pdf"].map(function (type) {
-                return { extend: type, className: "btn btn-outline-success waves-effect waves-light" };
+                return { extend: type, className: "btn-soft-success waves-effect waves-light" };
             }),
             language: {
                 paginate: {

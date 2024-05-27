@@ -1,31 +1,78 @@
-<x-guest-layout>
-    <div class="mb-4 text-sm text-gray-600">
-        {{ __('Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didn\'t receive the email, we will gladly send you another.') }}
-    </div>
 
-    @if (session('status') == 'verification-link-sent')
-        <div class="mb-4 font-medium text-sm text-green-600">
-            {{ __('A new verification link has been sent to the email address you provided during registration.') }}
-        </div>
-    @endif
+@extends('backend.layouts.authentication')
 
-    <div class="mt-4 flex items-center justify-between">
-        <form method="POST" action="{{ route('verification.send') }}">
-            @csrf
+@section('title', 'Verify Email')
 
-            <div>
-                <x-primary-button>
-                    {{ __('Resend Verification Email') }}
-                </x-primary-button>
+@section('content')
+
+<div class="container">
+    <div class="row mt-5"></div>
+    <!-- end row -->
+
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6 col-xl-5">
+            <div class="card mt-4">
+
+                <div class="card-body p-4">
+                    <div class="mb-4">
+                        <div class="avatar-lg mx-auto">
+                            <div class="avatar-title bg-light text-primary display-5 rounded-circle">
+                                <i class="ri-mail-line"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-2 mt-4">
+                        <div class="text-muted text-center mb-4 mx-lg-3">
+                            <h4 class="">Verify Your Email</h4>
+                            <p>Please enter the 4 digit code sent to <span class="fw-semibold">example@abc.com</span></p>
+                        </div>
+
+                        <form autocomplete="off">
+                            <div class="hstack">
+                                <div class="mb-3 mx-1">
+                                    <label for="digit1-input" class="visually-hidden">Digit 1</label>
+                                    <input type="text" class="form-control form-control text-center" onkeyup="moveToNext(1, event)" maxLength="1" id="digit1-input" oninput="validateInput(event)">
+                                </div>
+                                <div class="mb-3 mx-1">
+                                    <label for="digit2-input" class="visually-hidden">Digit 2</label>
+                                    <input type="text" class="form-control form-control text-center" onkeyup="moveToNext(2, event)" maxLength="1" id="digit2-input" oninput="validateInput(event)">
+                                </div>
+                                <div class="mb-3 mx-1">
+                                    <label for="digit3-input" class="visually-hidden">Digit 3</label>
+                                    <input type="text" class="form-control form-control text-center" onkeyup="moveToNext(3, event)" maxLength="1" id="digit3-input" oninput="validateInput(event)">
+                                </div>    
+                                <div class="mb-3 mx-1">
+                                    <label for="digit4-input" class="visually-hidden">Digit 4</label>
+                                    <input type="text" class="form-control form-control text-center" onkeyup="moveToNext(4, event)" maxLength="1" id="digit4-input" oninput="validateInput(event)">
+                                </div>
+                                <div class="mb-3 mx-1">
+                                    <label for="digit5-input" class="visually-hidden">Digit 5</label>
+                                    <input type="text" class="form-control form-control text-center" onkeyup="moveToNext(5, event)" maxLength="1" id="digit5-input" oninput="validateInput(event)">
+                                </div>
+                                <div class="mb-3 mx-1">
+                                    <label for="digit6-input" class="visually-hidden">Digit 4</label>
+                                    <input type="text" class="form-control form-control text-center" onkeyup="moveToNext(6, event)" maxLength="1" id="digit6-input" oninput="validateInput(event)">
+                                </div>
+                            </div>
+                        </form>
+
+                        <div class="mt-3">
+                            <button type="button" class="btn btn-success w-100">Confirm</button>
+                        </div>
+                    </div>
+                </div>
+                <!-- end card body -->
             </div>
-        </form>
+            <!-- end card -->
 
-        <form method="POST" action="{{ route('logout') }}">
-            @csrf
+            <div class="mt-4 text-center">
+                <p class="mb-0">Didn't receive a code ? <a href="auth-pass-reset-basic.html" class="fw-semibold text-primary text-decoration-underline">Resend</a> </p>
+            </div>
 
-            <button type="submit" class="underline text-sm text-gray-600 hover:text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                {{ __('Log Out') }}
-            </button>
-        </form>
+        </div>
     </div>
-</x-guest-layout>
+    <!-- end row -->
+</div>
+    
+@endsection

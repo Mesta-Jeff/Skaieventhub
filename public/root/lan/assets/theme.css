@@ -114,7 +114,7 @@
   outline: 0 none;
   outline-offset: 0;
   box-shadow: 0 0 0 0.2rem #BFDBFE;
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-datepicker .p-datepicker-header .p-datepicker-title .p-datepicker-month {
   margin-right: 0.5rem;
@@ -266,8 +266,8 @@
   font-size: 14px;
 }
 .landing-themes .p-checkbox .p-checkbox-box.p-highlight {
-  border-color: #3B82F6;
-  background: #3B82F6;
+  border-color: teal;
+  background: teal;
 }
 .landing-themes .p-checkbox .p-checkbox-box.p-highlight:not(.p-disabled):hover {
   border-color: #1D4ED8;
@@ -275,13 +275,13 @@
   color: #ffffff;
 }
 .landing-themes .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: 0 0 0 0.2rem #BFDBFE;
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box.p-highlight:hover {
   border-color: #1D4ED8;
@@ -295,7 +295,7 @@
   background-color: #e9ecef;
 }
 .landing-themes .p-input-filled .p-checkbox .p-checkbox-box.p-highlight {
-  background: #3B82F6;
+  background: teal;
 }
 .landing-themes .p-input-filled .p-checkbox:not(.p-checkbox-disabled) .p-checkbox-box:hover {
   background-color: #e9ecef;
@@ -310,13 +310,13 @@
   border-radius: 6px;
 }
 .landing-themes .p-dropdown:not(.p-disabled):hover {
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-dropdown:not(.p-disabled).p-focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: 0 0 0 0.2rem #BFDBFE;
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-dropdown.p-dropdown-clearable .p-dropdown-label {
   padding-right: 1.75rem;
@@ -436,13 +436,13 @@
   border-radius: 6px;
 }
 .landing-themes .p-inputtext:enabled:hover {
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-inputtext:enabled:focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: 0 0 0 0.2rem #BFDBFE;
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-inputtext.p-invalid.p-component {
   border-color: #e24c4c;
@@ -520,13 +520,13 @@
   border-radius: 6px;
 }
 .landing-themes .p-multiselect:not(.p-disabled):hover {
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-multiselect:not(.p-disabled).p-focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: 0 0 0 0.2rem #BFDBFE;
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-multiselect.p-multiselect-clearable .p-multiselect-label {
   padding-right: 1.75rem;
@@ -679,13 +679,13 @@
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
 .landing-themes .p-radiobutton .p-radiobutton-box:not(.p-disabled):not(.p-highlight):hover {
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-radiobutton .p-radiobutton-box:not(.p-disabled).p-focus {
   outline: 0 none;
   outline-offset: 0;
   box-shadow: 0 0 0 0.2rem #BFDBFE;
-  border-color: #3B82F6;
+  border-color: teal;
 }
 .landing-themes .p-radiobutton .p-radiobutton-box .p-radiobutton-icon {
   width: 12px;
@@ -694,8 +694,8 @@
   background-color: #ffffff;
 }
 .landing-themes .p-radiobutton .p-radiobutton-box.p-highlight {
-  border-color: #3B82F6;
-  background: #3B82F6;
+  border-color: teal;
+  background: teal;
 }
 .landing-themes .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
   border-color: #1D4ED8;
@@ -715,7 +715,7 @@
   background-color: #e9ecef;
 }
 .landing-themes .p-input-filled .p-radiobutton .p-radiobutton-box.p-highlight {
-  background: #3B82F6;
+  background: teal;
 }
 .landing-themes .p-input-filled .p-radiobutton .p-radiobutton-box.p-highlight:not(.p-disabled):hover {
   background: #1D4ED8;
@@ -743,7 +743,7 @@
   height: 1.143rem;
   width: 1.143rem;
   background: #ffffff;
-  border: 2px solid #3B82F6;
+  border: 2px solid teal;
   border-radius: 50%;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
 }
@@ -753,16 +753,16 @@
   box-shadow: 0 0 0 0.2rem #BFDBFE;
 }
 .landing-themes .p-slider .p-slider-range {
-  background: #3B82F6;
+  background: teal;
 }
 .landing-themes .p-slider:not(.p-disabled) .p-slider-handle:hover {
-  background: #3B82F6;
-  border-color: #3B82F6;
+  background: teal;
+  border-color: teal;
 }
 .landing-themes .p-button {
   color: #ffffff;
-  background: #3B82F6;
-  border: 1px solid #3B82F6;
+  background: teal;
+  border: 1px solid teal;
   padding: 0.75rem 1.25rem;
   font-size: 1rem;
   transition: background-color 0.2s, color 0.2s, border-color 0.2s, box-shadow 0.2s;
@@ -780,17 +780,17 @@
 }
 .landing-themes .p-button.p-button-outlined {
   background-color: transparent;
-  color: #3B82F6;
+  color: teal;
   border: 1px solid;
 }
 .landing-themes .p-button.p-button-outlined:enabled:hover, .landing-themes .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):hover {
   background: rgba(99, 102, 241, 0.04);
-  color: #3B82F6;
+  color: teal;
   border: 1px solid;
 }
 .landing-themes .p-button.p-button-outlined:enabled:active, .landing-themes .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):active {
   background: rgba(99, 102, 241, 0.16);
-  color: #3B82F6;
+  color: teal;
   border: 1px solid;
 }
 .landing-themes .p-button.p-button-outlined.p-button-plain {
@@ -807,17 +807,17 @@
 }
 .landing-themes .p-button.p-button-text {
   background-color: transparent;
-  color: #3B82F6;
+  color: teal;
   border-color: transparent;
 }
 .landing-themes .p-button.p-button-text:enabled:hover, .landing-themes .p-button.p-button-text:not(button):not(a):not(.p-disabled):hover {
   background: rgba(99, 102, 241, 0.04);
-  color: #3B82F6;
+  color: teal;
   border-color: transparent;
 }
 .landing-themes .p-button.p-button-text:enabled:active, .landing-themes .p-button.p-button-text:not(button):not(a):not(.p-disabled):active {
   background: rgba(99, 102, 241, 0.16);
-  color: #3B82F6;
+  color: teal;
   border-color: transparent;
 }
 .landing-themes .p-button.p-button-text.p-button-plain {
@@ -853,7 +853,7 @@
   min-width: 1rem;
   height: 1rem;
   line-height: 1rem;
-  color: #3B82F6;
+  color: teal;
   background-color: #ffffff;
 }
 .landing-themes .p-button.p-button-raised {
@@ -965,8 +965,8 @@
 }
 .landing-themes .p-button.p-button-info, .landing-themes .p-buttonset.p-button-info > .p-button, .landing-themes .p-splitbutton.p-button-info > .p-button, .landing-themes .p-fileupload-choose.p-button-info {
   color: #ffffff;
-  background: #3B82F6;
-  border: 1px solid #3B82F6;
+  background: teal;
+  border: 1px solid teal;
 }
 .landing-themes .p-button.p-button-info:enabled:hover, .landing-themes .p-button.p-button-info:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-buttonset.p-button-info > .p-button:enabled:hover, .landing-themes .p-buttonset.p-button-info > .p-button:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-splitbutton.p-button-info > .p-button:enabled:hover, .landing-themes .p-splitbutton.p-button-info > .p-button:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-fileupload-choose.p-button-info:enabled:hover, .landing-themes .p-fileupload-choose.p-button-info:not(button):not(a):not(.p-disabled):hover {
   background: #2563EB;
@@ -983,33 +983,33 @@
 }
 .landing-themes .p-button.p-button-info.p-button-outlined, .landing-themes .p-buttonset.p-button-info > .p-button.p-button-outlined, .landing-themes .p-splitbutton.p-button-info > .p-button.p-button-outlined, .landing-themes .p-fileupload-choose.p-button-info.p-button-outlined {
   background-color: transparent;
-  color: #3B82F6;
+  color: teal;
   border: 1px solid;
 }
 .landing-themes .p-button.p-button-info.p-button-outlined:enabled:hover, .landing-themes .p-button.p-button-info.p-button-outlined:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-buttonset.p-button-info > .p-button.p-button-outlined:enabled:hover, .landing-themes .p-buttonset.p-button-info > .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-splitbutton.p-button-info > .p-button.p-button-outlined:enabled:hover, .landing-themes .p-splitbutton.p-button-info > .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-fileupload-choose.p-button-info.p-button-outlined:enabled:hover, .landing-themes .p-fileupload-choose.p-button-info.p-button-outlined:not(button):not(a):not(.p-disabled):hover {
   background: rgba(59, 130, 246, 0.04);
-  color: #3B82F6;
+  color: teal;
   border: 1px solid;
 }
 .landing-themes .p-button.p-button-info.p-button-outlined:enabled:active, .landing-themes .p-button.p-button-info.p-button-outlined:not(button):not(a):not(.p-disabled):active, .landing-themes .p-buttonset.p-button-info > .p-button.p-button-outlined:enabled:active, .landing-themes .p-buttonset.p-button-info > .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):active, .landing-themes .p-splitbutton.p-button-info > .p-button.p-button-outlined:enabled:active, .landing-themes .p-splitbutton.p-button-info > .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):active, .landing-themes .p-fileupload-choose.p-button-info.p-button-outlined:enabled:active, .landing-themes .p-fileupload-choose.p-button-info.p-button-outlined:not(button):not(a):not(.p-disabled):active {
   background: rgba(59, 130, 246, 0.16);
-  color: #3B82F6;
+  color: teal;
   border: 1px solid;
 }
 .landing-themes .p-button.p-button-info.p-button-text, .landing-themes .p-buttonset.p-button-info > .p-button.p-button-text, .landing-themes .p-splitbutton.p-button-info > .p-button.p-button-text, .landing-themes .p-fileupload-choose.p-button-info.p-button-text {
   background-color: transparent;
-  color: #3B82F6;
+  color: teal;
   border-color: transparent;
 }
 .landing-themes .p-button.p-button-info.p-button-text:enabled:hover, .landing-themes .p-button.p-button-info.p-button-text:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-buttonset.p-button-info > .p-button.p-button-text:enabled:hover, .landing-themes .p-buttonset.p-button-info > .p-button.p-button-text:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-splitbutton.p-button-info > .p-button.p-button-text:enabled:hover, .landing-themes .p-splitbutton.p-button-info > .p-button.p-button-text:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-fileupload-choose.p-button-info.p-button-text:enabled:hover, .landing-themes .p-fileupload-choose.p-button-info.p-button-text:not(button):not(a):not(.p-disabled):hover {
   background: rgba(59, 130, 246, 0.04);
   border-color: transparent;
-  color: #3B82F6;
+  color: teal;
 }
 .landing-themes .p-button.p-button-info.p-button-text:enabled:active, .landing-themes .p-button.p-button-info.p-button-text:not(button):not(a):not(.p-disabled):active, .landing-themes .p-buttonset.p-button-info > .p-button.p-button-text:enabled:active, .landing-themes .p-buttonset.p-button-info > .p-button.p-button-text:not(button):not(a):not(.p-disabled):active, .landing-themes .p-splitbutton.p-button-info > .p-button.p-button-text:enabled:active, .landing-themes .p-splitbutton.p-button-info > .p-button.p-button-text:not(button):not(a):not(.p-disabled):active, .landing-themes .p-fileupload-choose.p-button-info.p-button-text:enabled:active, .landing-themes .p-fileupload-choose.p-button-info.p-button-text:not(button):not(a):not(.p-disabled):active {
   background: rgba(59, 130, 246, 0.16);
   border-color: transparent;
-  color: #3B82F6;
+  color: teal;
 }
 .landing-themes .p-button.p-button-success, .landing-themes .p-buttonset.p-button-success > .p-button, .landing-themes .p-splitbutton.p-button-success > .p-button, .landing-themes .p-fileupload-choose.p-button-success {
   color: #ffffff;
@@ -1109,51 +1109,51 @@
 }
 .landing-themes .p-button.p-button-help, .landing-themes .p-buttonset.p-button-help > .p-button, .landing-themes .p-splitbutton.p-button-help > .p-button, .landing-themes .p-fileupload-choose.p-button-help {
   color: #ffffff;
-  background: #A855F7;
-  border: 1px solid #A855F7;
+  background: teal;
+  border: 1px solid teal;
 }
 .landing-themes .p-button.p-button-help:enabled:hover, .landing-themes .p-button.p-button-help:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-buttonset.p-button-help > .p-button:enabled:hover, .landing-themes .p-buttonset.p-button-help > .p-button:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-splitbutton.p-button-help > .p-button:enabled:hover, .landing-themes .p-splitbutton.p-button-help > .p-button:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-fileupload-choose.p-button-help:enabled:hover, .landing-themes .p-fileupload-choose.p-button-help:not(button):not(a):not(.p-disabled):hover {
-  background: #9333EA;
+  background: teal;
   color: #ffffff;
-  border-color: #9333EA;
+  border-color: teal;
 }
 .landing-themes .p-button.p-button-help:enabled:focus, .landing-themes .p-button.p-button-help:not(button):not(a):not(.p-disabled):focus, .landing-themes .p-buttonset.p-button-help > .p-button:enabled:focus, .landing-themes .p-buttonset.p-button-help > .p-button:not(button):not(a):not(.p-disabled):focus, .landing-themes .p-splitbutton.p-button-help > .p-button:enabled:focus, .landing-themes .p-splitbutton.p-button-help > .p-button:not(button):not(a):not(.p-disabled):focus, .landing-themes .p-fileupload-choose.p-button-help:enabled:focus, .landing-themes .p-fileupload-choose.p-button-help:not(button):not(a):not(.p-disabled):focus {
   box-shadow: 0 0 0 0.2rem #E9D5FF;
 }
 .landing-themes .p-button.p-button-help:enabled:active, .landing-themes .p-button.p-button-help:not(button):not(a):not(.p-disabled):active, .landing-themes .p-buttonset.p-button-help > .p-button:enabled:active, .landing-themes .p-buttonset.p-button-help > .p-button:not(button):not(a):not(.p-disabled):active, .landing-themes .p-splitbutton.p-button-help > .p-button:enabled:active, .landing-themes .p-splitbutton.p-button-help > .p-button:not(button):not(a):not(.p-disabled):active, .landing-themes .p-fileupload-choose.p-button-help:enabled:active, .landing-themes .p-fileupload-choose.p-button-help:not(button):not(a):not(.p-disabled):active {
-  background: #7E22CE;
+  background: teal;
   color: #ffffff;
-  border-color: #7E22CE;
+  border-color: teal;
 }
 .landing-themes .p-button.p-button-help.p-button-outlined, .landing-themes .p-buttonset.p-button-help > .p-button.p-button-outlined, .landing-themes .p-splitbutton.p-button-help > .p-button.p-button-outlined, .landing-themes .p-fileupload-choose.p-button-help.p-button-outlined {
   background-color: transparent;
-  color: #A855F7;
+  color: teal;
   border: 1px solid;
 }
 .landing-themes .p-button.p-button-help.p-button-outlined:enabled:hover, .landing-themes .p-button.p-button-help.p-button-outlined:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-buttonset.p-button-help > .p-button.p-button-outlined:enabled:hover, .landing-themes .p-buttonset.p-button-help > .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-splitbutton.p-button-help > .p-button.p-button-outlined:enabled:hover, .landing-themes .p-splitbutton.p-button-help > .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-fileupload-choose.p-button-help.p-button-outlined:enabled:hover, .landing-themes .p-fileupload-choose.p-button-help.p-button-outlined:not(button):not(a):not(.p-disabled):hover {
-  background: rgba(168, 85, 247, 0.04);
-  color: #A855F7;
+  background: teal;
+  color: teal;
   border: 1px solid;
 }
 .landing-themes .p-button.p-button-help.p-button-outlined:enabled:active, .landing-themes .p-button.p-button-help.p-button-outlined:not(button):not(a):not(.p-disabled):active, .landing-themes .p-buttonset.p-button-help > .p-button.p-button-outlined:enabled:active, .landing-themes .p-buttonset.p-button-help > .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):active, .landing-themes .p-splitbutton.p-button-help > .p-button.p-button-outlined:enabled:active, .landing-themes .p-splitbutton.p-button-help > .p-button.p-button-outlined:not(button):not(a):not(.p-disabled):active, .landing-themes .p-fileupload-choose.p-button-help.p-button-outlined:enabled:active, .landing-themes .p-fileupload-choose.p-button-help.p-button-outlined:not(button):not(a):not(.p-disabled):active {
-  background: rgba(168, 85, 247, 0.16);
-  color: #A855F7;
+  background: teal;
+  color: teal;
   border: 1px solid;
 }
 .landing-themes .p-button.p-button-help.p-button-text, .landing-themes .p-buttonset.p-button-help > .p-button.p-button-text, .landing-themes .p-splitbutton.p-button-help > .p-button.p-button-text, .landing-themes .p-fileupload-choose.p-button-help.p-button-text {
   background-color: transparent;
-  color: #A855F7;
+  color: teal;
   border-color: transparent;
 }
 .landing-themes .p-button.p-button-help.p-button-text:enabled:hover, .landing-themes .p-button.p-button-help.p-button-text:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-buttonset.p-button-help > .p-button.p-button-text:enabled:hover, .landing-themes .p-buttonset.p-button-help > .p-button.p-button-text:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-splitbutton.p-button-help > .p-button.p-button-text:enabled:hover, .landing-themes .p-splitbutton.p-button-help > .p-button.p-button-text:not(button):not(a):not(.p-disabled):hover, .landing-themes .p-fileupload-choose.p-button-help.p-button-text:enabled:hover, .landing-themes .p-fileupload-choose.p-button-help.p-button-text:not(button):not(a):not(.p-disabled):hover {
-  background: rgba(168, 85, 247, 0.04);
+  background: teal;
   border-color: transparent;
-  color: #A855F7;
+  color: teal;
 }
 .landing-themes .p-button.p-button-help.p-button-text:enabled:active, .landing-themes .p-button.p-button-help.p-button-text:not(button):not(a):not(.p-disabled):active, .landing-themes .p-buttonset.p-button-help > .p-button.p-button-text:enabled:active, .landing-themes .p-buttonset.p-button-help > .p-button.p-button-text:not(button):not(a):not(.p-disabled):active, .landing-themes .p-splitbutton.p-button-help > .p-button.p-button-text:enabled:active, .landing-themes .p-splitbutton.p-button-help > .p-button.p-button-text:not(button):not(a):not(.p-disabled):active, .landing-themes .p-fileupload-choose.p-button-help.p-button-text:enabled:active, .landing-themes .p-fileupload-choose.p-button-help.p-button-text:not(button):not(a):not(.p-disabled):active {
-  background: rgba(168, 85, 247, 0.16);
+  background: teal;
   border-color: transparent;
-  color: #A855F7;
+  color: teal;
 }
 .landing-themes .p-button.p-button-danger, .landing-themes .p-buttonset.p-button-danger > .p-button, .landing-themes .p-splitbutton.p-button-danger > .p-button, .landing-themes .p-fileupload-choose.p-button-danger {
   color: #ffffff;
@@ -1387,7 +1387,7 @@
   color: #495057;
 }
 .landing-themes .p-datatable .p-column-resizer-helper {
-  background: #3B82F6;
+  background: teal;
 }
 .landing-themes .p-datatable .p-datatable-scrollable-header,
 .landing-themes .p-datatable .p-datatable-scrollable-footer {
@@ -1681,14 +1681,14 @@
   position: absolute;
   bottom: 0;
   height: 2px;
-  background-color: #3B82F6;
+  background-color: teal;
   transition: 500ms cubic-bezier(0.35, 0, 0.25, 1);
 }
 .landing-themes .p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight button {
-  background-color: #3B82F6;
+  background-color: teal;
 }
 .landing-themes .p-galleria .p-galleria-indicators .p-galleria-indicator.p-highlight button {
-  background-color: #3B82F6;
+  background-color: teal;
 }
 .landing-themes .p-button:focus {
   box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #b1b3f8, 0 1px 2px 0 black;
@@ -1712,8 +1712,8 @@
   box-shadow: 0 0 0 2px #ffffff, 0 0 0 4px #f7a2a2, 0 1px 2px 0 black;
 }
 .landing-themes .p-datatable .p-datatable-tbody > tr.p-datatable-dragpoint-top > td {
-  box-shadow: inset 0 2px 0 0 #3B82F6;
+  box-shadow: inset 0 2px 0 0 teal;
 }
 .landing-themes .p-datatable .p-datatable-tbody > tr.p-datatable-dragpoint-bottom > td {
-  box-shadow: inset 0 -2px 0 0 #3B82F6;
+  box-shadow: inset 0 -2px 0 0 teal;
 }

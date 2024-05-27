@@ -12,11 +12,51 @@ use App\Models\IdentityType;
 use App\Models\Notification;
 use Illuminate\Http\Request;
 use App\Models\UserPermission;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\ValidationException;
 
 
 class EndSettingsController extends Controller
 {
+
+    // Bulk Remove
+    public function bulkRemove(Request $request)
+    {
+        try {
+            // Retrieve the values from the request
+            $ids = $request->input('id');
+            $table = $request->input('table');
+
+            // Perform the bulk update
+            $updated = DB::table($table)->whereIn('id', $ids)->update(['is_deleted' => 'Yes']);
+
+            if ($updated) {
+                return response()->json([
+                    'status' => true,
+                    'message' => 'Operation performed, records deleted successfully',
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Records not found or already deleted',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            Log::error('Validation failed', ['errors' => json_encode($e->errors())]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            Log::error('Validation failed', ['errors' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
     // Roles
     public function viewRole()
     {
@@ -84,9 +124,9 @@ class EndSettingsController extends Controller
                 'description' => 'required|string|max:1000',
                 'status' => 'required|string|max:10',
             ]);
-            $role = Role::find($data['role_id']);
-            if ($role) {
-                $role->update($data);
+            $idata = Role::find($data['role_id']);
+            if ($idata) {
+                $idata->update($data);
                 return response()->json([
                     'success' => true,
                     'message' => 'Request to perform database operation has gone through successful',
@@ -116,11 +156,11 @@ class EndSettingsController extends Controller
             $data = $request->validate([
                 'role_id' => 'required|integer|exists:roles,id',
             ]);
-            $role = Role::find($data['role_id']);
-            if ($role) {
+            $idata = Role::find($data['role_id']);
+            if ($idata) {
 
-                $role->is_deleted = 'Yes';
-                $role->save();
+                $idata->is_deleted = 'Yes';
+                $idata->save();
                 return response()->json([
                     'success' => true,
                     'message' => 'Request to perform database operation has gone through successful',
@@ -147,11 +187,7 @@ class EndSettingsController extends Controller
     public function fetchRole()
     {
         try {
-            $data = Role::where('is_deleted', '!=', 'Yes')
-                        ->orderBy('title', 'ASC')
-                        ->orderBy('id', 'ASC')
-                        ->get(['id', 'title']);
-
+            $data = Role::where('is_deleted', '!=', 'Yes')->orderBy('title', 'ASC')->orderBy('id', 'ASC')->get(['id', 'title']);
             return response()->json([
                 'success' => true,
                 'message' => 'Data retrieved successfully',
@@ -169,74 +205,445 @@ class EndSettingsController extends Controller
     // Regions
     public function viewRegion()
     {
-        // Code to handle viewing regions
+        try {
+            $data = Region::where('is_deleted', '!=', 'Yes')->orderby('id', 'DESC')->get();
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function createRegion(Request $request)
     {
-        // Code to handle creating a region
+        try {
+            $data = $request->validate([
+                'name' => 'required|string',
+            ]);
+
+            // Check if a role with the same title already exists
+            if (Region::where('name', $data['name'])->exists() && Region::where('name', $data['name'])->where('is_deleted', 'NO')->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record already exists in the database, try a different one.'
+                ], 422);
+            }
+            $dbRequest = Region::create($data);
+            if ($dbRequest) {
+                return response()->json([
+                    'success'=> true,
+                    'message'=> 'Request to perform database operation has gone through successful',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success'=> false,
+                    'message'=> 'Sorry request to the database has declined, try again later',
+                ], 409);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success'=> false,
+                'message' => 'Validation failed because: '. json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success'=> false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function updateRegion(Request $request)
     {
-        // Code to handle updating a region
+        try {
+            $data = $request->validate([
+                'region_id' => 'required|integer|exists:regions,id',
+                'name' => 'required|string',
+                'status' => 'required|string|max:10',
+            ]);
+            $region = Region::find($data['region_id']);
+            if ($region) {
+                $region->update($data);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function destroyRegion(Request $request)
     {
-        // Code to handle deleting a region
+        try {
+            $data = $request->validate([
+                'region_id' => 'required|integer|exists:regions,id',
+            ]);
+            $idata = Region::find($data['region_id']);
+            if ($idata) {
+
+                $idata->is_deleted = 'Yes';
+                $idata->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function getRegion(Request $request)
     {
-        // Code to handle getting a region
+        try {
+            $data = Region::where('is_deleted', '!=', 'Yes')->orderBy('name', 'ASC')->orderBy('id', 'ASC')->get(['id', 'name']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     // Districts
-    public function viewDistrict()
+    public function viewDistrict(Request $request)
     {
-        // Code to handle viewing districts
+        try {
+            // Perform the join and retrieve the necessary fields
+            $data = DB::table('districts as d')
+            ->join('regions as r', 'd.region_id', '=', 'r.id')
+            ->where('d.is_deleted', '!=', 'Yes')
+            ->select('d.*', 'r.name as region')
+            ->orderBy('d.id', 'DESC')
+            ->get();
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function createDistrict(Request $request)
     {
-        // Code to handle creating a district
+        try {
+            $data = $request->validate([
+                'name' => 'required|string',
+                'region_id' => 'required|integer|exists:regions,id',
+            ]);
+
+            // Check if a role with the same title already exists
+            if (District::where('name', $data['name'])->exists() && District::where('name', $data['name'])->where('is_deleted', 'NO')->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record already exists in the database, try a different one.'
+                ], 422);
+            }
+            $dbRequest = District::create($data);
+            if ($dbRequest) {
+                return response()->json([
+                    'success'=> true,
+                    'message'=> 'Request to perform database operation has gone through successful',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success'=> false,
+                    'message'=> 'Sorry request to the database has declined, try again later',
+                ], 409);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success'=> false,
+                'message' => 'Validation failed because: '. json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success'=> false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function updateDistrict(Request $request)
     {
-        // Code to handle updating a district
+        try {
+            $data = $request->validate([
+                'region_id' => 'required|integer|exists:regions,id',
+                'district_id' => 'required|integer|exists:districts,id',
+                'name' => 'required|string',
+                'status' => 'required|string|max:10',
+            ]);
+            $idata = District::find($data['district_id']);
+            if ($idata) {
+                $idata->update($data);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function destroyDistrict(Request $request)
     {
-        // Code to handle deleting a district
+        try {
+            $data = $request->validate([
+                'district_id' => 'required|integer|exists:districts,id',
+            ]);
+            $idata = District::find($data['district_id']);
+            if ($idata) {
+
+                $idata->is_deleted = 'Yes';
+                $idata->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function getDistrict(Request $request)
     {
-        // Code to handle getting a district
+        try {
+            $data = District::where('is_deleted', '!=', 'Yes')->orderBy('name', 'ASC')->orderBy('id', 'ASC')->get(['id', 'name']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getDistrictByRegion(Request $request)
+    {
+        $region_id = $request->input('region_id');
+        try {
+            $data = District::where('region_id', $region_id)
+            ->where('is_deleted', '!=', 'Yes')->orderBy('name', 'ASC')
+            ->orderBy('id', 'ASC')->get(['id', 'name']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     // Towns
     public function viewTown()
     {
-        // Code to handle viewing towns
+        try {
+            $data = DB::table('towns as d')
+            ->join('districts as r', 'd.district_id', '=', 'r.id')
+            ->where('d.is_deleted', '!=', 'Yes')
+            ->select('d.*', 'r.name as district')
+            ->orderBy('d.id', 'DESC')
+            ->get();
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function createTown(Request $request)
     {
-        // Code to handle creating a town
+        try {
+            $data = $request->validate([
+                'name' => 'required|string',
+                'district_id' => 'required|integer|exists:districts,id',
+            ]);
+
+            // Check if a role with the same title already exists
+            if (Town::where('name', $data['name'])->exists() && Town::where('name', $data['name'])->where('is_deleted', 'NO')->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record already exists in the database, try a different one.'
+                ], 422);
+            }
+            $dbRequest = Town::create($data);
+            if ($dbRequest) {
+                return response()->json([
+                    'success'=> true,
+                    'message'=> 'Request to perform database operation has gone through successful',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success'=> false,
+                    'message'=> 'Sorry request to the database has declined, try again later',
+                ], 409);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success'=> false,
+                'message' => 'Validation failed because: '. json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success'=> false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function updateTown(Request $request)
     {
-        // Code to handle updating a town
+        try {
+            $data = $request->validate([
+                'town_id' => 'required|integer|exists:towns,id',
+                'district_id' => 'required|integer|exists:districts,id',
+                'name' => 'required|string',
+                'status' => 'required|string|max:10',
+            ]);
+            $idata = Town::find($data['town_id']);
+            if ($idata) {
+                $idata->update($data);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function destroyTown(Request $request)
     {
-        // Code to handle deleting a town
+        try {
+            $data = $request->validate([
+                'town_id' => 'required|integer|exists:towns,id',
+            ]);
+            $idata = Town::find($data['town_id']);
+            if ($idata) {
+
+                $idata->is_deleted = 'Yes';
+                $idata->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function getTown(Request $request)
@@ -299,22 +706,126 @@ class EndSettingsController extends Controller
     // Identity Types
     public function viewIdentityType()
     {
-        // Code to handle viewing identity types
+        try {
+            $data = IdentityType::where('is_deleted', '!=', 'Yes')->orderby('id', 'DESC')->get();
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     public function createIdentityType(Request $request)
     {
-        // Code to handle creating an identity type
+        try {
+            $data = $request->validate([
+                'name' => 'required|string',
+            ]);
+
+            // Check if a role with the same title already exists
+            if (IdentityType::where('name', $data['name'])->exists() && IdentityType::where('name', $data['name'])->where('is_deleted', 'NO')->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record already exists in the database, try a different one.'
+                ], 422);
+            }
+            $dbRequest = IdentityType::create($data);
+            if ($dbRequest) {
+                return response()->json([
+                    'success'=> true,
+                    'message'=> 'Request to perform database operation has gone through successful',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success'=> false,
+                    'message'=> 'Sorry request to the database has declined, try again later',
+                ], 409);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success'=> false,
+                'message' => 'Validation failed because: '. json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success'=> false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function updateIdentityType(Request $request)
     {
-        // Code to handle updating an identity type
+        try {
+            $data = $request->validate([
+                'identitytype_id' => 'required|integer|exists:identity_types,id',
+                'name' => 'required|string',
+                'status' => 'required|string|max:10',
+            ]);
+            $idata = IdentityType::find($data['identitytype_id']);
+            if ($idata) {
+                $idata->update($data);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function destroyIdentityType(Request $request)
     {
-        // Code to handle deleting an identity type
+        try {
+            $data = $request->validate([
+                'identitytype_id' => 'required|integer|exists:identity_types,id',
+            ]);
+            $idata = IdentityType::find($data['identitytype_id']);
+            if ($idata) {
+
+                $idata->is_deleted = 'Yes';
+                $idata->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function getIdentityType(Request $request)

@@ -9,17 +9,87 @@ use Illuminate\Support\Facades\Validator;
 
 class WebSettingsController extends Controller
 {
+
+    // BUlk Rmove
+    public function bulkRemove(Request $request)
+    {
+        try {
+            // Retrieve the values from the session
+            $token = session('token');
+            $apiKey = session('api_key');
+            $apiToken = session('api_token');
+            $userKey = session('user_key');
+            $apiStartPoint = env('API_START_POINT');
+            $apiURL = $apiStartPoint . '/commands/bulk-remove';
+
+            // Prepare the request body
+            $ids = $request->input('id');
+            $table = $request->input('table');
+            $body = [
+                'ids' => $ids,
+                'table' => $table,
+            ];
+
+            // Create the custom request
+            $customRequest = Request::create($apiURL, 'POST', $body);
+            $customRequest->headers->set('Accept', 'application/json');
+            $customRequest->headers->set('Authorization', 'Bearer ' . $token);
+            $customRequest->headers->set('ApiKey', $apiKey);
+            $customRequest->headers->set('ApiToken', $apiToken);
+            $customRequest->headers->set('UserKey', $userKey);
+
+            // Handle the request and get the response
+            $response = app()->handle($customRequest);
+            $data = json_decode($response->getContent(), true);
+
+            // Check the response status code
+            if ($response->getStatusCode() === 201) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $data['message'] ?? 'Records Removed',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $data['message'] ?? 'Failed to remove records',
+                    'errors' => $data['errors'] ?? [],
+                ], $response->getStatusCode());
+            }
+        } catch (\Exception $e) {
+            Log::error('Validation failed', ['errors' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     // GET FROM API universal function
-    public function getViewDataFromApi($endpoint)
+    public function getViewDataFromApi($endpoint, $status)
     {
+        // Retrieve the values from the session
+        $token = session('token');
+        $apiKey = session('api_key');
+        $apiToken = session('api_token');
+        $userKey = session('user_key');
+
         try {
             $apiStartPoint = env('API_START_POINT');
             $apiURL = $apiStartPoint . $endpoint;
 
-            // Make the API request
+            // Create the GET request
             $customRequest = Request::create($apiURL, 'GET');
             $customRequest->headers->set('Accept', 'application/json');
 
+            // Set headers if tokens are available
+            if ($status == "send-with-token") {
+                $customRequest->headers->set('Authorization', 'Bearer ' . $token);
+                $customRequest->headers->set('ApiKey', $apiKey);
+                $customRequest->headers->set('ApiToken', $apiToken);
+                $customRequest->headers->set('UserKey', $userKey);
+            }
+
+            // Handle the request and get the response
             $response = app()->handle($customRequest);
             $data = json_decode($response->getContent(), true);
 
@@ -45,17 +115,32 @@ class WebSettingsController extends Controller
         }
     }
 
-    // FETCH DATA for dropdown
-    public function fetchDataFromApiForDropdown($endpoint)
+    // Getting record by id
+    public function getDataFromApiById($endpoint, $status)
     {
+        // Retrieve the values from the session
+        $token = session('token');
+        $apiKey = session('api_key');
+        $apiToken = session('api_token');
+        $userKey = session('user_key');
+
         try {
             $apiStartPoint = env('API_START_POINT');
             $apiURL = $apiStartPoint . $endpoint;
 
-            // Make the API request
+            // Create the GET request
             $customRequest = Request::create($apiURL, 'GET');
             $customRequest->headers->set('Accept', 'application/json');
 
+            // Set headers if tokens are available
+            if ($status == "send-with-token") {
+                $customRequest->headers->set('Authorization', 'Bearer ' . $token);
+                $customRequest->headers->set('ApiKey', $apiKey);
+                $customRequest->headers->set('ApiToken', $apiToken);
+                $customRequest->headers->set('UserKey', $userKey);
+            }
+
+            // Handle the request and get the response
             $response = app()->handle($customRequest);
             $data = json_decode($response->getContent(), true);
 
@@ -80,20 +165,39 @@ class WebSettingsController extends Controller
             ];
         }
     }
+
 
     // POST TO API universal function
-    public function handleApiRequest($endpoint, $method, $body)
+    public function handleApiRequest($endpoint, $method, $body, $status)
     {
+        // Retrieve the values from the session
+        $token = session('token');
+        $apiKey = session('api_key');
+        $apiToken = session('api_token');
+        $userKey = session('user_key');
+
+        // Build the full API URL
         $apiStartPoint = env('API_START_POINT');
         $apiURL = $apiStartPoint . $endpoint;
 
         try {
+            // Create the request
             $customRequest = Request::create($apiURL, $method, $body);
             $customRequest->headers->set('Accept', 'application/json');
 
+            // Add headers if status requires a token
+            if ($status == "send-with-token") {
+                $customRequest->headers->set('Authorization', 'Bearer ' . $token);
+                $customRequest->headers->set('ApiKey', $apiKey);
+                $customRequest->headers->set('ApiToken', $apiToken);
+                $customRequest->headers->set('UserKey', $userKey);
+            }
+
+            // Handle the request and get the response
             $response = app()->handle($customRequest);
             $data = json_decode($response->getContent(), true);
 
+            // Check the response status code
             if ($response->getStatusCode() === 201) {
                 return response()->json([
                     'success' => true,
@@ -107,6 +211,7 @@ class WebSettingsController extends Controller
                 ], $response->getStatusCode());
             }
         } catch (\Exception $e) {
+            // Return a JSON response with error details
             return response()->json([
                 'success' => false,
                 'message' => 'An error occurred: ' . $e->getMessage()
@@ -118,17 +223,14 @@ class WebSettingsController extends Controller
     public function showRole(Request $request)
     {
         $endpoint = '/settings/roles';
-        $apiResponse = $this->getViewDataFromApi($endpoint);
-
-        $roles = $apiResponse['status'] ? $apiResponse['data'] : [];
-
+        $send_state = "free";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
         if ($request->ajax()) {
-            return response()->json(['roles' => $roles]);
+            return response()->json(['roles' => $idata]);
         }
-
-        return view('backend.settings.roles', ['roles' => $roles]);
+        return view('backend.settings.roles', ['roles' => $idata]);
     }
-
 
     public function addRole(Request $request)
     {
@@ -152,11 +254,10 @@ class WebSettingsController extends Controller
             'title' => $request->input('title'),
             'description' => $request->input('description'),
         ];
-
-        return $this->handleApiRequest($endpoint, $method, $body);
+        $sending_status = "free";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
-    
     public function modifyRole(Request $request)
     {
         // Validate the request inputs
@@ -183,8 +284,8 @@ class WebSettingsController extends Controller
             'description' => $request->input('description'),
             'status' => $request->input('status'),
         ];
-
-        return $this->handleApiRequest($endpoint, $method, $body);
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function removeRole(Request $request)
@@ -202,122 +303,345 @@ class WebSettingsController extends Controller
             ], 422);
         }
 
-        try {
-            $apiStartPoint = env('API_START_POINT');
-            $apiURL = $apiStartPoint.'/settings/roles/delete';
-            $body = [
-                'role_id' => $request->input('role_id'),
-            ];
+        $endpoint = '/settings/roles/delete';
+        $method = 'POST';
+        $body = [
+            'role_id' => $request->input('role_id'),
+        ];
 
-            $customRequest = Request::create($apiURL, 'POST', $body);
-            $customRequest->headers->set('Accept', 'application/json');
-
-            $response = app()->handle($customRequest);
-            $data = json_decode($response->getContent(), true);
-
-            if ($response->getStatusCode() === 201) {
-                return response()->json([
-                    'success' => true,
-                    'message' => $data['message'] ?? 'Operetion Performed',
-                ], 201);
-            } else {
-                return response()->json([
-                    'success' => false,
-                    'message' => $data['message'] ?? 'Failed to perform transanction',
-                    'errors' => $data['errors'] ?? [],
-                ], $response->getStatusCode());
-            }
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred: ' . $e->getMessage()
-            ], 500);
-        }
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
-    
+
     public function fetchRole(Request $request){
 
         $endpoint = '/settings/roles/fetch';
-        $apiResponse = $this->getViewDataFromApi($endpoint);
-
-        $roles = $apiResponse['status'] ? $apiResponse['data'] : [];
+        $send_state = "free";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
 
         if ($request->ajax()) {
-            return response()->json(['roles' => $roles]);
+            return response()->json(['roles' => $idata]);
         }
     }
 
     // Regions
-    public function showRegion()
+    public function showRegion(Request $request)
     {
-        // Code to handle showing regions
+        $endpoint = '/settings/regions';
+        $send_state = "send-with-token";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+        if ($request->ajax()) {
+            return response()->json(['regions' => $idata]);
+        }
+        return view('backend.settings.regions', ['regions' => $idata]);
     }
 
     public function addRegion(Request $request)
     {
-        // Code to handle adding a region
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/regions';
+        $method = 'POST';
+        $body = [
+            'name' => $request->input('name'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function modifyRegion(Request $request)
     {
-        // Code to handle modifying a region
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'region_id' => ['required', 'numeric'],
+            'name' => 'required|string',
+            'status' => 'required|string|max:10',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/regions/update';
+        $method = 'POST';
+        $body = [
+            'region_id' => $request->input('region_id'),
+            'name' => $request->input('name'),
+            'status' => $request->input('status'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function removeRegion(Request $request)
     {
-        // Code to handle removing a region
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'region_id' => ['required', 'numeric'],
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/regions/delete';
+        $method = 'POST';
+        $body = [
+            'region_id' => $request->input('region_id'),
+        ];
+
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function getRegion(Request $request)
     {
-        // Code to handle getting a region
+        $endpoint = '/settings/regions/get';
+        $send_state = "send-with-token";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+
+        if ($request->ajax()) {
+            return response()->json(['regions' => $idata]);
+        }
     }
 
     // Districts
-    public function showDistrict()
+    public function showDistrict(Request $request)
     {
-        // Code to handle showing districts
+        $endpoint = '/settings/districts';
+        $send_state = "send-with-token";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+        if ($request->ajax()) {
+            return response()->json(['districts' => $idata]);
+        }
+        return view('backend.settings.districts', ['districts' =>$idata]);
     }
 
     public function addDistrict(Request $request)
     {
-        // Code to handle adding a district
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'region_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/districts';
+        $method = 'POST';
+        $body = [
+            'name' => $request->input('name'),
+            'region_id' => $request->input('region_id'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function modifyDistrict(Request $request)
     {
-        // Code to handle modifying a district
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'region_id' => ['required', 'numeric'],
+            'district_id' => ['required', 'numeric'],
+            'name' => 'required|string',
+            'status' => 'required|string|max:10',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/districts/update';
+        $method = 'POST';
+        $body = [
+            'region_id' => $request->input('region_id'),
+            'district_id' => $request->input('district_id'),
+            'name' => $request->input('name'),
+            'status' => $request->input('status'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function removeDistrict(Request $request)
     {
-        // Code to handle removing a district
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'district_id' => ['required', 'numeric'],
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/districts/delete';
+        $method = 'POST';
+        $body = [
+            'district_id' => $request->input('district_id'),
+        ];
+
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function getDistrict(Request $request)
     {
-        // Code to handle getting a district
+        $endpoint = '/settings/districts/get';
+        $send_state = "send-with-token";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+
+        if ($request->ajax()) {
+            return response()->json(['districts' => $idata]);
+        }
     }
 
-    // Towns
-    public function showTown()
+    public function getDistrictByRegion(Request $request)
     {
-        // Code to handle showing towns
+        $region_id = $request->input('region_id');
+        $endpoint = '/settings/districts/byRegion';
+        $send_state = "send-with-token";
+
+        $endpoint .= '?region_id=' . $region_id;
+
+        $apiResponse = $this->getDataFromApiById($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+
+        if ($request->ajax()) {
+            return response()->json(['filtered' => $idata]);
+        }
+    }
+
+
+    // Towns
+    public function showTown(Request $request)
+    {
+        $endpoint = '/settings/towns';
+        $send_state = "send-with-token";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+        if ($request->ajax()) {
+            return response()->json(['towns' => $idata]);
+        }
+        return view('backend.settings.towns', ['towns' =>$idata]);
     }
 
     public function addTown(Request $request)
     {
-        // Code to handle adding a town
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+            'district_id' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/towns';
+        $method = 'POST';
+        $body = [
+            'name' => $request->input('name'),
+            'district_id' => $request->input('district_id'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function modifyTown(Request $request)
     {
-        // Code to handle modifying a town
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'town_id' => ['required', 'numeric'],
+            'district_id' => ['required', 'numeric'],
+            'name' => 'required|string',
+            'status' => 'required|string|max:10',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/towns/update';
+        $method = 'POST';
+        $body = [
+            'town_id' => $request->input('town_id'),
+            'district_id' => $request->input('district_id'),
+            'name' => $request->input('name'),
+            'status' => $request->input('status'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function removeTown(Request $request)
     {
-        // Code to handle removing a town
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'town_id' => ['required', 'numeric'],
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/towns/delete';
+        $method = 'POST';
+        $body = [
+            'town_id' => $request->input('town_id'),
+        ];
+
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function getTown(Request $request)
@@ -378,29 +702,105 @@ class WebSettingsController extends Controller
     }
 
     // Identity Types
-    public function showIdentityType()
+    public function showIdentityType(Request $request)
     {
-        // Code to handle showing identity types
+        $endpoint = '/settings/identity-types';
+        $send_state = "send-with-token";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+        if ($request->ajax()) {
+            return response()->json(['identitytypes' => $idata]);
+        }
+        return view('backend.settings.identity-types', ['identitytypes' => $idata]);
     }
 
     public function addIdentityType(Request $request)
     {
-        // Code to handle adding an identity type
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/identity-types';
+        $method = 'POST';
+        $body = [
+            'name' => $request->input('name'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function modifyIdentityType(Request $request)
     {
-        // Code to handle modifying an identity type
+       // Validate the request inputs
+       $validator = Validator::make($request->all(), [
+            'identitytype_id' => ['required', 'numeric'],
+            'name' => 'required|string',
+            'status' => 'required|string|max:10',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/identity-types/update';
+        $method = 'POST';
+        $body = [
+            'identitytype_id' => $request->input('identitytype_id'),
+            'name' => $request->input('name'),
+            'status' => $request->input('status'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function removeIdentityType(Request $request)
     {
-        // Code to handle removing an identity type
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'identitytype_id' => ['required', 'numeric'],
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/settings/identity-types/delete';
+        $method = 'POST';
+        $body = [
+            'identitytype_id' => $request->input('identitytype_id'),
+        ];
+
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function getIdentityType(Request $request)
     {
-        // Code to handle getting an identity type
+        $endpoint = '/settings/identity-types/get';
+        $send_state = "free";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+
+        if ($request->ajax()) {
+            return response()->json(['identities' => $idata]);
+        }
     }
 
     // API Routes

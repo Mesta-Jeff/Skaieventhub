@@ -219,6 +219,7 @@ class EndUserController extends Controller
     }
 
 
+    // Creating Account when authenticated from the web
     public function createUser(Request $request)
     {
         $tokens = $request->bearerToken();
@@ -226,16 +227,41 @@ class EndUserController extends Controller
         DB::beginTransaction();
 
         try {
-            $data = $request->validate([
-                'name' => ['required', 'string'],
+
+            $validator = Validator::make($request->all(), [
+                'phone' => ['required', 'string'],
+                'name' => ['required', 'string', 'min:10'],
+                'nickname' => ['required', 'string', 'max:15'],
                 'email' => ['required', 'email', 'unique:users'],
                 'password' => ['required', 'min:6'],
-                'dob' => ['required', 'string'],
                 'gender' => ['required', 'string'],
-                'phone' => ['required', 'string'],
-                'image' => ['required', 'string'],
+                'dob' => ['required', 'date'],
+                'role_id' => ['required', 'integer', 'exists:roles,id'],
+                'fear' => ['required', 'string'],
+                'address' => ['required', 'string'],
+                'image' => 'required|image|mimes:png,jpg,jpeg,gif',
             ]);
 
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Validation failed because: ' . json_encode($validator->errors()),
+                ], 422);
+            }
+
+            $data = $request->all();
+
+            // Handle file upload
+            if ($request->hasFile('image')) {
+                $file = $request->file('image');
+                $firstChar = substr($data['name'], 0, 1);
+                $lastChar = substr($data['name'], -1);
+                $filename = $firstChar . $lastChar . '-'. $data['phone'];
+                $filePath = $file->storeAs('public/images/users', $filename. '.png');
+                $data['image'] = $filename . '.png';
+            }
+
+            $data['password'] = Hash::make($data['password']);
             $user = User::create($data);
             $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -264,8 +290,6 @@ class EndUserController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'User Account has been created successfully',
-                'apikey' => $encryptedToken,
-                'user' => $user,
             ], 201);
         } catch (ValidationException $e) {
             DB::rollBack();

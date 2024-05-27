@@ -195,11 +195,11 @@
                                 </div>
                             </div>
                             <div class="modal-footer flex-center">
-                                <button type="reset" id="btnClear" class="btn btn-secondary btn-sm">Clear Input</button>
-                                <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>
-                                <button type="button" id="save-data" class="btn btn-success btn-sm">Proceed</button>
-                                <button type="button" id="edit-data" class="btn btn-primary btn-sm">Proceed</button>
-                                <button type="button" id="edit-images" class="btn btn-primary btn-sm">Confirm Change</button>
+                                <button type="reset" id="btnClear" class="btn btn-soft-secondary btn-sm">Clear Input</button>
+                                <button type="button" class="btn btn-soft-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                                <button type="button" id="save-data" class="btn btn-soft-success btn-sm">Proceed</button>
+                                <button type="button" id="edit-data" class="btn btn-soft-info btn-sm">Proceed</button>
+                                <button type="button" id="edit-images" class="btn btn-soft-info btn-sm">Confirm Change</button>
                             </div>
                         </form>
                     </div>

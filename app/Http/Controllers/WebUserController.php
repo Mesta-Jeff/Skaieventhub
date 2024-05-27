@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Validator;
 
 
 
-
 class WebUserController extends Controller
 {
 
