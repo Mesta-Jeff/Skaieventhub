@@ -213,5 +213,23 @@ class WebEventController extends Controller
     {
         // Code to handle getting an event star
     }
+
+
+
+
+
+
+    // FRONT END USERS CREATING EVENT
+    public function enCreateEvent()
+    {
+        return view('frontend.en.create-event');
+    }
+
+    public function enCreateEventIndex()
+    {
+        return view('frontend.en.index');
+    }
 }
+
+
 

@@ -1445,7 +1445,7 @@
                       </div>
                     </div>
                   </a> --}}
-                  <a href="">
+                  <a href="{{ route('en.event-Index')}}">
                     <div class="hero-box w-10rem h-10rem md:w-12rem md:h-12rem animation ml-4 md:ml-0 md:mt-4 flex align-items-center justify-content-center">
                       <div class="flex flex-column align-items-center"><i class="pi pi-palette" style="font-size: 30px; color:teal !important"></i>
                         <div class="name"><b style="color: teal">Documentations</b><span>Click to read</span></div>
@@ -1455,11 +1455,11 @@
                 </div>
 
                 <div class="p-2 flex flex-row md:flex-column">
-                  <a href="">
+                  <a href="{{ route('en.event')}}">
                     <div
                       class="hero-box w-10rem h-10rem md:w-12rem md:h-12rem animation flex align-items-center justify-content-center">
                       <div class="flex flex-column align-items-center"><i class="pi pi-briefcase" style="font-size: 30px; color:teal !important"></i>
-                        <div class="name"><b style="color: teal">View Events</b><span>Get the events</span></div>
+                        <div class="name"><b style="color: teal">Create Event</b><span>Get event ready</span></div>
                       </div>
                     </div>
                   </a>
@@ -1510,14 +1510,14 @@
           <div class="landing-footer-container">
             <hr class="section-divider mt-2">
             <div class="flex flex-wrap justify-content-between py-6 gap-5">
-              <a href="#">
+              <a href="/">
                 <img width="50" height="50" alt="primeng logo" priority="" src="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}">
               </a>
               <div class="flex align-items-center">
                 <a href="{{ route('login')}}"  class="linkbox block w-3rem h-3rem flex align-items-center justify-content-center mr-3">
                   <i class="pi pi-lock"></i>
                 </a>
-                <a href=""  class="linkbox block w-3rem h-3rem flex align-items-center justify-content-center">
+                <a href="{{ route('login')}}"  class="linkbox block w-3rem h-3rem flex align-items-center justify-content-center">
                   <i class="pi pi-user"></i>
                 </a>
               </div>

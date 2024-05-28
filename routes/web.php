@@ -19,9 +19,17 @@ Route::get('/', function () {
 });
 
 
+
+// #6a2e4d
 // =====================  free routes  ========================================================================================
 
 Route::middleware([CsrfExempt::class])->group(function () {
+
+    // FRONTEND ROutes
+    Route::get('en/create-event', [WebEventController::class, 'enCreateEvent'])->name('en.event');
+    Route::get('en/index', [WebEventController::class, 'enCreateEventIndex'])->name('en.event-Index');
+
+
     // Authentication Routes
     Route::get('auth/login', [WebAuthenticationController::class, 'login'])->name('login');
     Route::post('auth/signin', [WebAuthenticationController::class, 'signin'])->name('signin');

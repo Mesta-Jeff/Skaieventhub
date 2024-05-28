@@ -1,0 +1,81 @@
+[2024-05-27 13:49:20] local.ERROR: Command "make:" is ambiguous.
+Did you mean one of these?
+    make:cache-table         Create a migration for the cache database table
+    make:cast                Create a new custom Eloquent cast class
+    make:channel             Create a new channel class
+    make:class               Create a new class
+    make:component           Create a new view component class
+    make:command             Create a new Artisan command
+    make:controller          Create a new controller class
+    make:enum                Create a new enum
+    make:event               Create a new event class
+    make:exception           Create a new custom exception class
+    make:factory             Create a new model factory
+    make:interface           Create a new interface
+    make:job                 Create a new job class
+    make:listener            Create a new event listener class
+    make:mail                Create a new email class
+    make:middleware          Create a new middleware class
+    make:model               Create a new Eloquent model class
+    make:notification        Create a new notification class
+    make:notifications-table Create a migration for the notifications table
+    make:observer            Create a new observer class
+    make:policy              Create a new policy class
+    make:provider            Create a new service provider class
+    make:queue-failed-table  Create a migration for the failed queue jobs database table
+    make:queue-table         Create a migration for the queue jobs database table
+    make:queue-batches-table Create a migration for the batches database table
+    make:request             Create a new form request class
+    make:resource            Create a new resource
+    make:rule                Create a new validation rule
+    make:scope               Create a new scope class
+    make:seeder              Create a new seeder class
+    make:session-table       Create a migration for the session database table
+    make:test                Create a new test class
+    make:trait               Create a new trait
+    make:view                Create a new view
+    make:migration           Create a new migration file. {"exception":"[object] (Symfony\\Component\\Console\\Exception\\CommandNotFoundException(code: 0): Command \"make:\" is ambiguous.
+Did you mean one of these?
+    make:cache-table         Create a migration for the cache database table
+    make:cast                Create a new custom Eloquent cast class
+    make:channel             Create a new channel class
+    make:class               Create a new class
+    make:component           Create a new view component class
+    make:command             Create a new Artisan command
+    make:controller          Create a new controller class
+    make:enum                Create a new enum
+    make:event               Create a new event class
+    make:exception           Create a new custom exception class
+    make:factory             Create a new model factory
+    make:interface           Create a new interface
+    make:job                 Create a new job class
+    make:listener            Create a new event listener class
+    make:mail                Create a new email class
+    make:middleware          Create a new middleware class
+    make:model               Create a new Eloquent model class
+    make:notification        Create a new notification class
+    make:notifications-table Create a migration for the notifications table
+    make:observer            Create a new observer class
+    make:policy              Create a new policy class
+    make:provider            Create a new service provider class
+    make:queue-failed-table  Create a migration for the failed queue jobs database table
+    make:queue-table         Create a migration for the queue jobs database table
+    make:queue-batches-table Create a migration for the batches database table
+    make:request             Create a new form request class
+    make:resource            Create a new resource
+    make:rule                Create a new validation rule
+    make:scope               Create a new scope class
+    make:seeder              Create a new seeder class
+    make:session-table       Create a migration for the session database table
+    make:test                Create a new test class
+    make:trait               Create a new trait
+    make:view                Create a new view
+    make:migration           Create a new migration file. at /home/jeff/Documents/Laravel/Skaieventhub/vendor/symfony/console/Application.php:745)
+[stacktrace]
+#0 /home/jeff/Documents/Laravel/Skaieventhub/vendor/symfony/console/Application.php(260): Symfony\\Component\\Console\\Application->find()
+#1 /home/jeff/Documents/Laravel/Skaieventhub/vendor/symfony/console/Application.php(169): Symfony\\Component\\Console\\Application->doRun()
+#2 /home/jeff/Documents/Laravel/Skaieventhub/vendor/laravel/framework/src/Illuminate/Foundation/Console/Kernel.php(196): Symfony\\Component\\Console\\Application->run()
+#3 /home/jeff/Documents/Laravel/Skaieventhub/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(1187): Illuminate\\Foundation\\Console\\Kernel->handle()
+#4 /home/jeff/Documents/Laravel/Skaieventhub/artisan(13): Illuminate\\Foundation\\Application->handleCommand()
+#5 {main}
+"} 
