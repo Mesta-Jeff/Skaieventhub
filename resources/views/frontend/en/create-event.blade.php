@@ -14,12 +14,12 @@
                         <h2 class="title">Your Great Destination</h2>
                     </div>
                     <div class="destination-content">
-                        <p>Get rewarded for your travels – unlock instant savings of 10% or more with a free <span>Geairinfo.com</span> account</p>
+                        <p>Get your event online – break the barrier of client walking to buy ticket, or printing hard card for ticket - jera instant saving 10% or more with <span>{{ env('APP_NAME')}}</span> account</p>
                         <ul>
                             <li>
                                 <div class="counter-item">
                                     <div class="counter-content">
-                                        <h2 class="count"><span class="odometer" data-count="5830"></span>+</h2>
+                                        <h2 class="count">over <span class="odometer" data-count="9999"></span>+</h2>
                                         <p>Happy Customers</p>
                                     </div>
                                     <div class="counter-icon">
@@ -40,8 +40,8 @@
                             </li>
                         </ul>
                         <div class="content-bottom">
-                            <p>Discover the latest offers & news and start planning</p>
-                            <a href="contact.html">contact us</a>
+                            <p>Do you want to play an ads on our system, is that your worry...?</p>
+                            <a href="/">contact us</a>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,10 @@
         <div class="container">
             <div class="row justify-content-center">
 
+                <!-- Left side big bar -->
                 <div class="col-73">
+
+                    <!-- Personal Information -->
                     <div class="booking-list-item">
                         <div class="booking-list-item-inner">
                             <div class="booking-list-top">
@@ -114,7 +117,7 @@
 
                                     <ul>
                                         <li>
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <select id="title" name="select" class="form-select"
                                                         aria-label="Default select example">
@@ -126,12 +129,12 @@
                                             </div>
                                         </li>
                                         <li>
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <input type="text" id="firstname" placeholder="Give Name">
                                             </div>
                                         </li>
                                         <li>
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <input type="text" id="lastname" placeholder="Sur Name *">
                                             </div>
                                         </li>
@@ -139,7 +142,7 @@
 
                                     <div class="row">
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="email">Phone</label>
                                                     <input type="text" id="phone" maxlength="10" placeholder="0245482029">
@@ -147,7 +150,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="email">Tel</label>
                                                     <input type="text" id="tel" maxlength="10" placeholder="0245482029">
@@ -156,7 +159,7 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="gender">Gender</label>
                                                     <select id="gender" name="select" class="form-select"
@@ -169,7 +172,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="shortBy">Date of Birth</label>
                                                     <input type="text" id="dob" class="date" placeholder="Select Date">
@@ -177,7 +180,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="email">Email</label>
                                                     <input type="text" id="emails" placeholder="odenehonas1@gmail.com">
@@ -186,7 +189,7 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="gender">Identity Type</label>
                                                     <select id="id_type" name="select" class="form-select"
@@ -197,7 +200,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="shortBy">Identity Number</label>
                                                     <input id="id_num" type="text" placeholder="Id Number here">
@@ -206,7 +209,7 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="email">Upload scan id</label>
                                                     <input type="file" id="scans">
@@ -215,7 +218,7 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="gender">Account Type</label>
                                                     <select id="acc_type" name="select" class="form-select"
@@ -226,7 +229,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="shortBy">Account Number</label>
                                                     <input type="text" id="acc_num" placeholder="Account Number">
@@ -235,7 +238,7 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="shortBy">Account Branch (if momo, use the providers name)</label>
                                                     <input type="text" id="acc_branch" placeholder="eg. MTN or Ecobank">
@@ -244,7 +247,7 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="email">Upload profile image</label>
                                                     <input type="file" id="profile">
@@ -254,7 +257,7 @@
                                     </div>
 
                                     <div class="optional-item">
-                                        <div class="form-grp">
+                                        <div class="form-grp mb-3">
                                             <div class="form">
                                                 <label for="email">Select your region of address</label>
                                                 <select id="region_id" name="select" class="form-select select2"
@@ -265,7 +268,7 @@
                                         </div>
 
                                         <div class="col-md-12 mt-4">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="district">Select district of address</label>
                                                     <select id="district_id" name="select" class="form-select select2"
@@ -278,7 +281,7 @@
 
                                         <div class="row">
                                             <div class="col-md-9 mt-4">
-                                                <div class="form-grp">
+                                                <div class="form-grp mb-3">
                                                     <div class="form">
                                                         <label for="town">Where do you stay currently</label>
                                                         <select id="town_id" name="select" class="form-select select2"
@@ -289,7 +292,7 @@
                                                 </div>
                                             </div>
                                             <div class="col-md-3 mt-4">
-                                                <div class="form-grp">
+                                                <div class="form-grp mb-3">
                                                     <div class="form">
                                                         <a href="#" class="btn" style="height: 20px !important">Add New Town</a>
                                                     </div>
@@ -302,6 +305,7 @@
                         </div>
                     </div>
 
+                    <!-- About event -->
                     <div class="booking-list-item">
                         <div class="booking-list-item-inner">
                             <div class="booking-list-top">
@@ -327,7 +331,7 @@
                                     <div class="row">
 
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="email">Event Title</label>
                                                     <input type="text" id="title" placeholder="EVent main title here">
@@ -335,7 +339,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="email">Sub Title</label>
                                                     <input type="text" id="sub_title" placeholder="EVent sub title here">
@@ -344,19 +348,19 @@
                                         </div>
 
                                         <div class="contact-form">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <textarea id="contents" name="message" placeholder="What content do you want to show to viewers"></textarea>
                                             </div>
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <textarea id="discription" name="message" placeholder="Describe your event not more than 500 words"></textarea>
                                             </div>
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <textarea id="reason" name="message" placeholder="Give a comprehensive reason for creating the event it is required..."></textarea>
                                             </div>
                                         </div>
 
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="gender">Event Type</label>
                                                     <select id="event_type" name="select" class="form-select"
@@ -367,7 +371,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="shortBy">Alaises</label>
                                                     <input type="text" id="event_initials" placeholder="eg. VGMA24 or Emy Awards" maxlength="15">
@@ -376,7 +380,7 @@
                                         </div>
 
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="shortBy">Starting Date</label>
                                                     <input type="text" id="start_date" class="date" placeholder="Select Date">
@@ -384,7 +388,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="shortBy">Ending Date</label>
                                                     <input type="text" id="end_date" class="date" placeholder="Select Date">
@@ -393,7 +397,7 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="shortBy">Venue: (where is the event happening)</label>
                                                     <input type="text" id="venue" placeholder="eg. Accra-National Theatre">
@@ -402,7 +406,7 @@
                                         </div>
 
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="banner">Upload Banner for the event</label>
                                                     <input type="file" id="banner">
@@ -410,7 +414,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="large_image">Upload the large image</label>
                                                     <input type="file" id="large_image">
@@ -418,7 +422,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="medium_image">Upload the medium image</label>
                                                     <input type="file" id="medium_image">
@@ -426,7 +430,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="small_image">Upload small image</label>
                                                     <input type="file" id="small_image">
@@ -434,7 +438,7 @@
                                             </div>
                                         </div>
                                         <div class="col-md-12">
-                                            <div class="form-grp">
+                                            <div class="form-grp mb-3">
                                                 <div class="form">
                                                     <label for="small_image">Upload promo video (Optional)</label>
                                                     <input type="file" id="promo_video">
@@ -448,24 +452,29 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
 
+                <!-- Side right bar -->
                 <div class="col-27">
                     <aside class="booking-sidebar">
-                        <h2 class="main-title">Booking Info</h2>
-                        <div class="widget">
+                        <h2 class="main-title">Event Charges</h2>
+                        <div class="widget" style="margin-bottom: -60px">
+                            <h2 class="widget-title">Breakdown of the charges</h2>
                             <ul class="flight-info">
-                                <li><img src="assets/img/icon/sidebar_flight_icon.jpg" alt="">
-                                    <p>12:0 (DEK) <span>Dubai</span></p>
+                                <li>
+                                    <p>Subscription <span>GH00.00</span></p>
                                 </li>
                                 <li>
-                                    <p>16:30 (DEK) <span>istanbul</span></p>
+                                    <p>Set-Up <span>GH00.00</span></p>
                                 </li>
                             </ul>
+                            <hr>
+                            <div class="text-center" style="margin-top: -20px, margin-bottom: 2px">
+                                <a>Total: <h2>GH00.00</h2></a>
+                            </div>
                         </div>
                         <div class="widget">
-                            <h2 class="widget-title">Select Discount Option</h2>
+                            <h2 class="widget-title">Do you have a recommended coupon...?</h2>
                             <form action="#" class="discount-form">
                                 <i class="flaticon-coupon"></i>
                                 <input type="text" placeholder="Enter Code">

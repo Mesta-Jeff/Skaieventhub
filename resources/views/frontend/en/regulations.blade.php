@@ -53,13 +53,17 @@
                         </div>
                     </div>
 
-                    <aside class="booking-sidebar">
+                    <div class="booking-sidebar">
                         <h2 class="main-title">Booking Info</h2>
                         <div class="widget">
                             <h2 class="widget-title">Select Discount Option</h2>
 
                         </div>
-                    </aside>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <a href="{{ route('en.event')}}" class="btn">Continue from here</a>
+                    </div>
 
                 </div>
             </div>

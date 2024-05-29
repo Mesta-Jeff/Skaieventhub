@@ -4,6 +4,7 @@ use App\Http\Middleware\CsrfExempt;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\CheckSessionValue;
 use App\Http\Controllers\WebUserController;
+use App\Http\Controllers\FrontEndController;
 use App\Http\Controllers\WebEventController;
 use App\Http\Controllers\WebClientController;
 use App\Http\Controllers\WebAccountController;
@@ -14,9 +15,9 @@ use App\Http\Controllers\WebAdvertisementController;
 use App\Http\Controllers\WebConfigurationController;
 use App\Http\Controllers\WebAuthenticationController;
 
-Route::get('/', function () {
-    return view('index');
-});
+// Route::get('/', function () {
+//     return view('index');
+// });
 
 
 
@@ -28,6 +29,10 @@ Route::middleware([CsrfExempt::class])->group(function () {
     // FRONTEND ROutes
     Route::get('en/create-event', [WebEventController::class, 'enCreateEvent'])->name('en.event');
     Route::get('en/index', [WebEventController::class, 'enCreateEventIndex'])->name('en.event-Index');
+    Route::get('en/subscription', [WebEventController::class, 'ensubscribe'])->name('en.event.subscribe');
+
+    Route::get('/', [FrontEndController::class, 'index'])->name('index');
+    Route::get('/contact-us', [FrontEndController::class, 'contact_us'])->name('contact-us');
 
 
     // Authentication Routes

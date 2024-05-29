@@ -8,21 +8,20 @@
 <!-- header-area -->
 <header>
 
-    @if (Request::is('en/create-event'))
+    @if (Request::is('en/create-event', '/'))
         <div class="header-top">
             <div class="container custom-container">
                 <div class="row">
-                    <div class="col-xl-8">
+                    <div class="col-xl-9">
                         <div class="header-top-left">
                             <a href="#"><i class="fa-solid fa-plane"></i> Welcome to Skai-Tick, the ultimate online event ticket selling and buying platform accross the globe</a>
                         </div>
                     </div>
-                    <div class="col-xl-4">
+                    <div class="col-xl-3">
                         <div class="header-top-right">
                             <ul>
-                                <li><a href="#">Corporate Club</a></li>
-                                <li><a href="#">Miles&Smiles</a></li>
-                                <li><a href="about.html"><i class="fa-solid fa-comments"></i>Feedback</a></li>
+                                <li><a href="{{ route('login')}}">Signin</a></li>
+                                <li><a href="/"><i class="fa-solid fa-comments"></i>Feedback</a></li>
                             </ul>
                         </div>
                     </div>
@@ -37,11 +36,11 @@
                 <div class="col-12">
                     <div class="menu-wrap">
                         <nav class="menu-nav">
-                            <div class="logo"><h2 style="color: white;" class="title" href="/"><img style="margin-right: 10px; margin-bottom: 5px;" width="30" src="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}" alt="">{{ env('APP_NAME')}} </h2></div>
+                            <div class="logo"><h2 style="color: white;" class="title"><img style="margin-right: 10px; margin-bottom: 5px;" width="30" src="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}" alt="">{{ env('APP_NAME')}} </h2></div>
                             <div class="navbar-wrap main-menu d-none d-lg-flex">
                                 <ul class="navigation">
-                                    <li><a href="/">Go home</a></li>
-
+                                    <li><a href="/">Home</a></li>
+                                    <li><a href="{{ route('contact-us')}}">Contact Us</a></li>
                                     <li><a target="_blank" href="https://www.skaimount.com">Main Site</a></li>
                                 </ul>
                             </div>

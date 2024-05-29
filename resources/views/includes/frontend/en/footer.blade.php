@@ -3,7 +3,9 @@
 <footer>
     <div class="footer-area footer-bg">
 
-        @if (Request::is('en/index'))
+        @if (Request::is('en/create-event', 'en/subscription'))
+
+        @else
             @includeIf('includes.frontend.en.footer-topbar')
         @endif
 

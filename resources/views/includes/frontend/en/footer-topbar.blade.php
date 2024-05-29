@@ -8,7 +8,7 @@
                         <div class="logo"><h2 style="color: white;" class="title" href="/"><img style="margin-right: 10px; margin-bottom: 5px;" width="30" src="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}" alt="">{{ env('APP_NAME')}} </h2></div>
                     </div>
                     <div class="footer-content">
-                        <span>Skai-Tick is an electronic ticketing platform which rollback the challenges of the old manual selling of tickets at events. It breaks geographical boundaries since users and buyers do not have to be present to vote or purchase tickets</span>
+                        <span>{{ env('APP_NAME')}} is an electronic ticketing platform which rollback the challenges of the old manual selling of tickets at events. It breaks geographical boundaries since users and buyers do not have to be present to vote or purchase tickets</span>
                     </div>
                 </div>
             </div>

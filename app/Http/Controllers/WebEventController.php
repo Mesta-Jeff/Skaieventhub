@@ -227,7 +227,12 @@ class WebEventController extends Controller
 
     public function enCreateEventIndex()
     {
-        return view('frontend.en.index');
+        return view('frontend.en.regulations');
+    }
+
+    public function ensubscribe()
+    {
+        return view('frontend.en.subscription-payment');
     }
 }
 
