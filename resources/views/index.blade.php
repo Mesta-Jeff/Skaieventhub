@@ -185,3 +185,6 @@
     <!-- booking-details-area-end -->
 
 @endsection
+
+
+

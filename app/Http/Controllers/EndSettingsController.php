@@ -648,7 +648,39 @@ class EndSettingsController extends Controller
 
     public function getTown(Request $request)
     {
-        // Code to handle getting a town
+        try {
+            $data = Town::where('is_deleted', '!=', 'Yes')->orderBy('name', 'ASC')->orderBy('id', 'ASC')->get(['id', 'name']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function getTownByDistrict(Request $request)
+    {
+        $district_id = $request->input('district_id');
+        try {
+            $data = Town::where('district_id', $district_id)
+            ->where('is_deleted', '!=', 'Yes')->orderBy('name', 'ASC')
+            ->orderBy('id', 'ASC')->get(['id', 'name']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     // Permissions
@@ -830,7 +862,19 @@ class EndSettingsController extends Controller
 
     public function getIdentityType(Request $request)
     {
-        // Code to handle getting an identity type
+        try {
+            $data = IdentityType::where('is_deleted', '!=', 'Yes')->orderBy('name', 'ASC')->orderBy('id', 'ASC')->get(['id', 'name']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     // Notifications

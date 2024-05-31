@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 use App\Models\Event;
 use App\Models\Author;
 use App\Models\Ticket;
@@ -63,7 +67,171 @@ class EndEventController extends Controller
 
     public function getEventType(Request $request)
     {
-        // Code to handle getting an event type
+        try {
+            $data = EventType::where('is_deleted', '!=', 'Yes')->orderBy('event', 'ASC')->orderBy('id', 'ASC')->get(['id', 'event', 'price']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+
+    public function eventWithAuthor(Request $request)
+    {
+
+        DB::beginTransaction();
+
+        try {
+
+            // Validate the request data
+            $validator = Validator::make($request->all(), [
+                'event_title' => 'required|string',
+                'sub_title' => 'required|string',
+                'content' => 'required|string',
+                'description' => 'required|string',
+                'reason' => 'required|string',
+                'event_type_id' => 'required|integer',
+                'aliases' => 'required|string',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after:start_date',
+                'venue' => 'required|string',
+                'banner' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'large_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'medium_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'small_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+
+                'title' => 'required|string',
+                'first_name' => 'required|string',
+                'last_name' => 'required|string',
+                'phone' => 'required|string|max:10',
+                'tel' => 'required|string|max:10',
+                'gender' => 'required|in:Male,Female',
+                'dob' => 'required|date',
+                'email' => 'required|email',
+                'identity_type_id' => 'required|integer',
+                'id_number' => 'required|string',
+                'account_type' => 'required|string',
+                'acc_num' => 'required|string',
+                'acc_branch' => 'required|string',
+                'region_id' => 'required|integer',
+                'district_id' => 'required|integer',
+                'town_id' => 'required|integer',
+                'id_scan' => 'required|mimes:pdf|max:2048',
+                'profile' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                DB::rollBack();
+                Log::error('Validation failed', ['errors' => $validator->errors()]);
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors(),
+                    'message' => 'Validation failed because: ' . json_encode($validator->errors()),
+                ], 422);
+            }
+
+            $data = $request->all();
+            // Check if the phone or email exists
+            if (Author::where('phone', $request->phone)->orWhere('email', $request->email)->exists()) {
+                $message = '';
+
+                if (Author::where('phone', $request->phone)->exists()) {
+                    $message = 'Phone number has already been taken. Please use a different one.';
+                } elseif (Author::where('email', $request->email)->exists()) {
+                    $message = 'Email has already been taken. Please use a different one.';
+                }
+
+                return response()->json(['success' => false, 'message' => $message ], 422);
+            }
+            if (Event::where('event_title', $request->event_title)->exists()) {
+                $message = 'Event title has already been taken. Please use a different one.';
+                return response()->json(['success' => false, 'message' => $message ], 422);
+            }
+
+
+            $firstName = $data['first_name'];
+            $lastName = $data['last_name'];
+            $initials = substr($firstName, 0, 1) . substr($lastName, 0, 1);
+
+            $data['initials'] = $initials;
+            $eventTitle = str_replace(' ', '_', $request->input('event_title'));
+
+            if ($request->hasFile('profile')) {
+                $fileProfile = $request->file('profile');
+                $profileName = $initials . '-' . $data['phone'] . 'Profile';
+                $data['profile'] = $profileName . '.png';
+            }
+            if ($request->hasFile('id_scan')) {
+                $fileIdScan = $request->file('id_scan');
+                $idScanName = $initials . '-' . $data['phone'] . 'ID';
+                $data['id_scan'] = $idScanName . '.pdf';
+            }
+
+            if ($request->hasFile('banner')) {
+                $fileBanner = $request->file('banner');
+                $bannerName = $eventTitle . '_Banner';
+                $data['banner'] = $bannerName . '.png';
+            }
+            if ($request->hasFile('large_image')) {
+                $fileLargeImage = $request->file('large_image');
+                $largeImageName = $eventTitle . '_Large';
+                $data['large_image'] = $largeImageName . '.png';
+            }
+            if ($request->hasFile('medium_image')) {
+                $fileMediumImage = $request->file('medium_image');
+                $mediumImageName = $eventTitle . '_Medium';
+                $data['medium_image'] = $mediumImageName . '.png';
+            }
+            if ($request->hasFile('small_image')) {
+                $fileSmallImage = $request->file('small_image');
+                $smallImageName = $eventTitle . '_Small';
+                $data['small_image'] = $smallImageName . '.png';
+            }
+
+            $author = Author::create($data);
+            $authorId = $author->id;
+            $data['creator_id'] = $authorId;
+            $event = Event::create($data);
+
+            DB::commit();
+
+            $profilePath = $fileProfile->storeAs('/images/authors', $profileName . '.png');
+            $idScanPath = $fileIdScan->storeAs('/images/authors', $idScanName . '.pdf');
+            $bannerPath = $fileBanner->storeAs('/images/event', $bannerName . '.png');
+            $largeImagePath = $fileLargeImage->storeAs('/images/event', $largeImageName . '.png');
+            $mediumImagePath = $fileMediumImage->storeAs('/images/event', $mediumImageName . '.png');
+            $smallImagePath = $fileSmallImage->storeAs('/images/event', $smallImageName . '.png');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Event created successfully, procced to the next step to complete the proccess, Thank you.',
+                'event_id' => $event->id,
+                'creator_id' => $author->id,
+                'redirect' => route("en.event.subscribe"),
+            ], 200);
+        } catch (ValidationException $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+
+            DB::rollBack();
+            Log::error('Error creating event', ['exception' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error occured while creating the event, so try again, make sure all fields are having the rquired values'. json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     // Events
@@ -222,4 +390,3 @@ class EndEventController extends Controller
         // Code to handle getting an event star
     }
 }
-

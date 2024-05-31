@@ -166,7 +166,6 @@ class WebSettingsController extends Controller
         }
     }
 
-
     // POST TO API universal function
     public function handleApiRequest($endpoint, $method, $body, $status)
     {
@@ -585,7 +584,7 @@ class WebSettingsController extends Controller
             'name' => $request->input('name'),
             'district_id' => $request->input('district_id'),
         ];
-        $sending_status = "send-with-token";
+        $sending_status = "free";
         return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
@@ -646,8 +645,32 @@ class WebSettingsController extends Controller
 
     public function getTown(Request $request)
     {
-        // Code to handle getting a town
+        $endpoint = '/settings/towns/get';
+        $send_state = "send-with-token";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+
+        if ($request->ajax()) {
+            return response()->json(['towns' => $idata]);
+        }
     }
+
+    public function getTownByDistrict(Request $request)
+    {
+        $district_id = $request->input('district_id');
+        $endpoint = '/settings/towns/byDistrict';
+        $send_state = "send-with-token";
+
+        $endpoint .= '?district_id=' . $district_id;
+
+        $apiResponse = $this->getDataFromApiById($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+
+        if ($request->ajax()) {
+            return response()->json(['filtered' => $idata]);
+        }
+    }
+
 
     // Permissions
     public function showPermission()

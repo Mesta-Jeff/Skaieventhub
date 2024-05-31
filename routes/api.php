@@ -34,14 +34,21 @@ Route::prefix('v2')->group(function () {
     Route::post('/settings/roles', [EndSettingsController::class, 'createRole']);
     Route::get('/settings/roles/fetch', [EndSettingsController::class, 'fetchRole']);
 
-    // GetbyID
+    // Settings Controller
     Route::get('/settings/districts/byRegion', [EndSettingsController::class, 'getDistrictByRegion']);
+    Route::get('/settings/towns/byDistrict', [EndSettingsController::class, 'getTownByDistrict']);
     Route::get('/settings/regions/get', [EndSettingsController::class, 'getRegion']);
     Route::get('/settings/identity-types/get', [EndSettingsController::class, 'getIdentityType']);
+    Route::post('/settings/towns', [EndSettingsController::class, 'createTown']);
 
     // Authentication
     Route::get('/authentication/login', [EndAuthenticationController::class, 'getCrendential']);
     Route::post('/authentication/sessions', [EndAuthenticationController::class, 'createSessions']);
+
+    // CLient signing up for the first time
+    Route::post('/event/client/event-author', [EndEventController::class, 'eventWithAuthor'])->name('event.event-with-author');
+    Route::get('/events/types/get', [EndEventController::class, 'getEventType']);
+
 
     // End of free routes    =====================================================================================
 
@@ -92,7 +99,6 @@ Route::prefix('v2')->group(function () {
 
         // Towns:
         Route::get('/settings/towns', [EndSettingsController::class, 'viewTown']);
-        Route::post('/settings/towns', [EndSettingsController::class, 'createTown']);
         Route::post('/settings/towns/update', [EndSettingsController::class, 'updateTown']);
         Route::post('/settings/towns/delete', [EndSettingsController::class, 'destroyTown']);
         Route::get('/settings/towns/get', [EndSettingsController::class, 'getTown']);
@@ -143,7 +149,6 @@ Route::prefix('v2')->group(function () {
         Route::post('/events/types', [EndEventController::class, 'createEventType']);
         Route::post('/events/types/update', [EndEventController::class, 'updateEventType']);
         Route::post('/events/types/delete', [EndEventController::class, 'destroyEventType']);
-        Route::get('/events/types/get', [EndEventController::class, 'getEventType']);
 
         // Events:
         Route::get('/events', [EndEventController::class, 'viewEvent']);

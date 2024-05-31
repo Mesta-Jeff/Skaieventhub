@@ -8,15 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
     protected $fillable = [
-        'title', 'sub_title', 'content', 'creator_id', 'views', 'stars', 'comments', 'description',
-        'reason', 'event_type_id', 'start_date', 'end_date', 'initials', 'venue', 'banner',
+        'event_title', 'sub_title', 'content', 'creator_id', 'views', 'stars', 'comments', 'description',
+        'reason', 'event_type_id', 'start_date', 'end_date', 'aliases', 'venue', 'banner',
         'large_image', 'medium_image', 'small_image', 'promo_video', 'status', 'verified', 'approved'
     ];
 
     protected $hidden = [
         'updated_at','is_deleted'
     ];
-    
+
     public function eventType()
     {
         return $this->belongsTo(EventType::class);

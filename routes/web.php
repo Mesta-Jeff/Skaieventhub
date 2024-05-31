@@ -52,6 +52,17 @@ Route::middleware([CsrfExempt::class])->group(function () {
     // Users
     Route::get('/users/list', [WebUserController::class, 'showUser'])->name('users.show');
     Route::post('/users/add', [WebUserController::class, 'addUser'])->name('users.create');
+
+    // Settings COntrollers
+    Route::post('/event/event-with-author', [WebEventController::class, 'eventWithAuthor'])->name('event.event-with-author');
+    Route::get('/settings/regions/get', [WebSettingsController::class, 'getRegion'])->name('settings.regions.get');
+    Route::get('/settings/districts/byRegion', [WebSettingsController::class, 'getDistrictByRegion'])->name('settings.districts.byRegion');
+    Route::get('/settings/towns/byDistrict', [WebSettingsController::class, 'getTownByDistrict'])->name('settings.towns.byDistricts');
+    Route::get('/settings/identity-types/get', [WebSettingsController::class, 'getIdentityType'])->name('settings.identitytypes.get');
+    Route::post('/settings/towns', [WebSettingsController::class, 'addTown'])->name('settings.towns.create');
+
+    // event controller
+    Route::get('/events/types/get', [WebEventController::class, 'getEventType'])->name('events.types.get');
 });
 
 //   =================== end of free routes  ===================================================================================
@@ -77,7 +88,6 @@ Route::middleware([CheckSessionValue::class])->group(function () {
     Route::post('/settings/regions', [WebSettingsController::class, 'addRegion'])->name('settings.regions.create');
     Route::post('/settings/regions/update', [WebSettingsController::class, 'modifyRegion'])->name('settings.regions.update');
     Route::post('/settings/regions/delete', [WebSettingsController::class, 'removeRegion'])->name('settings.regions.destroy');
-    Route::get('/settings/regions/get', [WebSettingsController::class, 'getRegion'])->name('settings.regions.get');
 
     // Districts:
     Route::get('/settings/districts', [WebSettingsController::class, 'showDistrict'])->name('settings.districts.show');
@@ -85,11 +95,10 @@ Route::middleware([CheckSessionValue::class])->group(function () {
     Route::post('/settings/districts/update', [WebSettingsController::class, 'modifyDistrict'])->name('settings.districts.update');
     Route::post('/settings/districts/delete', [WebSettingsController::class, 'removeDistrict'])->name('settings.districts.destroy');
     Route::get('/settings/districts/get', [WebSettingsController::class, 'getDistrict'])->name('settings.districts.get');
-    Route::get('/settings/districts/byRegion', [WebSettingsController::class, 'getDistrictByRegion'])->name('settings.districts.byRegion');
+
 
     // Towns:
     Route::get('/settings/towns', [WebSettingsController::class, 'showTown'])->name('settings.towns.show');
-    Route::post('/settings/towns', [WebSettingsController::class, 'addTown'])->name('settings.towns.create');
     Route::post('/settings/towns/update', [WebSettingsController::class, 'modifyTown'])->name('settings.towns.update');
     Route::post('/settings/towns/delete', [WebSettingsController::class, 'removeTown'])->name('settings.towns.destroy');
     Route::get('/settings/towns/get', [WebSettingsController::class, 'getTown'])->name('settings.towns.get');
@@ -113,7 +122,6 @@ Route::middleware([CheckSessionValue::class])->group(function () {
     Route::post('/settings/identity-types', [WebSettingsController::class, 'addIdentityType'])->name('settings.identitytypes.create');
     Route::post('/settings/identity-types/update', [WebSettingsController::class, 'modifyIdentityType'])->name('settings.identitytypes.update');
     Route::post('/settings/identity-types/delete', [WebSettingsController::class, 'removeIdentityType'])->name('settings.identitytypes.destroy');
-    Route::get('/settings/identity-types/get', [WebSettingsController::class, 'getIdentityType'])->name('settings.identitytypes.get');
 
     // API Routes:
     Route::get('/settings/api-routes', [WebSettingsController::class, 'showAPIRoute'])->name('settings.apiroutes.show');
@@ -160,7 +168,7 @@ Route::middleware([CheckSessionValue::class])->group(function () {
     Route::post('/events/types', [WebEventController::class, 'addEventType'])->name('events.types.create');
     Route::post('/events/types/update', [WebEventController::class, 'modifyEventType'])->name('events.types.update');
     Route::post('/events/types/delete', [WebEventController::class, 'removeEventType'])->name('events.types.destroy');
-    Route::get('/events/types/get', [WebEventController::class, 'getEventType'])->name('events.types.get');
+
 
     // Events:
     Route::get('/events', [WebEventController::class, 'showEvent'])->name('events.show');

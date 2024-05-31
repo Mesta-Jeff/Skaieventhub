@@ -24,4 +24,8 @@
     <link rel="stylesheet" href="{{ asset ('root/forms/assets/css/responsive.css') }}">
 
     <link href="{{ asset('root/hyp/assets/vendor/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
+    <link href=" https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css " rel="stylesheet">
+
+    @yield('additional-css')
+    
 </head>

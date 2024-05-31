@@ -156,7 +156,7 @@ class EndUserController extends Controller
                 $image = $data['image'];
                 $lastFourDigits = substr($data['phone'], -4);
                 $filename = $data['nickname'] .'-'. $lastFourDigits;
-                $imagePath = storage_path('app/public/images/users/' . $filename . '.png');
+                $imagePath = storage_path('/images/users/' . $filename . '.png');
 
                 // Decode base64 string and save to file
                 $imageData = base64_decode($image);
@@ -257,7 +257,7 @@ class EndUserController extends Controller
                 $firstChar = substr($data['name'], 0, 1);
                 $lastChar = substr($data['name'], -1);
                 $filename = $firstChar . $lastChar . '-'. $data['phone'];
-                $filePath = $file->storeAs('public/images/users', $filename. '.png');
+                $filePath = $file->storeAs('/images/users', $filename. '.png');
                 $data['image'] = $filename . '.png';
             }
 

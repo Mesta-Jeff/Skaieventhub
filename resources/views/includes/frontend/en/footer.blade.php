@@ -23,7 +23,7 @@
         </div>
     </div>
 </footer>
-<!-- footer-area-end -->
+
 
 
 
@@ -42,6 +42,10 @@
 <script src="{{ asset ('root/forms/assets/js/main.js') }}"></script>
 
 <script src="{{ asset('root/hyp/assets/vendor/select2/js/select2.min.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+
+@yield('additional-js')
+
 <script>
     $(document).ready(function() {
         $('.select2').each(function() {

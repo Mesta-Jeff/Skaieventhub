@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->bigIncrements('id')->startingValue(23000);
-            $table->string('title', 100);
+            $table->string('event_title', 100);
             $table->string('sub_title', 100)->nullable();
             $table->text('content');
             $table->foreignId('creator_id')->constrained('authors')->onDelete('cascade');
@@ -25,7 +25,7 @@ return new class extends Migration
             $table->foreignId('event_type_id')->constrained()->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('initials', 15)->nullable();
+            $table->string('alises', 15)->nullable();
             $table->string('venue', 100);
             $table->string('banner', 100)->nullable();
             $table->string('large_image', 100)->nullable();
