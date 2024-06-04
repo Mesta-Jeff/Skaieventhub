@@ -496,7 +496,7 @@
                                         <div class="col-md-12">
                                             <div class="form-grp mb-3">
                                                 <div class="form">
-                                                    <label for="large_image">Upload the large image (1500 by 1300 px Portrait)</label>
+                                                    <label for="large_image">Upload the large image (1500 by 1500 px Portrait)</label>
                                                     <input type="file" id="large_image" class="file-input"
                                                         accept="image/*">
                                                 </div>
@@ -505,7 +505,7 @@
                                         <div class="col-md-12">
                                             <div class="form-grp mb-3">
                                                 <div class="form">
-                                                    <label for="medium_image">Upload the medium image (1500 by 1500 px Square image)</label>
+                                                    <label for="medium_image">Upload the main image (1080 by 1080 px Square image)</label>
                                                     <input type="file" id="medium_image" class="file-input"
                                                         accept="image/*">
                                                 </div>
@@ -514,7 +514,7 @@
                                         <div class="col-md-12">
                                             <div class="form-grp mb-3">
                                                 <div class="form">
-                                                    <label for="small_image">Upload small image (1200 by 1200 px Square image)</label>
+                                                    <label for="small_image">Upload small image (900 by 900 px Square image)</label>
                                                     <input type="file" id="small_image" class="file-input"
                                                         accept="image/*">
                                                 </div>
@@ -610,6 +610,7 @@
 
 <script>
 
+
     function resetForm() {
         document.getElementById("author-form").reset();
         document.getElementById("event-form").reset();
@@ -617,8 +618,8 @@
     // Call the function on page load
     window.onload = resetForm;
 
-    $(document).ready(function() {
 
+    $(document).ready(function() {
 
         var $modal = $('#imge-modal');
         var image = document.getElementById('sample_image');
@@ -917,7 +918,6 @@
             }
         });
 
-
         // Creating my own town
         $('#btnAddTown').click(function() {
             var selected_id = $("#district_id").val();
@@ -1023,22 +1023,6 @@
             }
         });
 
-
-        // FUnction to validate the inputs before
-        // function validateForm(...fields) {
-        //     for (let field of fields) {
-        //         if (!field) {
-        //             Swal.fire({
-        //                 icon: 'error',
-        //                 title: 'Error',
-        //                 text: 'Please a fill in all fields.'
-        //             });
-        //             return false;
-        //         }
-        //     }
-        //     return true;
-        // }
-
         function validateForm(...fields) {
             let allFieldsFilled = true;
             let missingFields = [];
@@ -1057,11 +1041,7 @@
             }
 
             if (!allFieldsFilled) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Error',
-                    text: `Please fill in all fields: ${missingFields.join(', ').replace(/([A-Z])/g, ' $1')}.`
-                });
+                Swal.fire({icon: 'error', title: 'Error',text: `Please fill in all fields: ${missingFields.join(', ').replace(/([A-Z])/g, ' $1')}.`});
                 return false;
             }
 
@@ -1174,7 +1154,7 @@
                             })
                             .then((result) => {
                                 buttonElement.prop('disabled', false).text('Submit Data').css('cursor', 'pointer');
-                                window.location.href = response.redirect;
+                                window.location.href = '/en/subscription';
                             });
                     } else {
                         Swal.fire({ icon: 'error',title: 'Error',text: response.message ? response.message : 'Unknown error occurred.'});
@@ -1184,7 +1164,7 @@
                     buttonElement.prop('disabled', false).text('Submit Data').css('cursor',
                         'pointer');
                     var errorMessage =
-                        '<strong>skaiHUB transaction request failed because:</strong>';
+                        '<strong> transaction request failed because:</strong>';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage += '<br>' + xhr.responseJSON.message;
                     } else {

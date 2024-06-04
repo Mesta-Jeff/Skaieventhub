@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nickname', 15) ->nullable();
             $table->string('fear', 255) ->nullable();
             $table->string('address', 255) ->nullable();
-            $table->string('email')->unique(); 
+            $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->date('dob')->nullable();
             $table->string('gender', 7)->nullable();
@@ -31,6 +31,7 @@ return new class extends Migration
             $table->string('cover_image', 100)->nullable();
             $table->boolean('verified')->default(false);
             $table->string('token', 255)->nullable();
+            $table->string('status', 11)->default('Active');
             $table->string('is_deleted', 3)->default('No');
             $table->timestamps();
         });

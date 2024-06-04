@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('views')->default(0);
             $table->integer('stars')->default(0);
             $table->integer('comments')->default(0);
+            $table->integer('likes')->default(0);
             $table->text('description')->nullable();
             $table->text('reason')->nullable();
             $table->foreignId('event_type_id')->constrained()->onDelete('cascade');

@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Log;
 use App\Models\Event;
 use App\Models\Author;
 use App\Models\Ticket;
@@ -13,8 +9,14 @@ use App\Models\EventType;
 use App\Models\EventLikes;
 use App\Models\EventStars;
 use App\Models\UserTicket;
+use App\Models\EventViewed;
 use App\Models\EventComment;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class EndEventController extends Controller
 {
@@ -158,14 +160,15 @@ class EndEventController extends Controller
 
             $firstName = $data['first_name'];
             $lastName = $data['last_name'];
-            $initials = substr($firstName, 0, 1) . substr($lastName, 0, 1);
+            $initials = substr($firstName, 0, 1);
+            $initials .= implode('', array_map(fn($part) => substr($part, 0, 1), explode(' ', $lastName)));
 
             $data['initials'] = $initials;
             $eventTitle = str_replace(' ', '_', $request->input('event_title'));
 
             if ($request->hasFile('profile')) {
                 $fileProfile = $request->file('profile');
-                $profileName = $initials . '-' . $data['phone'] . 'Profile';
+                $profileName = $initials . '-' . $data['phone'] .'-'. 'Profile';
                 $data['profile'] = $profileName . '.png';
             }
             if ($request->hasFile('id_scan')) {
@@ -214,7 +217,7 @@ class EndEventController extends Controller
                 'message' => 'Event created successfully, procced to the next step to complete the proccess, Thank you.',
                 'event_id' => $event->id,
                 'creator_id' => $author->id,
-                'redirect' => route("en.event.subscribe"),
+                'redirect' => '/en/subscription',
             ], 200);
         } catch (ValidationException $e) {
             DB::rollBack();
@@ -234,11 +237,129 @@ class EndEventController extends Controller
         }
     }
 
-    // Events
+    // Events view for Mobile
+    public function viewEventMobile(Request $request)
+    {
+        try {
+
+            $eventsQuery = DB::table('events as e')
+                ->join('authors as a', 'e.creator_id', '=', 'a.id')
+                ->join('event_types as et', 'e.event_type_id', '=', 'et.id')
+                ->select(
+                    'e.id', 'e.event_title', 'e.sub_title', 'e.content', 'e.creator_id', 'e.views', 'e.stars', 'e.comments','e.likes', 'e.start_date', 'e.end_date', 'e.aliases', 'e.venue', 'e.banner', 'e.large_image', 'e.medium_image', 'e.small_image', 'e.promo_video', 'e.created_at', 'e.status', 'a.title', 'a.initials', 'a.first_name', 'a.last_name', 'a.phone', 'a.tel', 'a.email', 'a.profile', 'et.event as event_type'
+                )
+                ->orderby('e.start_date', 'ASC')
+                ->where('e.is_deleted', 'No')
+                ->where('e.approved', 'Yes');
+
+                // Check if request_value is provided and not empty
+                if ($request->has('request_value') && !empty($request->input('request_value'))) {
+                    $requestValue = $request->input('request_value');
+                    $eventsQuery->where(function ($query) use ($requestValue) {
+                        $query->where('e.id', $requestValue)
+                            ->orWhere('e.event_title', $requestValue);
+                    });
+                }
+
+                // Check if query_type is provided and add appropriate where clause
+                if ($request->has('query_type')) {
+                    $queryType = $request->input('query_type');
+                    $today = date('Y-m-d');
+                    if ($queryType === 'Yes') {
+                        $eventsQuery->where('e.end_date', '<', $today);
+                    } else {
+                        $eventsQuery->where('e.end_date', '>', $today);
+                    }
+                }
+
+            $events = $eventsQuery->get();
+
+            // Transform the results to add the asset URLs
+            $events->transform(function ($event) {
+                $event->banner = asset('storage/images/event/' . $event->banner);
+                $event->large_image = asset('storage/images/event/' . $event->large_image);
+                $event->medium_image = asset('storage/images/event/' . $event->medium_image);
+                $event->small_image = asset('storage/images/event/' . $event->small_image);
+                $event->promo_video = !empty($event->promo_video) ? asset('storage/videos/event/' . $event->promo_video) : 'None';
+                $event->profile = asset('storage/images/authors/' . $event->profile);
+
+                // Format start_date and end_date
+                $event->start_date = date('M d, Y', strtotime($event->start_date));
+                $event->end_date = date('M d, Y', strtotime($event->end_date));
+                return $event;
+            });
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Events retrieved successfully',
+                'data' => $events
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'An error occurred while retrieving events',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+    // Someone wiewing the event
+    public function someoneViewed(Request $request)
+    {
+        try {
+            // Validate the incoming request data
+            $validatedData = $request->validate([
+                'user_id' => 'required|integer',
+                'event_id' => 'required|integer',
+            ]);
+
+            $existingRecord = EventViewed::where('user_id', $validatedData['user_id'])
+                ->where('event_id', $validatedData['event_id'])->first();
+
+            if ($existingRecord) {
+                return response()->json([
+                    'success' => false,
+                    'status_code' => 400,
+                    'message' => 'User has already viewed this event',
+                ]);
+            }
+
+            DB::beginTransaction();
+            EventViewed::create($validatedData);
+            $event = Event::findOrFail($validatedData['event_id']);
+            $event->increment('views');
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Event viewed successfully',
+                'status_code' => 200,
+            ]);
+        } catch (QueryException $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Error inserting data: ' . $e->getMessage(),
+                'status_code' => 500,
+            ]);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+                'status_code' => 500,
+            ]);
+        }
+    }
+
+    // Event view for web
     public function viewEvent()
     {
-        // Code to handle viewing events
+
     }
+
 
     public function createEvent(Request $request)
     {

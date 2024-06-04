@@ -163,20 +163,8 @@
                             </div>
                         </div>
                     </a>
-                </div><div class="col-xl-4 col-md-4 col-sm-10">
-                    <a href="{{ route('en.event.subscribe')}}">
-                        <div class="features-item">
-                            <div class="features-icon">
-                                <i class="flaticon-discount"></i>
-                            </div>
-                            <div class="features-content">
-                                <h6 class="title">Hire Our Team</h6>
-                                <p>Get developers and system analysts from us to manage or design your system for you</p>
-                                <a href="{{ route('en.event.subscribe')}}" class="text-succes">Discover More</a>
-                            </div>
-                        </div>
-                    </a>
                 </div>
+                
 
 
             </div>

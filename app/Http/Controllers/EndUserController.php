@@ -59,7 +59,6 @@ class EndUserController extends Controller
                 $firstChar = substr($data['name'], 0, 1);
                 $lastChar = substr($data['name'], -1);
                 $filename = $firstChar . $lastChar . '-'. $data['phone'];
-                $filePath = $file->storeAs('public/images/users', $filename. '.png');
                 $data['image'] = $filename . '.png';
             }
 
@@ -88,6 +87,8 @@ class EndUserController extends Controller
             ]);
 
             DB::commit();
+
+            $filePath = $file->storeAs('public/images/users', $filename. '.png');
 
             return response()->json([
                 'success' => true,
@@ -257,7 +258,6 @@ class EndUserController extends Controller
                 $firstChar = substr($data['name'], 0, 1);
                 $lastChar = substr($data['name'], -1);
                 $filename = $firstChar . $lastChar . '-'. $data['phone'];
-                $filePath = $file->storeAs('/images/users', $filename. '.png');
                 $data['image'] = $filename . '.png';
             }
 
@@ -286,6 +286,8 @@ class EndUserController extends Controller
             ]);
 
             DB::commit();
+            
+            $filePath = $file->storeAs('/images/users', $filename. '.png');
 
             return response()->json([
                 'success' => true,

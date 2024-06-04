@@ -35,23 +35,15 @@ class WebEventController extends Controller
             $data = json_decode($response->getContent(), true);
 
             if ($response->getStatusCode() === 201) {
-                if($endpoint === '/event/client/event-author')
-                {
-                    // Store data in the session
-                    session([
-                        'creator_id' => $data['creator_id'] ?? null,
-                        'event_id' => $data['event_id'] ?? null,
-                    ]);
-                    return response()->json([
-                        'success' => true,
-                        'message' => $data['message'] ?? 'Operation Performed',
-                        'creator_id' => $data['creator_id'] ?? null,
-                        'event_id' => $data['event_id'] ?? null,
-                        'redirect' => $data['redirect'] ?? null
-                    ], 201);
-                }
+                session([
+                    'creator_id' => $data['creator_id'],
+                    'event_id' => $data['event_id'],
+                ]);
                 return response()->json([
                     'success' => true,
+                    'creator_id' => $data['creator_id'],
+                    'event_id' => $data['event_id'],
+                    'redirect' => $data['redirect'],
                     'message' => $data['message'] ?? 'Operation Performed',
                 ], 201);
             } else {
@@ -119,7 +111,6 @@ class WebEventController extends Controller
             ];
         }
     }
-
 
     // Authors
     public function showAuthor()
@@ -408,6 +399,8 @@ class WebEventController extends Controller
 
     public function ensubscribe()
     {
+        $roles = session('event_id');
+        Log::info('Login response', ['response' => $roles]);
         return view('frontend.en.subscription-payment');
     }
 }

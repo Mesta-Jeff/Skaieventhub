@@ -152,10 +152,16 @@ Route::prefix('v2')->group(function () {
 
         // Events:
         Route::get('/events', [EndEventController::class, 'viewEvent']);
+        Route::get('/events/mobile', [EndEventController::class, 'viewEventMobile']);
         Route::post('/events', [EndEventController::class, 'createEvent']);
         Route::post('/events/update', [EndEventController::class, 'updateEvent']);
         Route::post('/events/delete', [EndEventController::class, 'destroyEvent']);
         Route::get('/events/get', [EndEventController::class, 'getEvent']);
+        Route::get('/events/get/counts', [EndEventController::class, 'getEventCounts']);
+        Route::post('/events/someone-viewing', [EndEventController::class, 'someoneViewed']);
+        Route::post('/events/someone-liking', [EndEventController::class, 'someoneLiked']);
+        Route::post('/events/someone-staring', [EndEventController::class, 'someoneStared']);
+        Route::post('/events/someone-commenting', [EndEventController::class, 'someoneCommented']);
 
         // Tickets:
         Route::get('/events/event-tickets', [EndEventController::class, 'viewEventTicket']);
