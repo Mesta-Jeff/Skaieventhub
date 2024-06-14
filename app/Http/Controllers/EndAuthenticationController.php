@@ -58,11 +58,11 @@ class EndAuthenticationController extends Controller
                 ->join('roles as r', 'users.role_id', '=', 'r.id')
                 ->join('user_api_tokens as uat', 'users.id', '=', 'uat.user_id')
                 ->where('users.status', 'Active')
-                ->select('users.id','users.name','users.nickname', 'users.email', 'users.phone', 'users.image', 'r.title as role', 'uat.raw_token', 'uat.user_key', 'uat.hash_token')
+                ->select('users.id','users.name','users.nickname','users.actions', 'users.email', 'users.phone', 'users.image', 'r.title as role', 'uat.raw_token', 'uat.user_key', 'uat.hash_token')
                 ->first();
 
             // Prepare response data
-            $imageUrl = asset('storage/images/users/' . $user->image);
+            $imageUrl = asset('storage/images/' . ($user->role === 'Author' ? 'authors' : 'users') . '/' . $user->image);
             $token = $user->createToken('auth_token')->plainTextToken;
 
             $responseData = [
@@ -77,6 +77,7 @@ class EndAuthenticationController extends Controller
                 'user_key' => $user->user_key,
                 'api_key' => $user->hash_token,
                 'token' => $token,
+                'host' => $user->actions,
             ];
 
             return response()->json([
@@ -129,6 +130,43 @@ class EndAuthenticationController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => 'Request to perform database operation has gone through successfully',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry, request to the database has declined, try again later',
+                ], 409);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
+    }
+
+    public function logout(Request $request) {
+        try {
+            // Validate incoming request data
+            $data = $request->validate([
+                'user_id' => 'required|numeric',
+            ]);
+
+            $time_out = now()->format('H:i:s');
+            $dbRequest = DB::table('sessions')->where('user_id', $data['user_id'])->whereNull('time_out')->update([
+                'time_out' => $time_out,
+            ]);
+
+            // Respond based on the success of the update operation
+            if ($dbRequest) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to update database operation has gone through successfully',
                 ], 201);
             } else {
                 return response()->json([

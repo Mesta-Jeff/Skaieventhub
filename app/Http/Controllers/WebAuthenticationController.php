@@ -52,6 +52,7 @@ class WebAuthenticationController extends Controller
 
             $response = app()->handle($customRequest);
             $data = json_decode($response->getContent(), true);
+            Log::info('Coming Error: ' . json_encode($data));
 
             if ($response->getStatusCode() === 201) {
                 return response()->json([
@@ -184,13 +185,14 @@ class WebAuthenticationController extends Controller
             'phone' => $responseData['phone'],
             'image' => $responseData['image'],
             'role' => $responseData['role'],
+            'host' => $responseData['host'],
         ]);
     }
 
     // Setting the login page to view
     public function login()
     {
-        
+
         if (Auth::check() && session()->has('role')) {
             $role = session('role');
             if (in_array($role, ['Developer', 'Oversear', 'Kernel'])) {
@@ -204,22 +206,23 @@ class WebAuthenticationController extends Controller
     // FUNCTION TO LOGOUT
     public function logout()
     {
-        if (Auth::check()) {
-            $user = Auth::user();
+        $endpoint = '/authentication/logout';
+        $method = 'POST';
+        $user_id = session('user_id');
+        $body = [
+            'user_id' => $user_id,
+        ];
+        $insertResponse = $this->insertSessionApiRequest($endpoint, $method, $body);
+        $insertData = json_decode($insertResponse->getContent(), true);
+        Log::info('Main Body: ' . json_encode($body));
 
-            DB::table('sessions')
-                ->where('email', '=', session('email'))
-                ->update([
-                    'time_out' => Carbon::now()->format('h:i A'),
-                    'status' => 'OUT',
-                ]);
-
-            Auth::logout();
-
+        if ($insertResponse->getStatusCode() === 201 && $insertData['success']) {
             session()->flush();
+            Auth::logout();
+            return redirect()->route('login');
+        } else {
+            return redirect()->route('login');
         }
-
-        return redirect()->route('login');
     }
 
 

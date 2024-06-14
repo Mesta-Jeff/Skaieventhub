@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'Types of Events')
+@section('title', 'My Events')
 
 @section('content')
     <!-- Start Content-->
@@ -29,7 +29,14 @@
                 <div class="card-body">
                     <div class="row g-2">
                         <!--end col-->
-                        <div class="col-xxl-9 ms-auto">
+                        <div class="col-xxl-5 ms-auto">
+                            <div>
+                                <select id="filter3" class="select2 form-control" >
+                                    <option value="" selected>Filter by event type...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xxl-4 ms-auto">
                             <div>
                                 <select id="filter2" class="select2 form-control" >
                                     <option value="" selected>Filter by Status...</option>
@@ -39,7 +46,7 @@
                         <!--end col-->
                         <div class="col-xxl-3 ms-auto">
                             <div class="hstack gap-2">
-                                <button type="button" id="btnref" class="btn btn-soft-secondary"><i class="mdi mdi-atom-letiant spin"></i> Reload</button>
+                                <button type="button" id="btnref" class="btn btn-soft-secondary">Reload</button>
                                 <button type="button" id="btnNew" class="btn btn-outline-success waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
                             </div>
                         </div>
@@ -51,7 +58,7 @@
     </div>
 
     <div class="row">
-        <div class="col-12">
+        <div class="col-12" >
             <div class="card">
                 <div class="card-body">
                     <div class="row mb-2">
@@ -66,11 +73,12 @@
                                 <tr>
                                     <th><input type="checkbox" id="selectAllCheckboxes"/></th>
                                     <th>#</th>
-                                    <th>Event</th>
-                                    <th>Price</th>
-                                    <th>Description</th>
+                                    <th>Event Title</th>
+                                    <th>Event Type</th>
+                                    <th>Views</th>
+                                    <th>Likes</th>
+                                    <th>Comments</th>
                                     <th>Status</th>
-                                    <th>Date Created</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -83,6 +91,43 @@
     </div>
 
 </div>
+
+<!-- Modal for action -->
+<div class="modal fade" id="actionModal" tabindex="-1" role="dialog" aria-labelledby="actionModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="actionModalLabel">Actions</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="action-id" />
+                <input type="hidden" id="action-title" />
+                <div class="row g-9">
+                    <div class="col-md-12 fv-row mb-2">
+                        <label class="form-label">What do you want to do to this selected event...?</label>
+                        <select id="modal-actions" class="select2 form-control mb-2" data-toggle="select2">
+                            <option value="" selected disabled>---- Select Action ----</option>
+                            <option value="more-details">More Details</option>
+                            <option value="modify-event">Modify Event</option>
+                            <option value="event-ticket">Event Ticket</option>
+                            <option value="in-attendance">In Attendance</option>
+                            <option value="comments">View Comments</option>
+                            <option value="likes">Who Liked</option>
+                            <option value="stars">View Stars</option>
+                            <option value="viewers">See Viewers</option>
+                            <option value="subscribe-sms">Subscribe SMS</option>
+                            <option value="delete-record">Remove Event</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-soft-danger btn-sm" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 <div class="modal fade" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
@@ -169,38 +214,18 @@
             $('#description').text('');
         });
 
-        // Event listener for edit button
-        $('#example').on('click', '.edit-btn', function() {
-            var id = $(this).data('id');
-            var event = $(this).data('event');
-            var price = $(this).data('price');
-            var description = $(this).data('description');
-            var status = $(this).data('status');
-
-            $('#modal-title').text('About to modify this record');
-            $('#event').val(event).change();
-            $('#price').val(price);
-            $('#gottenid').val(id);
-            $('#description').text(description);
-            $('#stat').val(status);
-            $('#state-view').show();
-            $('#save-data').hide();
-            $('#edit-data').show();
-            $('#my-modal').modal('show');
-
-        });
 
         //Getting the table ready
         dataTable = $('#example').DataTable({
             ajax: {
-                url: '{{ route("events.types.show") }}',
+                url: '{{ route("events.show") }}',
                 dataSrc: 'events'
             },
             columns: [
                 {
                     data: null,
                     render: function (data, type, row) {
-                        return '<input type="checkbox" class="select-checkbox" data-id="' + data.id + '" data-title="' + data.event + '" />';
+                        return '<input type="checkbox" class="select-checkbox" data-id="' + data.id + '" data-title="' + data.event_title + '" />';
                     },
                 },
                 {
@@ -209,31 +234,49 @@
                         return ++counter;
                     }
                 },
-                { data: 'event' },
-                { data: 'price' },
-                { data: 'description' },
-                { data: 'status' },
-                {
-                    data: 'created_at',
+                { data: 'event_title',
                     render: function(data, type, row) {
-                        return moment(data).format('YYYY-MM-DD hh:mm:ss A');
+                        if (row.verified === true || row.verified === 1) {
+                            data += ' <span data-bs-toggle="tooltip" data-bs-placement="left" title="This event has been verified" class="mdi mdi-check-decagram text-info"></span>';
+                        }
+                        return data;
+                    }
+                },
+                { data: 'event_type' },
+                { data: 'views' },
+                { data: 'likes' },
+                { data: 'comments' },
+                // { data: 'status' },
+                {
+                data: 'status',
+                    render: function(data, type, row) {
+                        let badgeClass;
+                        switch (data) {
+                            case 'Approved':
+                                badgeClass = 'text-success';
+                                break;
+                            case 'Declined':
+                                badgeClass = 'text-danger';
+                                break;
+                            case 'Suspended':
+                                badgeClass = 'text-warning';
+                                break;
+                            default:
+                                badgeClass = 'text-secondary';
+                        }
+                        return `<span class="${badgeClass}">${data}</span>`;
                     }
                 },
                 {
                     data: null,
                     render: function(data, type, row) {
-                        return '<div class="btn-group">' +
-                            '<button type="button" class="btn btn-outline-info waves-effect waves-light dropdown-toggle arrow-none" data-bs-toggle="dropdown" aria-expanded="false">' +
-                            '<i class="mdi mdi-dots-horizontal font-16"></i> More' +
-                            '<i class="mdi mdi-chevron-down"></i>' +
-                            '</button>' +
-                            '<div class="dropdown-menu">' +
-                            '<span class="dropdown-header">More Actions</span>' +
-                            '<hr style="margin-top: 1px;" />'+
-                            '<a class="dropdown-item edit-btn" href="javascript: void(0);" data-id="' + data.id + '" data-event="' + data.event + '" data-price="' + data.price + '" data-description="' + data.description + '" data-status="' + data.status + '"><i class="mdi mdi-pen-plus mx-1"></i>Modify Record </a>' +
-                            '<a class="dropdown-item text-danger delete-btn" href="javascript: void(0);" data-id="' + data.id + '" data-rol="' + data.event + '"><i class="mdi mdi-delete mx-1"></i>Remove Record</a>' +
-                            '</div>' +
-                            '</div>';
+                        return `
+                        <button type="button" class="btn btn-outline-info waves-effect waves-light btn-action" data-id="${data.id}" data-creator_id="${data.creator_id}" data-event="${data.event_title}" aria-expanded="false">
+                            More Actions
+                        </button>
+                        <button type="button" class="btn btn-outline-danger waves-effect waves-light btn-remove" data-id="${data.id}" data-title="${data.event_title}" aria-expanded="false">
+                            Drop Event
+                        </button>`;
                     }
                 }
             ],
@@ -261,23 +304,56 @@
                 });
 
 
-                let uniqueStatusValues = dataTable.column(5).data().unique().toArray();
+                let uniqueStatusValues2 = dataTable.column(7).data().unique().toArray();
                 let filter2 = document.getElementById("filter2");
 
+                let uniqueStatusValues3 = dataTable.column(3).data().unique().toArray();
+                let filter3 = document.getElementById("filter3");
+
                 // Populate the remaining options
-                uniqueStatusValues.forEach(function(value) {
+                uniqueStatusValues2.forEach(function(value) {
                     let option = document.createElement("option");
                     option.value = value;
                     option.text = value;
                     filter2.appendChild(option);
                 });
+                uniqueStatusValues3.forEach(function(value) {
+                    let option = document.createElement("option");
+                    option.value = value;
+                    option.text = value;
+                    filter3.appendChild(option);
+                });
             }
         });
 
+        // Calling action modal
+        $('#example').on('click', '.btn-action', function() {
+            var id = $(this).data('id');
+            var event = $(this).data('event');
+            $('#action-id').val(id);
+            $('#action-title').val(event);
+
+            $('#modal-actions')[0].selectedIndex = 0;
+            $('#modal-actions').val('');
+
+            $('.modal-title').text('You\'ve Selected ' + event);
+            $('#actionModal').modal('show');
+
+        });
+
+        // Calling the action to drop the event
+        $('#example').on('click', '.btn-remove', function() {
+            var id = $(this).data('id');
+            var title = $(this).data('title');
+            removeEventAction(id, title);
+        });
+
         //Filtering
-        $('#filter2').on('change', function () {
-            var catFilter = $('#filter2').val();
-            dataTable.column(5).search(catFilter).draw();
+        $('#filter2, #filter3').on('change', function () {
+            var filter2 = $('#filter2').val();
+            dataTable.column(7).search(filter2).draw();
+            var filter3 = $('#filter3').val();
+            dataTable.column(3).search(filter3).draw();
         });
 
 
@@ -362,117 +438,58 @@
             window.location.reload();
         })
 
-        // FUnction to validate the inputs before
-        function validateForm(...fields) {
-            for (let field of fields) {
-                if (!field) {
-                    Swal.fire({ icon: 'error', title: 'Error', text: 'Please fill in all fields.' });
-                    return false;
-                }
-            }
-            return true;
+
+        // Function to perform the "More Details" action
+        function moreDetailsAction(id, title) {
+            console.log('Performing More Details action for ID:', id, 'with title:', title);
+            // Your code to perform the "More Details" action goes here
         }
 
+        // Function to perform the "Modify Event" action
+        function modifyEventAction(id, title) {
+            console.log('Performing Modify Event action for ID:', id, 'with title:', title);
+            // Your code to perform the "Modify Event" action goes here
+        }
 
-        // Save Data Button Click Event
-        $('#save-data').on('click', function() {
-            var event = $('#event').val();
-            var price = $('#price').val();
-            var des = $('#description').val();
+        // Function to perform the "Event Ticket" action
+        function eventTicketAction(id, title) {
+            console.log('Performing Event Ticket action for ID:', id, 'with title:', title);
+            // Your code to perform the "Event Ticket" action goes here
+        }
 
-            // Check if fields are not empty
-            if (!validateForm(event, description)) return;
+        // Function to perform the "In Attendance" action
+        function inAttendanceAction(id, title) {
+            console.log('Performing In Attendance action for ID:', id, 'with title:', title);
+            // Your code to perform the "In Attendance" action goes here
+        }
 
-            var buttonElement = $(this);
-            buttonElement.html('<i class="fa fa-spinner fa-spin"></i> Please wait... ').attr('disabled', true);
+        // Function to perform the "View Comments" action
+        function viewCommentsAction(id, title) {
+            console.log('Performing View Comments action for ID:', id, 'with title:', title);
+            // Your code to perform the "View Comments" action goes here
+        }
 
-            $.ajax({
-                type: 'POST',
-                url: '{{ route("events.types.create") }}',
-                data: {_token: '{{ csrf_token() }}',event: event, price: price, description: des,},
-                success: function(response) {
-                    console.log('Success Response:', response);
-                    if (response.success) {
-                        Swal.fire({ icon: 'success', title: 'Success',text: response.message,})
-                            .then((result) => {
-                                buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                                $('#my-form')[0].reset();
-                                resetForm();
-                                $('#my-modal').modal('hide');
-                                counter = 0; dataTable.ajax.reload();
-                            });
-                    } else {
-                        Swal.fire({ icon: 'error', title: 'Error', text: response.message });
-                    }
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                    var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage += '<br>' + xhr.responseJSON.message;
-                    } else {
-                        errorMessage += '<br>' + textStatus + ', ' + errorThrown;
-                    }
-                    Swal.fire({ icon: 'error', title: 'Error', html: errorMessage });
-                }
+        // Function to perform the "Who Liked" action
+        function whoLikedAction(id, title) {
+            console.log('Performing Who Liked action for ID:', id, 'with title:', title);
+            // Your code to perform the "Who Liked" action goes here
+        }
 
-            });
-        });
+        // Function to perform the "View Stars" action
+        function viewStarsAction(id, title) {
+            console.log('Performing View Stars action for ID:', id, 'with title:', title);
+            // Your code to perform the "View Stars" action goes here
+        }
 
-        // Edit Data Button Click Event
-        $('#edit-data').on('click', function() {
-            var event = $('#event').val();
-            var price = $('#price').val();
-            var des = $('#description').val();
-            var stat = $('#stat').val();
-            var gottenid = $('#gottenid').val();
+        // Function to perform the "See Viewers" action
+        function seeViewersAction(id, title) {
+            console.log('Performing See Viewers action for ID:', id, 'with title:', title);
+            // Your code to perform the "See Viewers" action goes here
+        }
 
-            // Check if fields are not empty
-            if (!validateForm(event, description, stat, gottenid)) return;
-
-            var buttonElement = $(this);
-            buttonElement.html('<i class="fa fa-spinner fa-spin"></i> Please wait... ').attr("disabled", true);
-
-            $.ajax({
-                type: "POST",
-                url: '{{ route("events.types.update") }}',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    event: event,description: des, price: price, status: stat, event_id: gottenid
-                },
-                success: function(response) {
-                    console.log('Success Response:', response);
-                    if (response.status="success") {
-                        Swal.fire({ icon: 'success', title: 'Success',text: response.message,})
-                            .then((result) => {
-                                buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                                $('#my-form')[0].reset();
-                                resetForm();
-                                $('#my-modal').modal('hide');
-                                counter = 0; dataTable.ajax.reload();
-                            });
-                    } else {
-                        Swal.fire({ icon: 'error', title: 'Error', text: response.message });
-                    }
-                },
-                error: function(xhr, textStatus, errorThrown) {
-                    buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                    var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
-                    if (xhr.responseJSON && xhr.responseJSON.message) {
-                        errorMessage += '<br>' + xhr.responseJSON.message;
-                    } else {
-                        errorMessage += '<br>' + textStatus + ', ' + errorThrown;
-                    }
-                    Swal.fire({ icon: 'error', title: 'Error', html: errorMessage });
-                }
-            });
-        });
-
-        // Event listener for delete button
-        $('#example').on('click', '.delete-btn', function(e) {
-            var ids = $(this).data('id');
-            var rol = $(this).data('rol');
-            var message = 'Are you sure you want to remove this record? <strong>' + rol + '</strong>';
+        // Function to perform the "Remove Event" action
+        function removeEventAction(id, title) {
+            var message = 'Are you sure you want to remove this record? <strong>' + title + '</strong>';
             Swal.fire({
                 title: 'Confirm Deletion',
                 html: message,
@@ -486,7 +503,7 @@
                     $.ajax({
                         type: "POST",
                         url: '{{ route("events.types.destroy") }}',
-                        data: {_token: '{{ csrf_token() }}',event_id: ids},
+                        data: {_token: '{{ csrf_token() }}',event_id: id},
                         success: function(response) {
                             console.log('Success Response:', response);
                             if (response.status="success") {
@@ -513,9 +530,60 @@
                     console.log("Delete action canceled by user.");
                 }
             });
+        }
+
+        // Function to perform the "Event Statistics" action
+        function eventStatisticsAction(id, title) {
+            console.log('Performing Event Statistics action for ID:', id, 'with title:', title);
+            // Your code to perform the "Event Statistics" action goes here
+        }
+
+
+        // Event listener for the select dropdown change
+        $('#modal-actions').on('change', function() {
+            var selectedAction = $(this).val();
+            var selectedOption = $(this).find(':selected');
+            var id = $('#action-id').val()
+            var title = $('#action-title').val();
+
+            switch(selectedAction) {
+                case 'more-details':
+                    moreDetailsAction(id, title);
+                    break;
+                case 'modify-event':
+                    modifyEventAction(id, title);
+                    break;
+                case 'event-ticket':
+                    eventTicketAction(id, title);
+                    break;
+                case 'in-attendance':
+                    inAttendanceAction(id, title);
+                    break;
+                case 'comments':
+                    viewCommentsAction(id, title);
+                    break;
+                case 'likes':
+                    whoLikedAction(id, title);
+                    break;
+                case 'stars':
+                    viewStarsAction(id, title);
+                    break;
+                case 'viewers':
+                    seeViewersAction(id, title);
+                    break;
+                case 'delete-record':
+                    removeEventAction(id, title);
+                    break;
+                case 'subscribe-sms':
+                    subscribeSmsAction(id, title);
+                    break;
+                default:
+                    // Default action or error handling
+                    console.log('Invalid action selected.');
+                    break;
+            }
         });
 
-        $("#role").val("");   //resetting the event
 
     });
 </script>

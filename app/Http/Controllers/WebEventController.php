@@ -61,6 +61,58 @@ class WebEventController extends Controller
         }
     }
 
+    // POST TO API universal function
+    public function handleApiRequest($endpoint, $method, $body, $status)
+    {
+        // Retrieve the values from the session
+        $token = session('token');
+        $apiKey = session('api_key');
+        $apiToken = session('api_token');
+        $userKey = session('user_key');
+
+        // Build the full API URL
+        $apiStartPoint = env('API_START_POINT');
+        $apiURL = $apiStartPoint . $endpoint;
+
+        try {
+            // Create the request
+            $customRequest = Request::create($apiURL, $method, $body);
+            $customRequest->headers->set('Accept', 'application/json');
+
+            // Add headers if status requires a token
+            if ($status == "send-with-token") {
+                $customRequest->headers->set('Authorization', 'Bearer ' . $token);
+                $customRequest->headers->set('ApiKey', $apiKey);
+                $customRequest->headers->set('ApiToken', $apiToken);
+                $customRequest->headers->set('UserKey', $userKey);
+            }
+
+            // Handle the request and get the response
+            $response = app()->handle($customRequest);
+            $data = json_decode($response->getContent(), true);
+
+            // Check the response status code
+            if ($response->getStatusCode() === 201) {
+                return response()->json([
+                    'success' => true,
+                    'message' => $data['message'] ?? 'Operation Performed',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => $data['message'] ?? 'Failed to perform transaction',
+                    'errors' => $data['errors'] ?? [],
+                ], $response->getStatusCode());
+            }
+        } catch (\Exception $e) {
+            // Return a JSON response with error details
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     // GET FROM API universal function
     public function getViewDataFromApi($endpoint, $status)
     {
@@ -139,24 +191,101 @@ class WebEventController extends Controller
     }
 
     // Event Types
-    public function showEventType()
+    public function showEventType(Request $request)
     {
-        // Code to handle showing event types
+        $endpoint = '/events/types';
+        $send_state = "send-with-token";
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+        if ($request->ajax()) {
+            return response()->json(['events' => $idata]);
+        }
+        return view('backend.events.event-type', ['events' => $idata]);
     }
 
     public function addEventType(Request $request)
     {
-        // Code to handle adding an event type
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'event' => 'required|string|max:50',
+            'price' => 'required|string|max:10',
+            'description' => 'required|string|max:1000',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/events/types';
+        $method = 'POST';
+        $body = [
+            'event' => $request->input('event'),
+            'price' => $request->input('price'),
+            'description' => $request->input('description'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function modifyEventType(Request $request)
     {
-        // Code to handle modifying an event type
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'event_id' => ['required', 'numeric'],
+            'event' => 'required|string|max:50',
+            'price' => 'required|string|max:10',
+            'description' => 'required|string|max:1000',
+            'status' => 'required|string|max:10',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/events/types/update';
+        $method = 'POST';
+        $body = [
+            'event_id' => $request->input('event_id'),
+            'event' => $request->input('event'),
+            'price' => $request->input('price'),
+            'description' => $request->input('description'),
+            'status' => $request->input('status'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function removeEventType(Request $request)
     {
-        // Code to handle removing an event type
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'event_id' => ['required', 'numeric'],
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/events/types/delete';
+        $method = 'POST';
+        $body = [
+            'event_id' => $request->input('event_id'),
+        ];
+
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     public function getEventType(Request $request)
@@ -213,7 +342,7 @@ class WebEventController extends Controller
             Log::error('Validation failed', ['errors' => $validator->errors()]);
             return response()->json([
                 'success' => false,
-                'errors' => $validator->errors() ,
+                'errors' => $validator->errors(),
                 'message' => 'Validation failed because: ' . json_encode($validator->errors()),
             ], 422);
         }
@@ -222,13 +351,45 @@ class WebEventController extends Controller
         $method = 'POST';
 
         return $this->handleUserAddingRequest($endpoint, $method, $request);
-
     }
 
-    // Events
-    public function showEvent()
+    // Events list
+    public function showEvent(Request $request)
     {
-        // Code to handle showing events
+        $batch = session('batch');
+        $event_host = session('host');
+        // Log::info('Batch value: ' . $event_host);
+
+        $endpoint = '/events/web?who_requested=' . $batch . '&event_host=' . $event_host;
+        $send_state = "send-with-token";
+
+        // Modify the endpoint to include the query_type parameter
+        $query_type = $request->input('query_type');
+        if ($query_type === 'Yes') {
+            $endpoint .= '&query_type=Yes';
+        } elseif ($query_type === 'No') {
+            $endpoint .= '&query_type=No';
+        }
+
+
+        $apiResponse = $this->getViewDataFromApi($endpoint, $send_state);
+        $idata = $apiResponse['status'] ? $apiResponse['data'] : [];
+
+        if ($request->ajax()) {
+            return response()->json(['events' => $idata]);
+        }
+
+        if ($batch === 'skaimount') {
+            return view('backend.events.events', ['events' => $idata]);
+        } else {
+            return view('backend.events.authior-events', ['events' => $idata]);
+        }
+    }
+
+    // Setting event up
+    public function setupEvent()
+    {
+        return view('backend.events.creating-event');
     }
 
     public function addEvent(Request $request)
@@ -249,6 +410,112 @@ class WebEventController extends Controller
     public function getEvent(Request $request)
     {
         // Code to handle getting an event
+    }
+
+    // Approving event
+    public function eventApprove(Request $request)
+    {
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|numeric',
+            'creator_id' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/events/approve';
+        $method = 'POST';
+        $body = [
+            'creator_id' => $request->input('creator_id'),
+            'id' => $request->input('id'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
+    }
+
+    // Decline Event
+    public function eventDecline(Request $request)
+    {
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|numeric',
+            'creator_id' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/events/decline';
+        $method = 'POST';
+        $body = [
+            'creator_id' => $request->input('creator_id'),
+            'id' => $request->input('id'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
+    }
+
+    // Suspend event
+    public function eventSuspend(Request $request)
+    {
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|numeric',
+            'creator_id' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/events/suspend';
+        $method = 'POST';
+        $body = [
+            'creator_id' => $request->input('creator_id'),
+            'id' => $request->input('id'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
+    }
+
+    // Verify Event
+    public function eventVerify(Request $request)
+    {
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'id' => 'required|numeric',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/events/verify';
+        $method = 'POST';
+        $body = [
+            'id' => $request->input('id'),
+        ];
+        $sending_status = "send-with-token";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
     }
 
     // Tickets
@@ -404,6 +671,3 @@ class WebEventController extends Controller
         return view('frontend.en.subscription-payment');
     }
 }
-
-
-

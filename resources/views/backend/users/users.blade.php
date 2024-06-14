@@ -393,7 +393,7 @@
             $('#edit-data').hide();
             $('#save-data').show();
             $('#edit-images').hide();
-            $('#my-modal').modal('show');
+            $('#my-modal').addClass('modal-blur').modal('show');
         });
 
         // Event listener for edit button
@@ -470,7 +470,7 @@
             lengthChange: false,
             responsive: true,
             buttons: ["copy", "excel", "csv", "print", "pdf"].map(function (type) {
-                return { extend: type, className: "btn btn-outline-success waves-effect waves-light" };
+                return { extend: type, className: "btn-soft-success waves-effect waves-light" };
             }),
             language: {
                 paginate: {
@@ -665,7 +665,7 @@
                 },
                 error: function (xhr, textStatus, errorThrown) {
                     buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                    var errorMessage = '<strong>skaiHUB transaction request failed because:</strong>';
+                    var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage += '<br>' + xhr.responseJSON.message;
                     } else {
@@ -712,7 +712,7 @@
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                    var errorMessage = '<strong>skaiHUB transaction request failed because:</strong>';
+                    var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage += '<br>' + xhr.responseJSON.message;
                     } else {
@@ -755,7 +755,7 @@
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                            var errorMessage = '<strong>skaiHUB transaction request failed because:</strong>';
+                            var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
                             if (xhr.responseJSON && xhr.responseJSON.message) {
                                 errorMessage += '<br>' + xhr.responseJSON.message;
                             } else {

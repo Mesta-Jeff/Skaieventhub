@@ -88,23 +88,23 @@ class EndEventController extends Controller
             $dbRequest = EventType::create($data);
             if ($dbRequest) {
                 return response()->json([
-                    'success' => true,
-                    'message' => 'Request to perform database operation has gone through successful',
+                    'success'=> true,
+                    'message'=> 'Request to perform database operation has gone through successful',
                 ], 201);
             } else {
                 return response()->json([
-                    'success' => false,
-                    'message' => 'Sorry request to the database has declined, try again later',
+                    'success'=> false,
+                    'message'=> 'Sorry request to the database has declined, try again later',
                 ], 409);
             }
         } catch (ValidationException $e) {
             return response()->json([
-                'success' => false,
-                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+                'success'=> false,
+                'message' => 'Validation failed because: '. json_encode($e->errors()),
             ], 422);
         } catch (\Exception $e) {
             return response()->json([
-                'success' => false,
+                'success'=> false,
                 'message' => 'An error occurred: ' . json_encode($e->getMessage()),
             ], 500);
         }
@@ -198,7 +198,6 @@ class EndEventController extends Controller
     }
 
 
-    // Creating event with AUthor
     public function eventWithAuthor(Request $request)
     {
 
@@ -264,25 +263,25 @@ class EndEventController extends Controller
                     $message = 'Email has already been taken. Please use a different one.';
                 }
 
-                return response()->json(['success' => false, 'message' => $message], 422);
+                return response()->json(['success' => false, 'message' => $message ], 422);
             }
             if (Event::where('event_title', $request->event_title)->exists()) {
                 $message = 'Event title has already been taken. Please use a different one.';
-                return response()->json(['success' => false, 'message' => $message], 422);
+                return response()->json(['success' => false, 'message' => $message ], 422);
             }
 
 
             $firstName = $data['first_name'];
             $lastName = $data['last_name'];
             $initials = substr($firstName, 0, 1);
-            $initials .= implode('', array_map(fn ($part) => substr($part, 0, 1), explode(' ', $lastName)));
+            $initials .= implode('', array_map(fn($part) => substr($part, 0, 1), explode(' ', $lastName)));
 
             $data['initials'] = $initials;
             $eventTitle = str_replace(' ', '_', $request->input('event_title'));
 
             if ($request->hasFile('profile')) {
                 $fileProfile = $request->file('profile');
-                $profileName = $initials . '-' . $data['phone'] . '-' . 'Profile';
+                $profileName = $initials . '-' . $data['phone'] .'-'. 'Profile';
                 $data['profile'] = $profileName . '.png';
             }
             if ($request->hasFile('id_scan')) {
@@ -346,7 +345,7 @@ class EndEventController extends Controller
             Log::error('Error creating event', ['exception' => $e->getMessage()]);
             return response()->json([
                 'success' => false,
-                'message' => 'Error occured while creating the event, so try again, make sure all fields are having the rquired values' . json_encode($e->getMessage()),
+                'message' => 'Error occured while creating the event, so try again, make sure all fields are having the rquired values'. json_encode($e->getMessage()),
             ], 500);
         }
     }
@@ -360,59 +359,31 @@ class EndEventController extends Controller
                 ->join('authors as a', 'e.creator_id', '=', 'a.id')
                 ->join('event_types as et', 'e.event_type_id', '=', 'et.id')
                 ->select(
-                    'e.id',
-                    'e.event_title',
-                    'e.sub_title',
-                    'e.content',
-                    'e.creator_id',
-                    'e.views',
-                    'e.stars',
-                    'e.comments',
-                    'e.likes',
-                    'e.start_date',
-                    'e.end_date',
-                    'e.aliases',
-                    'e.venue',
-                    'e.banner',
-                    'e.large_image',
-                    'e.medium_image',
-                    'e.small_image',
-                    'e.promo_video',
-                    'e.created_at',
-                    'e.status',
-                    'a.title',
-                    'a.initials',
-                    'a.first_name',
-                    'a.last_name',
-                    'a.phone',
-                    'a.tel',
-                    'a.email',
-                    'a.profile',
-                    'et.event as event_type'
+                    'e.id', 'e.event_title', 'e.sub_title', 'e.content', 'e.creator_id', 'e.views', 'e.stars', 'e.comments','e.likes', 'e.start_date', 'e.end_date', 'e.aliases', 'e.venue', 'e.banner', 'e.large_image', 'e.medium_image', 'e.small_image', 'e.promo_video', 'e.created_at', 'e.status', 'a.title', 'a.initials', 'a.first_name', 'a.last_name', 'a.phone', 'a.tel', 'a.email', 'a.profile', 'et.event as event_type'
                 )
                 ->orderby('e.start_date', 'ASC')
                 ->where('e.is_deleted', 'No')
                 ->where('e.approved', 'Yes');
 
-            // Check if request_value is provided and not empty
-            if ($request->has('request_value') && !empty($request->input('request_value'))) {
-                $requestValue = $request->input('request_value');
-                $eventsQuery->where(function ($query) use ($requestValue) {
-                    $query->where('e.id', $requestValue)
-                    ->orWhere('e.event_title', $requestValue);
-                });
-            }
-
-            // Check if query_type is provided and add appropriate where clause
-            if ($request->has('query_type')) {
-                $queryType = $request->input('query_type');
-                $today = date('Y-m-d');
-                if ($queryType === 'Yes') {
-                    $eventsQuery->where('e.end_date', '<', $today);
-                } else {
-                    $eventsQuery->where('e.end_date', '>', $today);
+                // Check if request_value is provided and not empty
+                if ($request->has('request_value') && !empty($request->input('request_value'))) {
+                    $requestValue = $request->input('request_value');
+                    $eventsQuery->where(function ($query) use ($requestValue) {
+                        $query->where('e.id', $requestValue)
+                            ->orWhere('e.event_title', $requestValue);
+                    });
                 }
-            }
+
+                // Check if query_type is provided and add appropriate where clause
+                if ($request->has('query_type')) {
+                    $queryType = $request->input('query_type');
+                    $today = date('Y-m-d');
+                    if ($queryType === 'Yes') {
+                        $eventsQuery->where('e.end_date', '<', $today);
+                    } else {
+                        $eventsQuery->where('e.end_date', '>', $today);
+                    }
+                }
 
             $events = $eventsQuery->get();
 
@@ -637,40 +608,41 @@ class EndEventController extends Controller
 
             $eventsQuery = DB::table('events as e')
                 ->join('event_types as et', 'e.event_type_id', '=', 'et.id')
-                ->select('e.id','e.event_title', 'e.sub_title','e.content', 'e.creator_id', 'e.views', 'e.stars', 'e.comments', 'e.likes',
-                    'e.start_date','e.end_date','e.aliases','e.venue','e.banner','e.large_image','e.medium_image','e.small_image','e.promo_video',
-                    'e.created_at', 'e.status','e.description','e.reason','e.event_type_id','e.verified','e.approved','et.event as event_type'
+                ->select('e.id', 'e.event_title', 'e.sub_title', 'e.content', 'e.creator_id', 'e.views', 'e.stars', 'e.comments','e.likes', 'e.start_date',
+                     'e.end_date', 'e.aliases', 'e.venue', 'e.banner', 'e.large_image', 'e.medium_image','e.small_image', 'e.promo_video', 'e.created_at',
+                     'e.status','e.description', 'e.reason', 'e.event_type_id', 'e.verified', 'e.approved', 'et.event as event_type'
                 )
-                ->where('e.is_deleted', 'No');
+                ->where('e.is_deleted', 'No')
+                ->where('e.approved', 'Yes');
 
-            // Check if request_value is provided and not empty
-            if ($request->has('request_value') && !empty($request->input('request_value'))) {
-                $requestValue = $request->input('request_value');
-                $eventsQuery->where(function ($query) use ($requestValue) {
-                    $query->where('e.id', $requestValue)
-                        ->orWhere('e.event_title', $requestValue);
-                });
-            }
-
-            // Check if query_type is provided and add appropriate where clause
-            if ($request->has('query_type')) {
-                $queryType = $request->input('query_type');
-                $today = date('Y-m-d');
-                if ($queryType === 'Yes') {
-                    $eventsQuery->where('e.end_date', '<', $today);
-                } else {
-                    $eventsQuery->where('e.end_date', '>', $today);
+                // Check if request_value is provided and not empty
+                if ($request->has('request_value') && !empty($request->input('request_value'))) {
+                    $requestValue = $request->input('request_value');
+                    $eventsQuery->where(function ($query) use ($requestValue) {
+                        $query->where('e.id', $requestValue)
+                            ->orWhere('e.event_title', $requestValue);
+                    });
                 }
-            }
 
-            // Check if who_requested is provided and apply appropriate conditions
-            if ($request->has('who_requested')) {
-                $whoRequested = $request->input('who_requested');
-                $idRequested = $request->input('event_host');
-                if ($whoRequested != 'skaimount') {
-                    $eventsQuery->where('e.creator_id', $idRequested);
+                // Check if query_type is provided and add appropriate where clause
+                if ($request->has('query_type')) {
+                    $queryType = $request->input('query_type');
+                    $today = date('Y-m-d');
+                    if ($queryType === 'Yes') {
+                        $eventsQuery->where('e.end_date', '<', $today);
+                    } else {
+                        $eventsQuery->where('e.end_date', '>', $today);
+                    }
                 }
-            }
+
+                // Check if who_requested is provided and apply appropriate conditions
+                if ($request->has('who_requested')) {
+                    $whoRequested = $request->input('who_requested');
+                    $idRequested = $request->input('event_host');
+                    if ($whoRequested != 'skaimount') {
+                        $eventsQuery->where('e.actions', $idRequested);
+                    }
+                }
 
             $events = $eventsQuery->orderby('e.start_date', 'ASC')->get();
 
@@ -682,6 +654,7 @@ class EndEventController extends Controller
                 $event->medium_image = asset('storage/images/event/' . $event->medium_image);
                 $event->small_image = asset('storage/images/event/' . $event->small_image);
                 $event->promo_video = !empty($event->promo_video) ? asset('storage/videos/event/' . $event->promo_video) : 'None';
+                $event->profile = asset('storage/images/authors/' . $event->profile);
 
                 // Format start_date and end_date
                 $event->start_date = date('M d, Y', strtotime($event->start_date));
@@ -739,38 +712,30 @@ class EndEventController extends Controller
 
             // Retrieve author information
             $author = Author::select('title', 'initials', 'first_name', 'last_name', 'gender', 'dob', 'phone', 'email', 'profile')
-                ->where('id', $data['creator_id'])->firstOrFail();
+                            ->where('id', $data['creator_id'])->firstOrFail();
 
-            // Update event status to 'Approved' and set 'approved' to true
+            // Update event status to 'Approve' and set 'approved' to true
             $event = Event::where('id', $data['id'])->firstOrFail();
-            $event->update(['status' => 'Approved', 'approved' => true]);
+            $event->update(['status' => 'Approve', 'approved' => true]);
 
             // Get the role ID where the title is 'Author'
             $role = Role::where('title', 'Author')->firstOrFail();
 
-            // Check if user already exists by email or phone
-            $user = User::where('email', $author->email)->where('phone', $author->phone)->first();
+            // Prepare user data for mass insertion
+            $userData = [
+                'name' => $author->first_name . ' ' . $author->last_name,
+                'email' => $author->email,
+                'password' => Hash::make($author->phone),
+                'image' => $author->profile,
+                'phone' => $author->phone,
+                'dob' => $author->dob,
+                'gender' => $author->gender,
+                'role_id' => $role->id, // Set the role ID obtained from the query
+                'nickname' => $author->title . '-' . $author->first_name,
+                'actions' => $data['id']
+            ];
 
-            if ($user !== null) {
-                // Update all users with matching actions to set is_deleted to 'No'
-                User::where('actions', $data['creator_id'])->update(['is_deleted' => 'No']);
-            }  else {
-                // Prepare user data for mass insertion
-                $userData = [
-                    'name' => $author->first_name . ' ' . $author->last_name,
-                    'email' => $author->email,
-                    'password' => Hash::make($author->phone),
-                    'image' => $author->profile,
-                    'phone' => $author->phone,
-                    'dob' => $author->dob,
-                    'gender' => $author->gender,
-                    'role_id' => $role->id,
-                    'nickname' => $author->title . '-' . $author->first_name,
-                    'actions' => $data['creator_id']
-                ];
-                $user = User::create($userData);
-            }
-
+            $user = User::create($userData);
             $token = $user->createToken('auth_token')->plainTextToken;
 
             // Generate encryption key
@@ -796,122 +761,38 @@ class EndEventController extends Controller
             DB::commit();
 
             return response()->json([
-                'success' => true,
-                'message' => 'Request to perform database operation has gone through successfully',
+                'success'=> true,
+                'message'=> 'Request to perform database operation has gone through successfully',
             ], 201);
+
         } catch (ValidationException $e) {
             DB::rollBack();
             return response()->json([
-                'success' => false,
+                'success'=> false,
                 'message' => 'Validation failed because: ' . json_encode($e->errors()),
             ], 422);
         } catch (\Exception $e) {
             DB::rollBack();
             return response()->json([
-                'success' => false,
+                'success'=> false,
                 'message' => 'An error occurred: ' . json_encode($e->getMessage()),
             ], 500);
         }
     }
 
-    // Decline Event
+
+
     public function eventDecline(Request $request)
     {
-        try {
-            $data = $request->validate([
-                'creator_id' => 'required|integer|exists:authors,id',
-                'id' => 'required|integer|exists:events,id'
-            ]);
-
-            DB::beginTransaction();
-
-            $event = Event::where('id', $data['id'])->firstOrFail();
-            $event->update(['status' => 'Declined', 'approved' => false]);
-
-            User::where('actions', $data['creator_id'])->update(['status' => 'Declined', 'is_deleted' => 'Yes']);
-
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Request to perform database operation has gone through successfully',
-            ], 201);
-        } catch (ValidationException $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed because: ' . json_encode($e->errors()),
-            ], 422);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
-            ], 500);
-        }
+        // Code to handle getting an event
     }
-
     public function eventSuspend(Request $request)
     {
-        try {
-            $data = $request->validate([
-                'creator_id' => 'required|integer|exists:authors,id',
-                'id' => 'required|integer|exists:events,id'
-            ]);
-
-            DB::beginTransaction();
-
-            $event = Event::where('id', $data['id'])->firstOrFail();
-            $event->update(['status' => 'Suspended', 'approved' => false]);
-
-            User::where('actions', $data['creator_id'])->update(['status' => 'Suspended', 'is_deleted' => 'Yes']);
-
-            DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Request to perform database operation has gone through successfully',
-            ], 201);
-        } catch (ValidationException $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed because: ' . json_encode($e->errors()),
-            ], 422);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
-            ], 500);
-        }
+        // Code to handle getting an event
     }
-
     public function eventVerify(Request $request)
     {
-        try {
-            $data = $request->validate([
-                'id' => 'required|integer|exists:events,id'
-            ]);
-
-            $event = Event::where('id', $data['id'])->firstOrFail();
-            $event->update(['verified' => true]);
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Request to perform database operation has gone through successfully',
-            ], 201);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Validation failed because: ' . json_encode($e->errors()),
-            ], 422);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
-            ], 500);
-        }
+        // Code to handle getting an event
     }
 
 
@@ -983,7 +864,7 @@ class EndEventController extends Controller
                 ->where('ec.is_deleted', '!=', 'Yes')
                 ->get();
 
-            $comments->transform(function ($comment) {
+                $comments->transform(function ($comment) {
                 $comment->image = asset('storage/images/users/' . $comment->image);
                 return $comment;
             });

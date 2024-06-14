@@ -83,7 +83,7 @@
 </div>
 
 
-<div class="modal fade" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade modal-blur" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -359,7 +359,7 @@
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                    var errorMessage = '<strong>skaiHUB transaction request failed because:</strong>';
+                    var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage += '<br>' + xhr.responseJSON.message;
                     } else {
@@ -406,7 +406,7 @@
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                    var errorMessage = '<strong>skaiHUB transaction request failed because:</strong>';
+                    var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage += '<br>' + xhr.responseJSON.message;
                     } else {
@@ -449,7 +449,7 @@
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                            var errorMessage = '<strong>skaiHUB transaction request failed because:</strong>';
+                            var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
                             if (xhr.responseJSON && xhr.responseJSON.message) {
                                 errorMessage += '<br>' + xhr.responseJSON.message;
                             } else {

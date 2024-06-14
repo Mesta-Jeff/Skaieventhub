@@ -112,16 +112,12 @@
                     <div class="collapse sidebarUser">
                         <ul class="side-nav-second-level">
                             <li id="view-user"><a href="{{route("users.show")}}">View Users</a></li>
-                            <li id="suspended-users"><a href="#">Suspended User</a></li>
+                            <li id="suspended-users"><a href="#">Suspended Users</a></li>
                             <li id="reset-password"><a href="#">Reset Password</a></li>
-                            <li id="verify-user"><a href="#">Verify User</a></li>
                             <li id="assign-user-role"><a href="#">Assign User Role</a></li>
                             <li id="assign-user-permission"><a href="#">Assign User Permission</a></li>
-                            <li id="remove-user-permission"><a href="#">Remove User Permission</a></li>
                             <li id="user-logs"><a href="#">User Logs</a></li>
                             <li id="user-event-history"><a href="#">User Event History</a></li>
-                            <li id="approve-user"><a href="#">Approve User</a></li>
-                            <li id="view-tokens"><a href="#">User Tokens</a></li>
                             <li id="user-apikeys"><a href="#">User Apikeys</a></li>
                             <li id="user-statistics"><a href="#">Users Statistics</a></li>
                         </ul>
@@ -136,14 +132,14 @@
                     </a>
                     <div class="collapse sidebarContract">
                         <ul class="side-nav-second-level">
-                            <li id="view-event"><a href="#">View Event</a></li>
-                            <li id="create-event"><a href="#">Create Event</a></li>
-                            <li id="view-ticket"><a href="#">View Ticket</a></li>
-                            <li id="view-event-type"><a href="#">View Event Type</a></li>
-                            <li id="view-comments"><a href="#">View Comments</a></li>
-                            <li id="view-likes"><a href="#">View Likes</a></li>
-                            <li id="view-star"><a href="#">View Star</a></li>
-                            <li id="view-author"><a href="#">View Author</a></li>
+                            <li id="view-event"><a href="{{ route('events.show')}}">View Event</a></li>
+                            <li id="create-event"><a href="{{ route('events.setting-up')}}">Create Event</a></li>
+                            <li id="view-ticket"><a href="{{ route('events.tickets.show')}}">View Ticket</a></li>
+                            <li id="view-event-type"><a href="{{ route('events.types.show')}}">View Event Type</a></li>
+                            <li id="view-comments"><a href="{{ route('events.comments.show')}}">View Comments</a></li>
+                            <li id="view-likes"><a href="{{ route('events.likes.show')}}">View Likes</a></li>
+                            <li id="view-star"><a href="{{ route('events.stars.show')}}">View Star</a></li>
+                            <li id="view-author"><a href="{{ route('events.authors.show')}}">View Author</a></li>
                             <li id="event-statistics"><a href="#">Event Statistics</a></li>
                         </ul>
                     </div>

@@ -2,7 +2,7 @@
 
 @extends('backend.layouts.app')
 
-@section('title', 'Systeme Permissions')
+@section('title', 'System Permissions')
 
 @section('content')
     <!-- Start Content-->
@@ -59,7 +59,7 @@
 </div>
 
 
-<div class="modal fade" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade modal-blur" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -71,102 +71,7 @@
                     <div class="row g-9">
                         <div class="col-md-12 fv-row">
                             <select id="permission" class="select2 form-control mb-2" data-toggle="select2">
-                                <option value="" selected disabled>---- Select Option ----</option>
-
-                                <!-- Full Settings Group -->
-                                <optgroup label="About Settings">
-                                    <option value="view-roles">View Roles</option>
-                                    <option value="view-permissions">View Permissions</option>
-                                    <option value="set-contract">Set Contract</option>
-                                    <option value="set-payslip">Set Payslip</option>
-                                    <option value="set-leave">Set Leave</option>
-                                    <option value="set-leave-claims">Set Leave Claims</option>
-                                    <option value="set-wage">Set Wage</option>
-                                    <option value="view-groups">View Groups</option>
-                                    <option value="view-factory">View Factory</option>
-                                    <option value="configure-system">Configure System</option>
-                                </optgroup>
-
-                                <!-- Full Workers Group -->
-                                <optgroup label="About Workers">
-                                    <option value="view-casual-workers">View Casual Workers</option>
-                                    <option value="view-contract-workers">View Contract Workers</option>
-                                    <option value="view-permanent-workers">View Permanent Workers</option>
-                                    <option value="assign-worker-permission">Assign Worker Permission</option>
-                                    <option value="effect-promotion">Effect Promotion</option>
-                                </optgroup>
-
-                                <!-- Full Contracts Group -->
-                                <optgroup label="About Contracts">
-                                    <option value="sign-contract">Sign Contract</option>
-                                    <option value="terminate-contract">Terminate Contract</option>
-                                    <option value="pending-contract-request">Pending Contract Request</option>
-                                    <option value="contract-review">Contract Review</option>
-                                    <option value="batch-assignment">Batch Assignment</option>
-                                    <option value="issue-contract-statement">Issue Contract Statement</option>
-                                    <option value="extend-contract-individual">Extend Contract Individual</option>
-                                    <option value="extend-group-contract">Extend Group Contract</option>
-                                </optgroup>
-
-                                    <!-- Full Requests Group -->
-                                <optgroup label="About Requests">
-                                    <option value="attendance-list">Attendance List</option>
-                                    <option value="workers-records">Workers Records</option>
-                                    <option value="requested-loans">Requested Loans</option>
-                                    <option value="account-minute">Account Minute</option>
-                                    <option value="promotion-claims">Promotion Claims</option>
-                                    <option value="leave-claims">Leave Claims</option>
-                                    <option value="excuse-duties">Excuse Duties</option>
-                                    <option value="requested-days">Requested Days</option>
-                                </optgroup>
-
-                                <!-- Full Leaves Group -->
-                                <optgroup label="About Leaves">
-                                    <option value="leave-requests">Leave Requests</option>
-                                    <option value="requests-days">Requests Days</option>
-                                    <option value="pending-leaves">Pending Leaves</option>
-                                    <option value="due-leaves">Due Leaves</option>
-                                    <option value="enforce-leave">Enforce Leave</option>
-                                    <option value="reschedule-leave">Reschedule Leave</option>
-                                </optgroup>
-
-                                <!-- Full Attendances Group -->
-                                <optgroup label="About Attendances">
-                                    <option value="upload-attendance">Upload Attendance</option>
-                                    <option value="remark-attendance">Remark Attendance</option>
-                                    <option value="review-attendance">Review Attendance</option>
-                                    <option value="check-days-worker">Check Days Worker</option>
-                                    <option value="check-group-days">Check Group Days</option>
-                                    <option value="days-claims">Days Claims</option>
-                                    <option value="generate-timetable">Generate Timetable</option>
-                                </optgroup>
-
-                                <!-- Full Loans Group -->
-                                <optgroup label="About Loans">
-                                    <option value="process-loan">Process Loan</option>
-                                    <option value="approve-loan">Approve Loan</option>
-                                    <option value="loan-statements">Loan Statements</option>
-                                </optgroup>
-
-                                <!-- Full Payslips Group -->
-                                <optgroup label="About Payslips">
-                                    <option value="approve-payslip">Approve Payslip</option>
-                                    <option value="financial-ticket">Financial Ticket</option>
-                                    <option value="generate-pincode">Generate Pincode</option>
-                                    <option value="prepare-payslip">Prepare Payslip</option>
-                                    <option value="release-salary">Release Salary</option>
-                                    <option value="release-pincode">Release Pincode</option>
-                                    <option value="verify-payslip">Verify Payslip</option>
-                                    <option value="view-slip-ticket">View Slip Ticket</option>
-                                    <option value="withheld-payslip">Withheld Payslip</option>
-                                </optgroup>
-
-                                <optgroup label="About Highest Level">
-                                    <option value="Developer-Option">Super Permission</option>
-                                    <option value="Admin-Option">Admin Permssion</option>
-                                    <option value="Hr-Option">Moderator Permission</option>
-                                </optgroup>
-
+                                <option value="" selected disabled>Choose...</option>
                             </select>
                         </div>
                         <div class="form-outline col-md-12 fv-row mb-2">
@@ -187,9 +92,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="edit-data">Proceed</button>
-                    <button type="button" class="btn btn-primary btn-sm" id="save-data">Proceed</button>
+                    <button type="button" class="btn btn-soft-danger btn-sm" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-soft-info btn-sm" id="edit-data">Proceed</button>
+                    <button type="button" class="btn btn-soft-success btn-sm" id="save-data">Proceed</button>
                 </div>
             </form>
         </div>
@@ -198,17 +103,38 @@
 
 
 <script src="{{ asset('root/dek/bower_components/jquery/js/jquery.min.js') }}"></script>
-
+{{-- <script src="{{ asset('root/js/permission-access.js') }}"></script> --}}
 
 <script>
+
+
     $(document).ready(function ()
     {
         var dataTable = "";
         var counter = 0;
 
+        // Get the select element
+        const permissionsSelect = document.getElementById('permission');
+
+        // Function to convert snake-case to Title Case
+        function toTitleCase(str) {
+            return str.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        }
+        // Loop through the sections and their inner permissions to create options
+        sections.forEach(section => {
+            section.innerPermissions.forEach(innerPermission => {
+                const option = document.createElement('option');
+                option.value = innerPermission;
+                option.text = toTitleCase(innerPermission);
+                permissionsSelect.add(option);
+            });
+        });
+
+
+        // FUnction to get the existing permissions
         function getPermissions() {
             $.ajax({
-                url: '{{ route("fetch-permission") }}',
+                url: '{{ route("settings.permissions.get") }}',
                 type: 'GET',
                 dataType: 'json',
                 success: function (data) {
@@ -239,7 +165,7 @@
         //Getting the table ready
         dataTable = $('#example').DataTable({
             ajax: {
-                url: '{{ route("ss.permissions") }}',
+                url: '{{ route("settings.permissions.show") }}',
                 dataSrc: 'permissions'
             },
             columns: [
@@ -289,7 +215,7 @@
 
             $.ajax({
                 type: 'POST',
-                url: '{{ route("add-permission") }}',
+                url: '{{ route("settings.permissions.create") }}',
                 data: formData,
                 processData: false,
                 contentType: false,
@@ -333,7 +259,7 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type: "POST",
-                        url: '{{ route("distroy-permission") }}',
+                        url: '{{ route("settings.permissions.destroy") }}',
                         data: {
                             _token: '{{ csrf_token() }}',
                             ids: ids

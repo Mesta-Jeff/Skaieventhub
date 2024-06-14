@@ -332,7 +332,10 @@
             if ("geolocation" in navigator) {
                 navigator.geolocation.getCurrentPosition(
                     function(position) {
-                        reverseGeocode(position.coords.latitude, position.coords.longitude);
+                        reverseGeocode(position.coords.latitude, position.coords.longitude, function(newAddress) {
+                            address = newAddress;
+                            console.log(address);
+                        });
                     },
                     function(error) {
                         console.error('Error getting location:', error.message);
@@ -343,7 +346,7 @@
             }
 
             // Function to reverse geocode coordinates
-            function reverseGeocode(latitude, longitude) {
+            function reverseGeocode(latitude, longitude, callback) {
                 $.get(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`)
                 .done(function(response) {
                     var town = response.address.town || response.address.city;
@@ -351,8 +354,7 @@
                     var region = response.address.state || response.address.region;
                     var country = response.address.country;
 
-                    address = `${country}, ${region} (${town})`;
-                    console.log(address);
+                    callback(`${country}, ${region} (${town})`);
                 })
                 .fail(function(error) {
                     console.error('Error in reverse geocoding:', error);
@@ -361,7 +363,6 @@
 
             getIpAddress(function(ip) {
                 ipaddress = ip;
-                // console.log(ipaddress)
             });
 
             $('#btnSubmit').click(function(e) {
@@ -416,10 +417,27 @@
                                 }
                             },
                             error: function(xhr, textStatus, errorThrown) {
-                                $("#my_para").html(xhr.responseText);
+                                let errorMessage;
+
+                                // Check if the response contains the specific IP field error
+                                try {
+                                    const response = JSON.parse(xhr.responseText);
+                                    if (response.message) {
+                                        errorMessage = response.message;
+                                    } else if (response.message && response.message.ip) {
+                                        errorMessage = "Please check your internet connection and try again";
+                                    } else {
+                                        errorMessage = "An unknown error occurred. Please try again also check your internet connection";
+                                    }
+                                } catch (e) {
+                                    errorMessage = "An unknown error occurred. Please try again also check your internet connection";
+                                }
+
+                                $("#my_para").html(errorMessage);
                                 $("#myAlert").show();
                                 buttonElement.prop('disabled', false).text('Confirm Action').css('cursor', 'pointer');
                             }
+
                         });
                     }
                 }

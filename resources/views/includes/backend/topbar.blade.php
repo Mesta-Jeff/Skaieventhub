@@ -275,7 +275,7 @@
 
                     <!-- item-->
                     <hr>
-                    <a href="javascript:void(0);" class="dropdown-item text-danger">
+                    <a href="{{ route('logout')}}" class="dropdown-item text-danger">
                         <i class="mdi mdi-logout me-1"></i>
                         <span>Logout</span>
                     </a>

@@ -31,7 +31,7 @@
                         <!--end col-->
                         <div class="col-xxl-9 ms-auto">
                             <div>
-                                <select id="filter2" class="select2 form-control" data-placeholder="Filter by Status...">
+                                <select id="filter2" class="select2 form-control">
                                     <option value="" selected>Filter by Status...</option>
                                 </select>
                             </div>
@@ -84,7 +84,7 @@
 </div>
 
 
-<div class="modal fade" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade modal-blur" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -193,7 +193,13 @@
                     }
                 },
                 { data: 'title' },
-                { data: 'description' },
+                {
+                    data: 'description',
+                    render: function(data, type, row) {
+                        return data.length > 70 ? data.substring(0, 70) + '...' : data;
+                    }
+                },
+
                 { data: 'status' },
                 {
                     data: 'created_at',
@@ -387,7 +393,7 @@
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                    var errorMessage = '<strong>skaiHUB transaction request failed because:</strong>';
+                    var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage += '<br>' + xhr.responseJSON.message;
                     } else {
@@ -435,7 +441,7 @@
                 },
                 error: function(xhr, textStatus, errorThrown) {
                     buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                    var errorMessage = '<strong>skaiHUB transaction request failed because:</strong>';
+                    var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
                     if (xhr.responseJSON && xhr.responseJSON.message) {
                         errorMessage += '<br>' + xhr.responseJSON.message;
                     } else {
@@ -478,7 +484,7 @@
                         },
                         error: function(xhr, textStatus, errorThrown) {
                             buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
-                            var errorMessage = '<strong>skaiHUB transaction request failed because:</strong>';
+                            var errorMessage = '<strong>Skai-Tick transaction request failed because:</strong>';
                             if (xhr.responseJSON && xhr.responseJSON.message) {
                                 errorMessage += '<br>' + xhr.responseJSON.message;
                             } else {

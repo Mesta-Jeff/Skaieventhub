@@ -44,10 +44,12 @@ Route::prefix('v2')->group(function () {
     // Authentication
     Route::get('/authentication/login', [EndAuthenticationController::class, 'getCrendential']);
     Route::post('/authentication/sessions', [EndAuthenticationController::class, 'createSessions']);
+    Route::post('/authentication/logout', [EndAuthenticationController::class, 'logout']);
 
     // CLient signing up for the first time
     Route::post('/event/client/event-author', [EndEventController::class, 'eventWithAuthor'])->name('event.event-with-author');
     Route::get('/events/types/get', [EndEventController::class, 'getEventType']);
+
 
 
     // End of free routes    =====================================================================================
@@ -151,13 +153,17 @@ Route::prefix('v2')->group(function () {
         Route::post('/events/types/delete', [EndEventController::class, 'destroyEventType']);
 
         // Events:
-        Route::get('/events', [EndEventController::class, 'viewEvent']);
+        Route::get('/events/web', [EndEventController::class, 'viewEvent']);
         Route::get('/events/mobile', [EndEventController::class, 'viewEventMobile']);
         Route::post('/events', [EndEventController::class, 'createEvent']);
         Route::post('/events/update', [EndEventController::class, 'updateEvent']);
         Route::post('/events/delete', [EndEventController::class, 'destroyEvent']);
         Route::get('/events/get', [EndEventController::class, 'getEvent']);
-        Route::get('/events/get/counts', [EndEventController::class, 'getEventCounts']);
+        Route::post('/events/approve', [EndEventController::class, 'eventApprove']);
+        Route::post('/events/decline', [EndEventController::class, 'eventDecline']);
+        Route::post('/events/suspend', [EndEventController::class, 'eventSuspend']);
+        Route::post('/events/verify', [EndEventController::class, 'eventVerify']);
+
         Route::post('/events/someone-viewing', [EndEventController::class, 'someoneViewed']);
         Route::post('/events/someone-liking', [EndEventController::class, 'someoneLiked']);
         Route::post('/events/someone-staring', [EndEventController::class, 'someoneStared']);

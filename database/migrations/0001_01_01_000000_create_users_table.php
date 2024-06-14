@@ -31,7 +31,8 @@ return new class extends Migration
             $table->string('cover_image', 100)->nullable();
             $table->boolean('verified')->default(false);
             $table->string('token', 255)->nullable();
-            $table->string('status', 11)->default('Active');
+            $table->string('status', 15)->default('Active');
+            $table->string('actions', 15)->default('[*]');
             $table->string('is_deleted', 3)->default('No');
             $table->timestamps();
         });

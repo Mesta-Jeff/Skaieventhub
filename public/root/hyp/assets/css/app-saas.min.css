@@ -280,6 +280,11 @@ html[data-bs-theme=dark][data-topbar-color=light] {
 
 
 
+.modal-blur {
+    backdrop-filter: blur(5px);
+}
+
+
 *,
 ::after,
 ::before {

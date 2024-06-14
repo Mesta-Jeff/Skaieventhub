@@ -171,11 +171,16 @@ Route::middleware([CheckSessionValue::class])->group(function () {
 
 
     // Events:
-    Route::get('/events', [WebEventController::class, 'showEvent'])->name('events.show');
+    Route::get('/events/list', [WebEventController::class, 'showEvent'])->name('events.show');
+    Route::get('/events/setting-up', [WebEventController::class, 'setupEvent'])->name('events.setting-up');
     Route::post('/events', [WebEventController::class, 'addEvent'])->name('events.create');
     Route::post('/events/update', [WebEventController::class, 'modifyEvent'])->name('events.update');
     Route::post('/events/delete', [WebEventController::class, 'removeEvent'])->name('events.destroy');
     Route::get('/events/get', [WebEventController::class, 'getEvent'])->name('events.get');
+    Route::post('/events/approve', [WebEventController::class, 'eventApprove'])->name('events.approve');
+    Route::post('/events/decline', [WebEventController::class, 'eventDecline'])->name('events.decline');
+    Route::post('/events/suspend', [WebEventController::class, 'eventSuspend'])->name('events.suspend');
+    Route::post('/events/verify', [WebEventController::class, 'eventVerify'])->name('events.verify');
 
     // Tickets:
     Route::get('/events/event-tickets', [WebEventController::class, 'showEventTicket'])->name('events.tickets.show');
