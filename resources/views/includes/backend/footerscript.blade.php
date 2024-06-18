@@ -1,6 +1,4 @@
 
-
-
 <script src="{{ asset('root/hyp/assets/js/vendor.min.js') }}"></script>
 <script src="{{ asset('root/hyp/assets/vendor/apexcharts/apexcharts.min.js') }}"></script>
 

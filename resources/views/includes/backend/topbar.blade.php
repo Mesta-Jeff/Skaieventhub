@@ -10,10 +10,8 @@
                 <a href="" class="logo-light">
                     <span class="logo-lg">
                         <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt="logo">
-                        <strong
-                            style="font-size: 22px; font-weight: bold; color: white; font-family: 'Segoe UI';">skai</strong><span
-                            class="logo-lg-text-dark"
-                            style="font-family: 'Segoe UI'; color: white;">-TICK</span>
+                        <strong style="font-size: 22px; font-weight: bold; color: white; font-family: 'Segoe UI';">{{ env('APP_NAME')}}</strong>
+                        {{-- <span class="logo-lg-text-dark" style="font-family: 'Segoe UI'; color: white;">{{ env('APP_NAME')}}</span> --}}
                     </span>
                     <span class="logo-sm">
                         <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt="small logo">
@@ -26,10 +24,8 @@
                 <a href="" class="logo-dark">
                     <span class="logo-lg">
                         <img src="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}" alt="dark logo" style="padding-bottom: 5px">
-                        <strong
-                            style="font-size: 22px; font-weight: bold; color: #04c58f; font-family: 'Segoe UI';">skai</strong><span
-                            class="logo-lg-text-dark"
-                            style="font-family: 'Segoe UI'; color: #04c58f;">-TICK</span>
+                        <strong style="font-size: 22px; font-weight: bold; color: #04c58f; font-family: 'Segoe UI';">{{ env('APP_NAME')}}</strong>
+                        {{-- <span class="logo-lg-text-dark"style="font-family: 'Segoe UI'; color: #04c58f;">{{ env('APP_NAME')}}</span> --}}
                     </span>
                     <span class="logo-sm">
                         <img src="{{ asset('root/hyp/assets/images/logo-dark-sm.png') }}" alt="small logo">

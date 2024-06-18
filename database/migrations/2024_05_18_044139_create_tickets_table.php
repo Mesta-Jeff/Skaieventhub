@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('event_id')->constrained()->onDelete('cascade');
             $table->decimal('price', 8, 2);
             $table->integer('total');
+            $table->string('seat',15)->nullable();
             $table->integer('remaining');
             $table->text('description')->nullable();
             $table->string('status', 10)->default('Active');

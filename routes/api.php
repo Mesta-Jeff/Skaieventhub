@@ -12,9 +12,7 @@ use App\Http\Controllers\EndSettingsController;
 use App\Http\Controllers\EndAdvertisementController;
 use App\Http\Controllers\EndConfigurationController;
 use App\Http\Controllers\EndAuthenticationController;
-
-
-
+use App\Http\Controllers\GeneralController;
 
 Route::get('/user', function (Request $request) {
     return $request->all();
@@ -28,6 +26,7 @@ Route::prefix('v2')->group(function () {
 
     Route::post('/users/new/registration', [EndUserController::class, 'register']);
     Route::post('/users/mobile/createaccount', [EndUserController::class, 'mobileRequestAccount']);
+    Route::get('/event/get-even-info', [EndEventController::class, 'paymentInfo'])->name('en.payment.info');
 
     // Roles:  free routes
     Route::get('/settings/roles', [EndSettingsController::class, 'viewRole']);
@@ -56,10 +55,17 @@ Route::prefix('v2')->group(function () {
 
     Route::middleware([CheckApiKey::class, 'auth:sanctum'])->group(function () {
 
+
+        // General Dashbboard Routes
+        Route::get('/gen/client/event-statistic', [GeneralController::class, 'clientEventStatistics']);
+        Route::get('/gen/client/personal-events', [GeneralController::class, 'clientPersonalEvents']);
+
+
         // Sessions
         Route::get('/authentication/sessions', [EndAuthenticationController::class, 'getSessions']);
         // Bulk Remove
         Route::post('/commands/bulk-remove', [EndSettingsController::class, 'bulkRemove']);
+        
 
         // Users:
         Route::get('/users', [EndUserController::class, 'viewUser']);
@@ -155,7 +161,7 @@ Route::prefix('v2')->group(function () {
         // Events:
         Route::get('/events/web', [EndEventController::class, 'viewEvent']);
         Route::get('/events/mobile', [EndEventController::class, 'viewEventMobile']);
-        Route::post('/events', [EndEventController::class, 'createEvent']);
+        Route::post('/events/create', [EndEventController::class, 'createEvent']);
         Route::post('/events/update', [EndEventController::class, 'updateEvent']);
         Route::post('/events/delete', [EndEventController::class, 'destroyEvent']);
         Route::get('/events/get', [EndEventController::class, 'getEvent']);

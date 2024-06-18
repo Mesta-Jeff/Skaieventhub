@@ -6,13 +6,11 @@
             <span class="logo-lg">
                 <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt=""
                     height="25">
-                <strong
-                    style="font-size: 22px; font-weight: bold; color: white; font-family: 'Segoe UI';">skai</strong><span
-                    class="logo-lg-text-dark" style="font-family: 'Segoe UI'; color: white;">-TICK</span>
+                <strong style="font-size: 22px; font-weight: bold; color: white; font-family: 'Segoe UI';">{{ env('APP_NAME')}}</strong>
+                {{-- <span class="logo-lg-text-dark" style="font-family: 'Segoe UI'; color: white;">-TICK</span> --}}
             </span>
             <span class="logo-sm">
-                <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt=""
-                    height="25">
+                <img src="{{ asset('root/hyp/assets/images/logo-sm.png') }}" alt="" height="25">
             </span>
         </a>
     </section>
@@ -37,7 +35,14 @@
                 <hr>
             </li>
             <li class="side-nav-item">
-                <a href="#" class="side-nav-link">
+
+                @if(session('batch') === 'skaimount')
+                <a href="{{ route('management.dashboard')}}" class="side-nav-link">
+                    <i class="uil-home-alt"></i>
+                    <span>Go Home</span>
+                </a>
+                @endif
+                <a href="{{ route('client.dashboard')}}" class="side-nav-link">
                     <i class="uil-home-alt"></i>
                     <span>Go Home</span>
                 </a>
@@ -133,13 +138,17 @@
                     <div class="collapse sidebarContract">
                         <ul class="side-nav-second-level">
                             <li id="view-event"><a href="{{ route('events.show')}}">View Event</a></li>
-                            <li id="create-event"><a href="{{ route('events.setting-up')}}">Create Event</a></li>
-                            <li id="view-ticket"><a href="{{ route('events.tickets.show')}}">View Ticket</a></li>
-                            <li id="view-event-type"><a href="{{ route('events.types.show')}}">View Event Type</a></li>
-                            <li id="view-comments"><a href="{{ route('events.comments.show')}}">View Comments</a></li>
-                            <li id="view-likes"><a href="{{ route('events.likes.show')}}">View Likes</a></li>
-                            <li id="view-star"><a href="{{ route('events.stars.show')}}">View Star</a></li>
-                            <li id="view-author"><a href="{{ route('events.authors.show')}}">View Author</a></li>
+                            @if(session('batch') === 'skaimount')
+                                <li id="create-event"><a href="{{ route('events.setting-up')}}">Create Event</a></li>
+                                <li id="view-event-type"><a href="{{ route('events.types.show')}}">View Event Type</a></li>
+                                <li id="view-author"><a href="{{ route('events.authors.show')}}">View Author</a></li>
+                            @endif
+
+                            {{-- <li id="view-comments"><a href="{{ route('events.comments.show')}}">View Comments</a></li> --}}
+                            {{-- <li id="view-likes"><a href="{{ route('events.likes.show')}}">View Likes</a></li> --}}
+                            {{-- <li id="view-star"><a href="{{ route('events.stars.show')}}">View Star</a></li> --}}
+                            {{-- <li id="view-ticket"><a href="{{ route('events.tickets.show')}}">View Ticket</a></li> --}}
+
                             <li id="event-statistics"><a href="#">Event Statistics</a></li>
                         </ul>
                     </div>

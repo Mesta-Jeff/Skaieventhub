@@ -407,7 +407,7 @@
                                                 <div class="form">
                                                     <label for="email">Event Title</label>
                                                     <input type="text" id="title"
-                                                        placeholder="EVent main title here">
+                                                        placeholder="Event main title here">
                                                 </div>
                                             </div>
                                         </div>
@@ -416,7 +416,7 @@
                                                 <div class="form">
                                                     <label for="email">Sub Title</label>
                                                     <input type="text" id="sub_title"
-                                                        placeholder="EVent sub title here">
+                                                        placeholder="Event sub title here">
                                                 </div>
                                             </div>
                                         </div>

@@ -1,6 +1,6 @@
 @extends('backend.layouts.app')
 
-@section('title', 'List of Tickets')
+@section('title', 'Available Tickets')
 
 @section('content')
     <!-- Start Content-->
@@ -31,8 +31,8 @@
                         <!--end col-->
                         <div class="col-xxl-9 ms-auto">
                             <div>
-                                <select id="filter2" class="select2 form-control" data-placeholder="Filter by Status...">
-                                    <option value="" selected>Filter by Status...</option>
+                                <select id="events" class="select2 form-control">
+                                    <option value="" selected>Choose event...</option>
                                 </select>
                             </div>
                         </div>
@@ -65,11 +65,14 @@
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="selectAllCheckboxes"/></th>
-                                    <th>#</th>
-                                    <th>Role</th>
-                                    <th>Description</th>
-                                    <th>Status</th>
+                                    <th>Title</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                    <th>Remaining</th>
+                                    <th>Creator</th>
+                                    <th>Event</th>
                                     <th>Date Created</th>
+                                    <th>Description</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -84,7 +87,7 @@
 </div>
 
 
-<div class="modal fade" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
+<div class="modal fade modal-blur" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header">
@@ -94,27 +97,43 @@
                 <div class="modal-body">
                     <input type="hidden" id="gottenid" />
                     <div class="row g-9">
-                        <div class="col-md-12 fv-row">
-                            <select id="role" class="select2 form-control mb-2" data-toggle="select2">
-                                <option value="" selected disabled>---- Select Option ----</option>
-                                <optgroup label="Management">
-                                    <option value="Developer">Developer</option>
-                                    <option value="Oversear">Oversear</option>
-                                    <option value="Kernel">Kernel</option>
-                                </optgroup>
-                                <optgroup label="Clients">
-                                    <option value="Author">Author</option>
-                                    <option value="Event Manager">Event Manager</option>
-                                    <option value="State Director">State Director</option>
-                                </optgroup>
-                                <optgroup label="Other">
-                                    <option value="Private">Private</option>
-                                </optgroup>
+                        <div class="col-md-12 mb-2">
+                            <label for="status" class="form-text">The type of ticket</label>
+                            <select id="ticket" class="select2 form-control mb-2" data-toggle="select2" required>
+                                <option value="" selected disabled>Choose Type...</option>
+                                <option value="Standard">Standard</option>
+                                <option value="Normal">Normal</option>
+                                <option value="Private">Private</option>
+                                <option value="Personal">Personal</option>
+                                <option value="VIP">VIP</option>
+                                <option value="VVIP">VVIP</option>
+                                <option value="Guest">Guest</option>
+                                <option value="Regular">Regular</option>
+                                <option value="Reserved">Reserved</option>
+                                <option value="Double">Double</option>
+                                <option value="Single">Single</option>
+                                <option value="Couple">Couple</option>
+                                <option value="Team">Team</option>
+                                <option value="Group">Group</option>
+                                <option value="Premium">Premium</option>
                             </select>
                         </div>
+
+                        <div class="col-md-3 mb-2">
+                            <label for="status" class="form-text">Total Tickect</label>
+                            <input type="text" class="form-control" placeholder="eg. 50" id="total" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" onkeydown="return ( event.ctrlKey || event.altKey || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false) || (95<event.keyCode && event.keyCode<106) || (event.keyCode==8) || (event.keyCode==9) || (event.keyCode>34 && event.keyCode<40) || (event.keyCode==46) )" maxlength="5" required/>
+                        </div>
+                        <div class="col-md-6 mb-2" t>
+                            <label for="status" class="form-text" title="State where the seating arrangement will start and ends">Siting starts from and ends...</label>
+                            <input type="text" class="form-control" placeholder="eg. 1-50" id="seat" title="State where the seating arrangement will start and ends" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" maxlength="15" required/>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label for="status" class="form-text">Price (In cedis)</label>
+                            <input type="text" class="form-control" placeholder="eg. 100.00" id="price" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" onkeydown="return ( event.ctrlKey || event.altKey || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false) || (95<event.keyCode && event.keyCode<106) || (event.keyCode==8) || (event.keyCode==9) || (event.keyCode>34 && event.keyCode<40) || (event.keyCode==46) )" maxlength="7" required/>
+                        </div>
                         <div class="form-outline col-md-12 fv-row mb-2">
-                            <label class="form-label" for="ides">Role Description</label>
-                            <textarea id="description" class="form-control form-control-lg" rows="3" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" onkeydown="return /^([a-zA-Z]+[\s]*)*$/i.test(event.target.value + event.key)"></textarea>
+                            <label class="form-label" for="ides">Ticket Description if any</label>
+                            <textarea id="description" class="form-control form-control-lg" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" onkeydown="return /^([a-zA-Z]+[\s]*)*$/i.test(event.target.value + event.key)"></textarea>
                         </div>
                         <div class="mb-1" style="display: none;" id="state-view">
                             <label for="status" class="form-label">Select Status</label>
@@ -138,10 +157,41 @@
 <script src="{{ asset('root/dek/bower_components/jquery/js/jquery.min.js') }}"></script>
 
 <script>
+    
+    var eventId = @json($event_id);
     $(document).ready(function ()
     {
         var dataTable = "";
         var counter = 0;
+
+
+        // Getting data for the regions
+        $.ajax({
+            url: '{{ route("events.get") }}',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                $('#events').empty();
+                $('#events').append($('<option>', {
+                    value: '',
+                    text: 'Choose Event...',
+                    selected: 'selected',
+                    disabled: 'disabled'
+                }));
+                $.each(data.events, function (key, value) {
+                    $('#events').append($('<option>', {
+                        value: value.id,
+                        text: value.event_title
+                    }));
+                });
+                if (eventId) {
+                    $('#events').val(eventId);
+                }
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
+            }
+        });
 
         //calling the model to add new
         $('#btnNew').click(function() {
@@ -157,18 +207,23 @@
         // Event listener for edit button
         $('#example').on('click', '.edit-btn', function() {
             var id = $(this).data('id');
-            var role = $(this).data('role');
+            var ticket = $(this).data('ticket');
             var description = $(this).data('description');
             var status = $(this).data('status');
+            var price = $(this).data('price');
+            var seat = $(this).data('seat');
+            var total = $(this).data('total');
 
             $('#modal-title').text('About to modify this record');
-            $('#role').val(role).change();
+            $('#ticket').val(ticket).change();
             $('#gottenid').val(id);
             $('#description').text(description);
             $('#stat').val(status);
-            $('#state-view').show();
+            $('#price').val(price);
+            $('#seat').val(seat);
+            $('#total').val(total);
+            $('#state-view, #edit-data').show();
             $('#save-data').hide();
-            $('#edit-data').show();
             $('#my-modal').modal('show');
 
         });
@@ -176,8 +231,8 @@
         //Getting the table ready
         dataTable = $('#example').DataTable({
             ajax: {
-                url: '{{ route("settings.roles.show") }}',
-                dataSrc: 'roles'
+                url: '{{ route("events.tickets.show") }}',
+                dataSrc: 'tickets'
             },
             columns: [
                 {
@@ -186,33 +241,31 @@
                         return '<input type="checkbox" class="select-checkbox" data-id="' + data.id + '" data-title="' + data.title + '" />';
                     },
                 },
-                {
-                    data: null,
-                    render: function(data, type, row) {
-                        return ++counter;
-                    }
-                },
                 { data: 'title' },
-                { data: 'description' },
-                { data: 'status' },
+                { data: 'price' },
+                { data: 'total' },
+                { data: 'remaining' },
+                { data: 'nickname' },
+                { data: 'aliases' },
                 {
                     data: 'created_at',
                     render: function(data, type, row) {
                         return moment(data).format('YYYY-MM-DD hh:mm:ss A');
                     }
                 },
+                { data: 'description' },
                 {
                     data: null,
                     render: function(data, type, row) {
                         return '<div class="btn-group">' +
                             '<button type="button" class="btn btn-outline-info waves-effect waves-light dropdown-toggle arrow-none" data-bs-toggle="dropdown" aria-expanded="false">' +
-                            '<i class="mdi mdi-dots-horizontal font-16"></i> More' +
+                            'More' +
                             '<i class="mdi mdi-chevron-down"></i>' +
                             '</button>' +
                             '<div class="dropdown-menu">' +
                             '<span class="dropdown-header">More Actions</span>' +
                             '<hr style="margin-top: 1px;" />'+
-                            '<a class="dropdown-item edit-btn" href="javascript: void(0);" data-id="' + data.id + '" data-role="' + data.title + '" data-description="' + data.description + '" data-status="' + data.status + '"><i class="mdi mdi-pen-plus mx-1"></i>Modify Record </a>' +
+                            '<a class="dropdown-item edit-btn" href="javascript: void(0);" data-id="' + data.id + '" data-ticket="' + data.title + '" data-total="' + data.total + '" data-price="' + data.price + '" data-seat="' + data.seat + '" data-description="' + data.description + '" data-status="' + data.status + '"><i class="mdi mdi-pen-plus mx-1"></i>Modify Record </a>' +
                             '<a class="dropdown-item text-danger delete-btn" href="javascript: void(0);" data-id="' + data.id + '" data-rol="' + data.title + '"><i class="mdi mdi-delete mx-1"></i>Remove Record</a>' +
                             '</div>' +
                             '</div>';
@@ -241,25 +294,12 @@
                     $('.select-checkbox').prop('checked', $(this).prop('checked'));
                     $('#bulk-remove').toggle(isChecked);
                 });
-
-
-                let uniqueStatusValues = dataTable.column(4).data().unique().toArray();
-                let filter2 = document.getElementById("filter2");
-
-                // Populate the remaining options
-                uniqueStatusValues.forEach(function(value) {
-                    let option = document.createElement("option");
-                    option.value = value;
-                    option.text = value;
-                    filter2.appendChild(option);
-                });
             }
         });
 
         //Filtering
-        $('#filter2').on('change', function () {
-            var catFilter = $('#filter2').val();
-            dataTable.column(4).search(catFilter).draw();
+        $('#events').on('change', function () {
+
         });
 
 
@@ -348,7 +388,7 @@
         function validateForm(...fields) {
             for (let field of fields) {
                 if (!field) {
-                    Swal.fire({ icon: 'error', title: 'Error', text: 'Please fill in all fields.' });
+                    Swal.fire({ icon: 'error', title: 'Error', text: 'Please fill in all fields it required' });
                     return false;
                 }
             }
@@ -358,28 +398,32 @@
 
         // Save Data Button Click Event
         $('#save-data').on('click', function() {
-            var roles = $('#role').val();
-            var des = $('#description').val();
+            var ticket = $('#ticket').val();
+            var total = $('#total').val();
+            var seat = $('#seat').val();
+            var price = $('#price').val();
+            var event = $('#events').val();
+            var description = $('#description').val();
 
             // Check if fields are not empty
-            if (!validateForm(roles, description)) return;
+            if (!validateForm(ticket, total, seat, price, event)) return;
 
             var buttonElement = $(this);
             buttonElement.html('<i class="fa fa-spinner fa-spin"></i> Please wait... ').attr('disabled', true);
 
             $.ajax({
                 type: 'POST',
-                url: '{{ route("settings.roles.create") }}',
-                data: {_token: '{{ csrf_token() }}',title: roles,description: des,},
+                url: '{{ route("events.tickets.create") }}',
+                data: {_token: '{{ csrf_token() }}', ticket:ticket,total:total,seat:seat,price:price,description:description,event_id:event},
                 success: function(response) {
                     console.log('Success Response:', response);
                     if (response.success) {
-                        Swal.fire({ icon: 'success', title: 'Success',text: response.message,})
+                        Swal.fire({ icon: 'success', title: 'Success', text: response.message, })
                             .then((result) => {
                                 buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
                                 $('#my-form')[0].reset();
                                 $('#my-modal').modal('hide');
-                                counter = 0; dataTable.ajax.reload();
+                                dataTable.ajax.reload();
                             });
                     } else {
                         Swal.fire({ icon: 'error', title: 'Error', text: response.message });
@@ -395,30 +439,31 @@
                     }
                     Swal.fire({ icon: 'error', title: 'Error', html: errorMessage });
                 }
-
             });
         });
 
+
         // Edit Data Button Click Event
         $('#edit-data').on('click', function() {
-            var roles = $('#role').val();
-            var des = $('#description').val();
+            var ticket = $('#ticket').val();
+            var total = $('#total').val();
+            var seat = $('#seat').val();
+            var price = $('#price').val();
+            var event = $('#events').val();
+            var description = $('#description').val();
             var stat = $('#stat').val();
             var gottenid = $('#gottenid').val();
 
             // Check if fields are not empty
-            if (!validateForm(roles, description, stat, gottenid)) return;
+            if (!validateForm(stat, gottenid, ticket, total, seat, price, event)) return;
 
             var buttonElement = $(this);
             buttonElement.html('<i class="fa fa-spinner fa-spin"></i> Please wait... ').attr("disabled", true);
 
             $.ajax({
                 type: "POST",
-                url: '{{ route("settings.roles.update") }}',
-                data: {
-                    _token: '{{ csrf_token() }}',
-                    title: roles,description: des, status: stat,role_id: gottenid
-                },
+                url: '{{ route("events.tickets.update") }}',
+                data: { _token: '{{ csrf_token() }}', status: stat,id: gottenid, ticket:ticket,total:total,seat:seat,price:price,description:description },
                 success: function(response) {
                     console.log('Success Response:', response);
                     if (response.status="success") {
@@ -427,7 +472,7 @@
                                 buttonElement.prop('disabled', false).text('Proceed').css('cursor', 'pointer');
                                 $('#my-form')[0].reset();
                                 $('#my-modal').modal('hide');
-                                counter = 0; dataTable.ajax.reload();
+                                dataTable.ajax.reload();
                             });
                     } else {
                         Swal.fire({ icon: 'error', title: 'Error', text: response.message });
@@ -463,14 +508,14 @@
                 if (result.isConfirmed) {
                     $.ajax({
                         type: "POST",
-                        url: '{{ route("settings.roles.destroy") }}',
-                        data: {_token: '{{ csrf_token() }}',role_id: ids},
+                        url: '{{ route("events.tickets.destroy") }}',
+                        data: {_token: '{{ csrf_token() }}',id: ids},
                         success: function(response) {
                             console.log('Success Response:', response);
                             if (response.status="success") {
                                 Swal.fire({ icon: 'success', title: 'Success',text: response.message,})
                                     .then((result) => {
-                                        counter = 0; dataTable.ajax.reload();
+                                        dataTable.ajax.reload();
                                     });
                             } else {
                                 Swal.fire({ icon: 'error', title: 'Error', text: response.message });
@@ -493,7 +538,6 @@
             });
         });
 
-        $("#role").val("");   //resetting the roles
 
     });
 </script>

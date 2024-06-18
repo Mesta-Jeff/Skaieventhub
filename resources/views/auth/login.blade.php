@@ -422,10 +422,16 @@
                                 // Check if the response contains the specific IP field error
                                 try {
                                     const response = JSON.parse(xhr.responseText);
+
+                                    // Check if the response contains the 'message' field
                                     if (response.message) {
-                                        errorMessage = response.message;
-                                    } else if (response.message && response.message.ip) {
-                                        errorMessage = "Please check your internet connection and try again";
+                                        // Check if 'message' is an object and contains the 'ip' field
+                                        if (typeof response.message === 'object' && response.message.ip) {
+                                            errorMessage = "Please check your internet connection and try again";
+                                        } else {
+                                            // Use the general message if available
+                                            errorMessage = response.message;
+                                        }
                                     } else {
                                         errorMessage = "An unknown error occurred. Please try again also check your internet connection";
                                     }
@@ -437,7 +443,6 @@
                                 $("#myAlert").show();
                                 buttonElement.prop('disabled', false).text('Confirm Action').css('cursor', 'pointer');
                             }
-
                         });
                     }
                 }

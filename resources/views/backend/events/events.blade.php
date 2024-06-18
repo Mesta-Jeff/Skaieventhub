@@ -82,7 +82,6 @@
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="selectAllCheckboxes"/></th>
-                                    <th>#</th>
                                     <th>Event Title</th>
                                     <th>Event Type</th>
                                     <th>Views</th>
@@ -268,7 +267,6 @@
 
         //Getting the table ready
         function initializeDataTable(events) {
-            let counter = 0;
             if ($.fn.dataTable.isDataTable('#example')) {
                 $('#example').DataTable().clear().destroy();
             }
@@ -281,12 +279,7 @@
                             return '<input type="checkbox" class="select-checkbox" data-id="' + data.id + '" data-title="' + data.event_title + '" />';
                         },
                     },
-                    {
-                        data: null,
-                        render: function(data, type, row) {
-                            return ++counter;
-                        }
-                    },
+
                     { data: 'event_title',
                         render: function(data, type, row) {
                             if (row.verified === true || row.verified === 1) {
@@ -334,7 +327,6 @@
                     }
                 ],
                 drawCallback: function () {
-                    counter = 0;
                     $(".dataTables_paginate > .pagination").addClass("pagination-rounded");
                 },
                 lengthChange: false,
@@ -489,8 +481,19 @@
 
         // Function to perform the "Event Ticket" action
         function eventTicketAction(id, title) {
-            console.log('Performing Event Ticket action for ID:', id, 'with title:', title);
-            // Your code to perform the "Event Ticket" action goes here
+            function generateGUID() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+
+            var pref = generateGUID().replace(/-/g, '').substring(0, 30);
+            var surf = generateGUID().replace(/-/g, '').substring(10, 20);
+            var combinedId = pref + '%' + id + '!' +surf;
+
+            var routeUrl = "{{ route('events.tickets.show', ['id' => '__ID__']) }}".replace('__ID__', combinedId);
+            window.location.href = routeUrl;
         }
 
         // Function to perform the "In Attendance" action

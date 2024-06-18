@@ -46,9 +46,22 @@ class EndEventController extends Controller
         // Code to handle deleting an author
     }
 
+    // Code to handle getting an author
     public function getAuthor(Request $request)
     {
-        // Code to handle getting an author
+        try {
+            $data = Author::where('is_deleted', '!=', 'Yes')->orderBy('title', 'ASC')->get(['id', 'title', 'first_name', 'last_name', 'initials']);
+            return response()->json([
+                'success' => true,
+                'message' => 'Data retrieved successfully',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . $e->getMessage(),
+            ], 500);
+        }
     }
 
     // Event Types
@@ -69,6 +82,7 @@ class EndEventController extends Controller
         }
     }
 
+    // Creating event type
     public function createEventType(Request $request)
     {
         try {
@@ -359,40 +373,13 @@ class EndEventController extends Controller
             $eventsQuery = DB::table('events as e')
                 ->join('authors as a', 'e.creator_id', '=', 'a.id')
                 ->join('event_types as et', 'e.event_type_id', '=', 'et.id')
-                ->select(
-                    'e.id',
-                    'e.event_title',
-                    'e.sub_title',
-                    'e.content',
-                    'e.creator_id',
-                    'e.views',
-                    'e.stars',
-                    'e.comments',
-                    'e.likes',
-                    'e.start_date',
-                    'e.end_date',
-                    'e.aliases',
-                    'e.venue',
-                    'e.banner',
-                    'e.large_image',
-                    'e.medium_image',
-                    'e.small_image',
-                    'e.promo_video',
-                    'e.created_at',
-                    'e.status',
-                    'a.title',
-                    'a.initials',
-                    'a.first_name',
-                    'a.last_name',
-                    'a.phone',
-                    'a.tel',
-                    'a.email',
-                    'a.profile',
-                    'et.event as event_type'
+                ->select('e.id','e.event_title','e.sub_title','e.content','e.creator_id','e.views','e.stars','e.comments','e.likes','e.start_date',
+                    'e.end_date','e.aliases','e.venue','e.banner','e.large_image','e.medium_image','e.small_image','e.promo_video','e.created_at',
+                    'e.status','a.title','a.initials','a.first_name','a.last_name','a.phone','a.tel','a.email','a.profile','et.event as event_type'
                 )
                 ->orderby('e.start_date', 'ASC')
                 ->where('e.is_deleted', 'No')
-                ->where('e.approved', 'Yes');
+                ->where('e.approved', true);
 
             // Check if request_value is provided and not empty
             if ($request->has('request_value') && !empty($request->input('request_value'))) {
@@ -629,7 +616,6 @@ class EndEventController extends Controller
         }
     }
 
-
     // Event view for web
     public function viewEvent(Request $request)
     {
@@ -706,9 +692,95 @@ class EndEventController extends Controller
     }
 
 
+    // Creating new event from the browser
     public function createEvent(Request $request)
     {
-        // Code to handle creating an event
+        try {
+
+            // Validate the request data
+            $validator = Validator::make($request->all(), [
+                'creator_id' => 'required|integer',
+                'event_title' => 'required|string',
+                'sub_title' => 'required|string',
+                'content' => 'required|string',
+                'description' => 'required|string',
+                'reason' => 'required|string',
+                'event_type_id' => 'required|integer',
+                'aliases' => 'required|string',
+                'start_date' => 'required|date',
+                'end_date' => 'required|date|after:start_date',
+                'venue' => 'required|string',
+                'banner' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'large_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'medium_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+                'small_image' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+
+            if ($validator->fails()) {
+                Log::error('Validation failed', ['errors' => $validator->errors()]);
+                return response()->json([
+                    'success' => false,
+                    'errors' => $validator->errors()->all(),
+                    'message' => 'Validation failed because: ' . json_encode($validator->errors()),
+                ], 422);
+            }
+
+            $data = $request->all();
+            if (Event::where('event_title', $request->event_title)->exists()) {
+                $message = 'Event title has already been taken. Please use a different one.';
+                return response()->json(['success' => false, 'message' => $message], 422);
+            }
+
+            $eventTitle = str_replace(' ', '_', $request->input('event_title'));
+
+            if ($request->hasFile('banner')) {
+                $fileBanner = $request->file('banner');
+                $bannerName = $eventTitle . '_Banner';
+                $data['banner'] = $bannerName . '.png';
+            }
+            if ($request->hasFile('large_image')) {
+                $fileLargeImage = $request->file('large_image');
+                $largeImageName = $eventTitle . '_Large';
+                $data['large_image'] = $largeImageName . '.png';
+            }
+            if ($request->hasFile('medium_image')) {
+                $fileMediumImage = $request->file('medium_image');
+                $mediumImageName = $eventTitle . '_Medium';
+                $data['medium_image'] = $mediumImageName . '.png';
+            }
+            if ($request->hasFile('small_image')) {
+                $fileSmallImage = $request->file('small_image');
+                $smallImageName = $eventTitle . '_Small';
+                $data['small_image'] = $smallImageName . '.png';
+            }
+            $event = Event::create($data);
+
+            $bannerPath = $fileBanner->storeAs('/images/event', $bannerName . '.png');
+            $largeImagePath = $fileLargeImage->storeAs('/images/event', $largeImageName . '.png');
+            $mediumImagePath = $fileMediumImage->storeAs('/images/event', $mediumImageName . '.png');
+            $smallImagePath = $fileSmallImage->storeAs('/images/event', $smallImageName . '.png');
+            return response()->json([
+                'success' => true,
+                'message' => 'Event created successfully, procced to the next step to complete the proccess, Thank you.',
+                'data' => [
+                    'event_id' => $event->id,
+                    'creator_id' => $request->creator_id,
+                ],
+                'redirect' => '/en/subscription',
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+                'errors' => $e->errors()
+            ], 422);
+        } catch (\Exception $e) {
+            Log::error('Error creating event', ['exception' => $e->getMessage()]);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error occured while creating the event, so try again, make sure all fields are having the rquired values' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function updateEvent(Request $request)
@@ -743,18 +815,16 @@ class EndEventController extends Controller
 
             // Update event status to 'Approved' and set 'approved' to true
             $event = Event::where('id', $data['id'])->firstOrFail();
-            $event->update(['status' => 'Approved', 'approved' => true]);
+            $eventUpdateResult = $event->update(['status' => 'Approved', 'approved' => true]);
 
             // Get the role ID where the title is 'Author'
             $role = Role::where('title', 'Author')->firstOrFail();
 
-            // Check if user already exists by email or phone
             $user = User::where('email', $author->email)->where('phone', $author->phone)->first();
 
             if ($user !== null) {
-                // Update all users with matching actions to set is_deleted to 'No'
-                User::where('actions', $data['creator_id'])->update(['is_deleted' => 'No']);
-            }  else {
+                $userUpdateResult = User::where('actions', $data['creator_id'])->update(['is_deleted' => 'No', 'status' => 'Active']);
+            } else {
                 // Prepare user data for mass insertion
                 $userData = [
                     'name' => $author->first_name . ' ' . $author->last_name,
@@ -774,8 +844,8 @@ class EndEventController extends Controller
             $token = $user->createToken('auth_token')->plainTextToken;
 
             // Generate encryption key
-            $firstChar = substr($userData['name'], 0, 1);
-            $lastChar = substr($userData['name'], -1);
+            $firstChar = substr($user->name, 0, 1);
+            $lastChar = substr($user->name, -1);
             $randomNumbers = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
             $encryptionKey = $firstChar . $lastChar . '-' . $randomNumbers;
 
@@ -851,6 +921,7 @@ class EndEventController extends Controller
         }
     }
 
+    // Suspend event
     public function eventSuspend(Request $request)
     {
         try {
@@ -887,6 +958,7 @@ class EndEventController extends Controller
         }
     }
 
+    // Verify event
     public function eventVerify(Request $request)
     {
         try {
@@ -916,24 +988,175 @@ class EndEventController extends Controller
 
 
     // Tickets
-    public function viewEventTicket()
+    public function viewEventTicket(Request $request)
     {
-        // Code to handle viewing event tickets
+        try {
+
+            $ticketsQuery = DB::table('tickets as t')
+                ->join('users as u', 't.user_id', '=', 'u.id')
+                ->join('events as e', 't.event_id', '=', 'e.id')
+                ->select(
+                    'u.name', 'u.nickname',
+                    't.id', 't.title', 't.event_id', 't.price','seat', 't.total', 't.remaining', 't.description', 't.status', 't.created_at',
+                    'e.aliases'
+                )
+                ->where('t.is_deleted', 'No');
+
+                if ($request->has('event_id') && !empty($request->input('event_id'))) {
+                    $requestValue = $request->input('event_id');
+                    $ticketsQuery->where(function ($query) use ($requestValue) {
+                        $query->where('e.id', $requestValue);
+                    });
+                }
+
+                // Apply conditions based on the request
+                if ($request->has('who_requested')) {
+                    $whoRequested = $request->input('who_requested');
+                    $idRequested = $request->input('event_host');
+                    if ($whoRequested != 'skaimount') {
+                        $ticketsQuery->where('e.creator_id', $idRequested);
+                    }
+                }
+            // Execute the query and get the results
+            $tickets = $ticketsQuery->orderby('t.title', 'DESC')->get();
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Events retrieved successfully',
+                'data' => $tickets
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'An error occurred while retrieving events',
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
+    // Code to handle creating an event ticket
     public function createEventTicket(Request $request)
     {
-        // Code to handle creating an event ticket
+
+        try {
+            $data = $request->validate([
+                'title' => 'required|string|max:255',
+                'total' => 'required|numeric|min:2',
+                'remaining' => 'required|numeric|min:2',
+                'seat' => 'required|string|min:3',
+                'price' => 'required|numeric|min:2',
+                'description' => 'nullable|string|max:1000',
+                'event_id' => 'required|numeric',
+                'user_id' => 'required|integer|exists:users,id',
+            ]);
+
+            // Check if a role with the same title already exists
+            if (Ticket::where('title', $data['title'])->exists() ||
+                (Ticket::where('title', $data['title'])->where('event_id', $data['event_id'])->where('is_deleted', 'NO')->exists())) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record already exists in the database, try a different one.'
+                ], 422);
+            }
+            $dbRequest = Ticket::create($data);
+            if ($dbRequest) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry request to the database has declined, try again later',
+                ], 409);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
+    // Code to handle updating an event ticket
     public function updateEventTicket(Request $request)
     {
-        // Code to handle updating an event ticket
+        try {
+            $data = $request->validate([
+                'id' => 'required|integer|exists:tickets,id',
+                'title' => 'required|string|max:255',
+                'total' => 'required|numeric|min:2',
+                'seat' => 'required|string|min:3',
+                'price' => 'required|numeric|min:2',
+                'description' => 'nullable|string|max:1000',
+                'status' => 'required|string|max:10',
+            ]);
+            $idata = Ticket::find($data['id']);
+            if ($idata) {
+                $idata->update($data);
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
+    // Code to handle deleting an event ticket
     public function destroyEventTicket(Request $request)
     {
-        // Code to handle deleting an event ticket
+        try {
+            $data = $request->validate([
+                'id' => 'required|integer|exists:tickets,id',
+            ]);
+            $idata = Ticket::find($data['id']);
+            if ($idata) {
+
+                $idata->is_deleted = 'Yes';
+                $idata->save();
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Request to perform database operation has gone through successful',
+                ], 200);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Record you want to remove cannot found',
+                ], 404);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
     }
 
     public function getEventTicket(Request $request)
@@ -1076,4 +1299,53 @@ class EndEventController extends Controller
     {
         // Code to handle getting an event star
     }
+
+    //  Payment info
+    public function paymentInfo(Request $request)
+    {
+        try {
+            $eventsQuery = DB::table('events as e')
+                ->join('event_types as et', 'e.event_type_id', '=', 'et.id')
+                ->join('authors as a', 'e.creator_id', '=', 'a.id')
+                ->select('e.id', 'e.event_title', 'e.aliases', 'et.event as event_type', 'et.price')
+                ->where('e.is_deleted', 'No');
+
+            // Check if id and creator_id are provided and not empty
+            if ($request->has('id') && !empty($request->input('id')) && $request->has('creator_id') && !empty($request->input('creator_id'))) {
+                $id = $request->input('id');
+                $creator_id = $request->input('creator_id');
+                $eventsQuery->where(function ($query) use ($id, $creator_id) {
+                    $query->where('e.id', $id)->Where('e.creator_id', $creator_id);
+                });
+            }
+
+            // Check if email and title are provided and not empty
+            if ($request->has('email') && !empty($request->input('email')) && $request->has('title') && !empty($request->input('title'))) {
+                $email = $request->input('email');
+                $title = $request->input('title');
+                $eventsQuery->where(function ($query) use ($email, $title) {
+                    $query->where('e.event_title', $title) ->Where('a.email', $email)->orWhere('a.phone', $email);
+                });
+            }
+
+            $events = $eventsQuery->orderBy('e.start_date', 'ASC')->get();
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Events retrieved successfully',
+                'data' => $events
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'An error occurred while retrieving events',
+                'error' => $e->getMessage()
+            ]);
+        }
+    }
+
+
+
 }

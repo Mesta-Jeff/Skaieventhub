@@ -39,7 +39,7 @@ class EndAuthenticationController extends Controller
             if (!Auth::attempt($credentials)) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Invalid credentials',
+                    'message' => 'Sorry your credentials have been found invalid, please try again',
                 ], 401);
             }
 
@@ -49,7 +49,7 @@ class EndAuthenticationController extends Controller
             if ($user->is_deleted == 'Yes') {
                 return response()->json([
                     'success' => false,
-                    'message' => 'User not found or has been deleted',
+                    'message' => 'User not found or has been deleted, contact the system administrators',
                 ], 404);
             }
 

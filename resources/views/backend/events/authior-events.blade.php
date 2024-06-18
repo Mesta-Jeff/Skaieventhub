@@ -17,7 +17,7 @@
                         <li class="breadcrumb-item active">@yield('title')</li>
                     </ol>
                 </div>
-                <h4 class="page-title">@yield('title')</h4>
+                <h4 class="page-title"><i class="mdi mdi-briefcase me-1"></i> @yield('title')</h4>
             </div>
         </div>
         <hr style="margin-top: -20px;">
@@ -47,7 +47,7 @@
                         <div class="col-xxl-3 ms-auto">
                             <div class="hstack gap-2">
                                 <button type="button" id="btnref" class="btn btn-soft-secondary">Reload</button>
-                                <button type="button" id="btnNew" class="btn btn-outline-success waves-effect waves-light"><i class="mdi mdi-plus-circle me-1"></i> Add New</button>
+                                <button type="button" id="btnNew" class="btn btn-outline-success waves-effect waves-light"><i class="mdi mdi-briefcase me-1"></i> Create New Event</button>
                             </div>
                         </div>
                         <!--end col-->
@@ -128,7 +128,9 @@
     </div>
 </div>
 
-
+@php
+    $hostId = session('host');
+@endphp
 
 <div class="modal fade" id="my-modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
@@ -139,29 +141,79 @@
             <form id="my-form" method="post" action="save_data.php" class="form-horizontal" enctype="multipart/form-data">
                 <div class="modal-body">
                     <input type="hidden" id="gottenid" />
-                    <div class="row g-9">
-                        <div class="col-md-12 fv-row mb-2">
-                            <select id="event" class="select2 form-control mb-2" data-toggle="select2">
-                                <option value="" selected disabled>---- Select Option ----</option>
-                                <optgroup label="Available Events Kinds We Offer">
-                                    <option value="Award">Award Only</option>
-                                    <option value="Award and Dinner">Award and Dinner</option>
-                                    <option value="Dinner">Dinner Only</option>
-                                    <option value="Music Fest">Music Fest</option>
-                                    <option value="Movie">Movie Premiere</option>
-                                    <option value="Comedy">Comedy Show</option>
-                                    <option value="Church">Church Event</option>
-                                </optgroup>
-                            </select>
+                    <div class="row" style="height: 400px; overflow-y: scroll;">
+
+                        <div class="col-md-12">
+                            <div class="form-outline mb-1">
+                                <div class="form">
+                                    <label for="email">Event title</label>
+                                    <input type="text" id="title" class="form-control" placeholder="Event main title here">
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-outline col-md-12 fv-row mb-2">
-                            <label class="form-label" for="ides">Event Description</label>
-                            <textarea id="description" class="form-control form-control-lg" rows="3" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" onkeydown="return /^([a-zA-Z]+[\s]*)*$/i.test(event.target.value + event.key)"></textarea>
+                        <div class="col-md-12">
+                            <div class="form-outline mb-1">
+                                <div class="form">
+                                    <label for="email">Sub title</label>
+                                    <input type="text" id="sub_title" class="form-control" placeholder="Event sub title here">
+                                </div>
+                            </div>
                         </div>
-                        <div class="col-md-12 mb-2">
-                            <label for="status" class="form-text">How much will somenoe pay to signup</label>
-                            <input type="text" class="form-control" placeholder="eg. 00.00" id="price" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" required/>
+
+                        <div class="contact-form">
+                            <div class="form-outline col-md-12 mb-1">
+                                <textarea id="contents" class="form-control" rows="3"  name="message" placeholder="What content do you want to show to viewers"></textarea>
+                            </div>
+                            <div class="form-outline mb-1">
+                                <textarea id="discription" class="form-control" rows="3"  name="message" placeholder="Describe your event not more than 500 words"></textarea>
+                            </div>
+                            <div class="form-outline mb-1">
+                                <textarea id="reason" name="message" class="form-control" rows="3" placeholder="Give a comprehensive reason for creating the event it is required..."></textarea>
+                            </div>
                         </div>
+
+                        <div class="col-md-6">
+                            <label for="gender">Event type</label>
+                                <select id="event_type" name="select" class="form-control select2">
+                                    <option value="" disabled selected>Choose option...</option>
+                                </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="shortBy">Alaises (15 Characters long)</label>
+                            <input class="form-control" type="text" id="event_initials" placeholder="eg. VGMA24 or Emy Awards" maxlength="15">
+                        </div>
+
+                        <div class="col-md-6">
+                            <label for="shortBy">Starting date</label>
+                            <input type="date" id="start_date" class="form-control" placeholder="Select Date">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="shortBy">Ending date</label>
+                            <input type="date" id="end_date" class="form-control" placeholder="Select Date">
+                        </div>
+
+                        <div class="col-md-12 mb-3">
+                            <label for="shortBy">Venue: (where is the event happening)</label>
+                            <input type="text" id="venue" class="form-control" placeholder="eg. Accra-National Theatre">
+                        </div>
+
+                        <div class="col-md-12 mb-1">
+                            <label for="banner">Upload Banner (1920 by 1000 px Landscape image)</label>
+                            <input type="file" id="banner" class="form-control" accept="image/*">
+                        </div>
+                        <div class="col-md-12 mb-1">
+                            <label for="large_image">Upload the large image (1500 by 1500 px Portrait)</label>
+                            <input type="file" id="large_image" class="form-control" accept="image/*">
+                        </div>
+                        <div class="col-md-12 mb-1">
+                            <label for="medium_image">Upload the main image (1080 by 1080 px Square image)</label>
+                            <input type="file" id="medium_image" class="form-control" accept="image/*">
+                        </div>
+                        <div class="col-md-12">
+                            <label for="small_image">Upload small image (900 by 900 px Square image)</label>
+                            <input type="file" id="small_image" class="form-control" accept="image/*">
+                        </div>
+
                         <div class="mb-1" style="display: none;" id="state-view">
                             <label for="status" class="form-label">Select Status</label>
                             <select class="form-select" name="stat" id="stat">
@@ -181,6 +233,8 @@
     </div>
 </div>
 
+
+
 <script src="{{ asset('root/dek/bower_components/jquery/js/jquery.min.js') }}"></script>
 
 <script>
@@ -190,28 +244,55 @@
         document.getElementById("my-form").reset();
     }
 
-    // Allowing only Monetary values
-    document.getElementById('price').addEventListener('input', function (e) {
-      const input = e.target.value;
-      const regex = /^[0-9]*\.?[0-9]*$/;
-      if (!regex.test(input) || input.length > 7) {
-        e.target.value = input.slice(0, -1);
-      }
-    });
 
     $(document).ready(function ()
     {
         var dataTable = "";
         var counter = 0;
+        var hostId = "{{ $host }}";
+
 
         //calling the model to add new
         $('#btnNew').click(function() {
-            resetForm();
-            $('#modal-title').text('Add New Record');
-            $('#my-modal').modal('show');
-            $('#state-view, #edit-data').hide();
-            $('#save-data').show();
-            $('#description').text('');
+
+            function generateGUIDs() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+
+            var prefs = generateGUIDs().replace(/-/g, '').substring(0, 30);
+            var surfs = generateGUIDs().replace(/-/g, '').substring(10, 20);
+            var combinedUrl = prefs + '~' + hostId + '!' + surfs;
+            // alert(combinedUrl);
+
+            var routeUrls = "{{ route('events.setting-up', ['id' => '__ID__']) }}".replace('__ID__', combinedUrl);
+            window.location.href = routeUrls;
+        });
+
+
+        // Getting data for the event type
+        $.ajax({
+            url: '{{ route('events.types.get') }}',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                $('#event_type').empty();
+                $('#event_type').append($('<option>', {
+                    value: '',  text: 'Choose option...', selected: 'selected', disabled: 'disabled'
+                }));
+                $.each(data.types, function(key, value) {
+                    $('#event_type').append($('<option>', {
+                        value: value.id,
+                        text: value.event,
+                        'data-prices': value.price
+                    }));
+                });
+            },
+            error: function(xhr, textStatus, errorThrown) {
+                console.error("AJAX request failed: " + textStatus + ", " + errorThrown);
+            }
         });
 
 
@@ -453,9 +534,21 @@
 
         // Function to perform the "Event Ticket" action
         function eventTicketAction(id, title) {
-            console.log('Performing Event Ticket action for ID:', id, 'with title:', title);
-            // Your code to perform the "Event Ticket" action goes here
+            function generateGUID() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
+            }
+
+            var pref = generateGUID().replace(/-/g, '').substring(0, 30);
+            var surf = generateGUID().replace(/-/g, '').substring(10, 20);
+            var combinedId = pref + '%' + id + '!' + surf;
+
+            var routeUrl = "{{ route('events.tickets.show', ['id' => '__ID__']) }}".replace('__ID__', combinedId);
+            window.location.href = routeUrl;
         }
+
 
         // Function to perform the "In Attendance" action
         function inAttendanceAction(id, title) {
