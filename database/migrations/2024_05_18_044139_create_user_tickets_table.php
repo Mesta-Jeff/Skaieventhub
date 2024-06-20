@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignId('ticket_id')->constrained()->onDelete('cascade');
             $table->integer('quantity');
             $table->string('seat',15);
-            $table->string('ticket_no',25)->unique();
+            $table->string('ticket_no',25);
             $table->string('status', 10)->default('Active');
             $table->timestamps();
             $table->string('is_deleted', 3)->default('No');

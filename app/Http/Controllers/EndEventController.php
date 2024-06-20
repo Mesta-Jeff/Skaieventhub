@@ -379,7 +379,7 @@ class EndEventController extends Controller
                 )
                 ->orderby('e.start_date', 'ASC')
                 ->where('e.is_deleted', 'No')
-                ->where('e.approved', true);
+                ->where('e.approved', 1);
 
             // Check if request_value is provided and not empty
             if ($request->has('request_value') && !empty($request->input('request_value'))) {
@@ -997,7 +997,7 @@ class EndEventController extends Controller
                 ->join('events as e', 't.event_id', '=', 'e.id')
                 ->select(
                     'u.name', 'u.nickname',
-                    't.id', 't.title', 't.event_id', 't.price','seat', 't.total', 't.remaining', 't.description', 't.status', 't.created_at',
+                    't.id', 't.title', 't.event_id', 't.price','t.seat', 't.total', 't.remaining', 't.description', 't.status', 't.created_at',
                     'e.aliases'
                 )
                 ->where('t.is_deleted', 'No');
@@ -1162,6 +1162,86 @@ class EndEventController extends Controller
     public function getEventTicket(Request $request)
     {
         // Code to handle getting an event ticket
+    }
+
+    // Buy Ticket from Mobile App =======================================================================================================================
+    public function eventBuyTicket(Request $request)
+    {
+        // Getting the value from the user request
+        try {
+            $data = $request->validate([
+                'ticket_type' => 'required|string|max:255',
+                'quantity' => 'required|numeric|min:1',
+                'seat' => 'required|numeric|min:1',
+                'ticket_id' => 'required|integer|exists:tickets,id',
+                'user_id' => 'required|integer|exists:users,id',
+            ]);
+
+            // Check if a record with the same ticket_type, ticket_id, and not deleted already exists
+            if (UserTicket::where('seat', $data['seat'])->where('ticket_id', $data['ticket_id'])->where('is_deleted', 'NO')->exists()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'This seat has been reserved already, try a different one.'
+                ], 422);
+            }
+
+            // Generate a 20-digit random number for ticket_no
+            $generatedCode = str_pad(mt_rand(1, 9999999999), 5, '0', STR_PAD_LEFT) . 'TN' .now()->format('Ymd-Hi');
+
+            $data['ticket_no'] = $generatedCode;
+            $data['status'] = 'UNPAID';
+
+            // Perform the database operation
+            $dbRequest = UserTicket::create($data);
+            if ($dbRequest) {
+                return response()->json([
+                    'success' => true,
+                    'ticket_number' => $generatedCode,
+                    'message' => 'Your ticket has been reserved, and details have been sent to your dm, check your phone or your profile proceed finish the process by making the payment',
+                ], 201);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Sorry request to the database has declined, try again later',
+                ], 409);
+            }
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation failed because: ' . json_encode($e->errors()),
+            ], 422);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred: ' . json_encode($e->getMessage()),
+            ], 500);
+        }
+    }
+
+    // Trying to find out if the seat is available or not
+    public function eventReservedSeats(Request $request)
+    {
+        try {
+
+            $requestValue = $request->input('ticket_id');
+
+            $ticketsQuery = DB::table('user_tickets')->select('seat')
+            ->where('is_deleted', 'No')->where('status', '!=', 'PAID')->where('ticket_id', $requestValue)->orderBy('seat', 'ASC')->get();
+
+            return response()->json([
+                'success' => true,
+                'status_code' => 200,
+                'message' => 'Events retrieved successfully',
+                'data' => $ticketsQuery
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'status_code' => 500,
+                'message' => 'An error occurred while retrieving events',
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
     // User Tickets

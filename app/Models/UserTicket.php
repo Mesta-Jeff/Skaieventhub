@@ -7,7 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserTicket extends Model
 {
-    protected $fillable = ['user_id', 'ticket_id', 'ticket_type', 'seat', 'ticket_no', 'qr_code', 'status', 'quantity'];
+    protected $fillable = ['ticket_type', 'user_id', 'ticket_id', 'quantity', 'seat', 'ticket_no', 'status'];
+
 
     protected $hidden = [
         'updated_at','is_deleted'

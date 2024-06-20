@@ -65,7 +65,7 @@ Route::prefix('v2')->group(function () {
         Route::get('/authentication/sessions', [EndAuthenticationController::class, 'getSessions']);
         // Bulk Remove
         Route::post('/commands/bulk-remove', [EndSettingsController::class, 'bulkRemove']);
-        
+
 
         // Users:
         Route::get('/users', [EndUserController::class, 'viewUser']);
@@ -188,6 +188,8 @@ Route::prefix('v2')->group(function () {
         Route::post('/events/user-tickets/update', [EndEventController::class, 'updateUserTicket']);
         Route::post('/events/user-tickets/delete', [EndEventController::class, 'destroyUserTicket']);
         Route::get('/events/user-tickets/get', [EndEventController::class, 'getUserTicket']);
+        Route::post('/events/ticket/buy', [EndEventController::class, 'eventBuyTicket']);
+        Route::get('/events/seats/reserved', [EndEventController::class, 'eventReservedSeats']);
 
         // Event Comments:
         Route::get('/events/comments', [EndEventController::class, 'viewEventComment']);
