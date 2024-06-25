@@ -214,8 +214,8 @@ Route::prefix('v2')->group(function () {
 
         // Payments:
         Route::get('/events/payments', [EndPaymentController::class, 'viewPayment']);
-        Route::post('/events/payments', [EndPaymentController::class, 'createPayment']);
-        Route::post('/events/payments/update', [EndPaymentController::class, 'updatePayment']);
+        Route::post('/ticket/initialize-payment', [EndPaymentController::class, 'initializeTicketPayment']);
+        Route::post('/ticket/payment/verify-status', [EndPaymentController::class, 'updateTicketPaymentStatus']);
         Route::post('/events/payments/delete', [EndPaymentController::class, 'destroyPayment']);
         Route::get('/events/payments/get', [EndPaymentController::class, 'getPayment']);
 

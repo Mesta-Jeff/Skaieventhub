@@ -48,7 +48,7 @@ class WebEventController extends Controller
             $data = json_decode($response->getContent(), true);
             // Log::info('Data from JSON response:', $data);
 
-        
+
             // Check if JSON decoding was successful
             if ($data !== null) {
                 // Check for a successful response
@@ -673,9 +673,9 @@ class WebEventController extends Controller
         // Validate the request inputs
         $validator = Validator::make($request->all(), [
             'ticket' => 'required|string|max:255',
-            'total' => 'required|numeric|min:2',
-            'seat' => 'required|string|min:3',
-            'price' => 'required|numeric|min:2',
+            'total' => 'required|numeric|min:1',
+            'seat' => 'required|string|min:1',
+            'price' => 'required|numeric|min:1',
             'description' => 'nullable|string|max:1000',
             'event_id' => 'required|numeric',
         ]);
@@ -922,15 +922,15 @@ class WebEventController extends Controller
 
         Log::info('got: ' . json_encode($idata));
         // Log::info('got: ' . $event_id);
-       
+
         if ($request->ajax()) {
-            
+
             return response()->json(['info' => $idata]);
         }
 
         return view('frontend.en.subscription-payment', ['info' => $idata[0] ?? []]);
     }
 
-    
-    
+
+
 }

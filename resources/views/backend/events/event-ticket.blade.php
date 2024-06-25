@@ -124,8 +124,8 @@
                             <input type="text" class="form-control" placeholder="eg. 50" id="total" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" onkeydown="return ( event.ctrlKey || event.altKey || (47<event.keyCode && event.keyCode<58 && event.shiftKey==false) || (95<event.keyCode && event.keyCode<106) || (event.keyCode==8) || (event.keyCode==9) || (event.keyCode>34 && event.keyCode<40) || (event.keyCode==46) )" maxlength="5" required/>
                         </div>
                         <div class="col-md-6 mb-2" t>
-                            <label for="status" class="form-text" title="State where the seating arrangement will start and ends">Siting starts from and ends...</label>
-                            <input type="text" class="form-control" placeholder="eg. 1-50" id="seat" title="State where the seating arrangement will start and ends" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" maxlength="15" required/>
+                            <label for="status" class="form-text" title="State where the seating arrangement will start and ends if only it requires sitting, else enter 0 ">Siting starts from and ends...</label>
+                            <input type="text" class="form-control" placeholder="eg. 1-50" id="seat" title="State where the seating arrangement will start and ends if only it requires sitting, else enter 0 " onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" maxlength="15" required/>
                         </div>
                         <div class="col-md-3 mb-2">
                             <label for="status" class="form-text">Price (In cedis)</label>

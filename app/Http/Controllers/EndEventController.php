@@ -998,7 +998,7 @@ class EndEventController extends Controller
                 ->select(
                     'u.name', 'u.nickname',
                     't.id', 't.title', 't.event_id', 't.price','t.seat', 't.total', 't.remaining', 't.description', 't.status', 't.created_at',
-                    'e.aliases'
+                    'e.aliases','e.start_date'
                 )
                 ->where('t.is_deleted', 'No');
 
@@ -1043,21 +1043,20 @@ class EndEventController extends Controller
         try {
             $data = $request->validate([
                 'title' => 'required|string|max:255',
-                'total' => 'required|numeric|min:2',
+                'total' => 'required|numeric|min:1',
                 'remaining' => 'required|numeric|min:2',
-                'seat' => 'required|string|min:3',
-                'price' => 'required|numeric|min:2',
+                'seat' => 'required|string|min:1',
+                'price' => 'required|numeric|min:1',
                 'description' => 'nullable|string|max:1000',
                 'event_id' => 'required|numeric',
                 'user_id' => 'required|integer|exists:users,id',
             ]);
 
             // Check if a role with the same title already exists
-            if (Ticket::where('title', $data['title'])->exists() ||
-                (Ticket::where('title', $data['title'])->where('event_id', $data['event_id'])->where('is_deleted', 'NO')->exists())) {
+            if ((Ticket::where('title', $data['title'])->where('event_id', $data['event_id'])->where('is_deleted', 'NO')->exists())) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Record already exists in the database, try a different one.'
+                    'message' => 'Ticket already exists in the database, try a different one.'
                 ], 422);
             }
             $dbRequest = Ticket::create($data);
@@ -1172,7 +1171,7 @@ class EndEventController extends Controller
             $data = $request->validate([
                 'ticket_type' => 'required|string|max:255',
                 'quantity' => 'required|numeric|min:1',
-                'seat' => 'required|numeric|min:1',
+                'seat' => 'required|numeric',
                 'ticket_id' => 'required|integer|exists:tickets,id',
                 'user_id' => 'required|integer|exists:users,id',
             ]);
@@ -1197,7 +1196,7 @@ class EndEventController extends Controller
                 return response()->json([
                     'success' => true,
                     'ticket_number' => $generatedCode,
-                    'message' => 'Your ticket has been reserved, and details have been sent to your dm, check your phone or your profile proceed finish the process by making the payment',
+                    'message' => 'Your ticket has been successfully reserved with pending action! Please proceed to complete the payment process. Thank you',
                 ], 201);
             } else {
                 return response()->json([
@@ -1226,7 +1225,7 @@ class EndEventController extends Controller
             $requestValue = $request->input('ticket_id');
 
             $ticketsQuery = DB::table('user_tickets')->select('seat')
-            ->where('is_deleted', 'No')->where('status', '!=', 'PAID')->where('ticket_id', $requestValue)->orderBy('seat', 'ASC')->get();
+            ->where('is_deleted', 'No')->where('status', '=', 'PAID')->where('ticket_id', $requestValue)->orderBy('seat', 'ASC')->get();
 
             return response()->json([
                 'success' => true,
