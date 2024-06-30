@@ -5,6 +5,7 @@ use App\Http\Middleware\CheckApiKey;
 use Illuminate\Support\Facades\Route;
 
 use App\Http\Controllers\EndUserController;
+use App\Http\Controllers\GeneralController;
 use App\Http\Controllers\EndEventController;
 use App\Http\Controllers\EndAccountController;
 use App\Http\Controllers\EndPaymentController;
@@ -12,7 +13,6 @@ use App\Http\Controllers\EndSettingsController;
 use App\Http\Controllers\EndAdvertisementController;
 use App\Http\Controllers\EndConfigurationController;
 use App\Http\Controllers\EndAuthenticationController;
-use App\Http\Controllers\GeneralController;
 
 Route::get('/user', function (Request $request) {
     return $request->all();
@@ -26,7 +26,7 @@ Route::prefix('v2')->group(function () {
 
     Route::post('/users/new/registration', [EndUserController::class, 'register']);
     Route::post('/users/mobile/createaccount', [EndUserController::class, 'mobileRequestAccount']);
-    Route::get('/event/get-even-info', [EndEventController::class, 'paymentInfo'])->name('en.payment.info');
+    Route::get('/event/get-even-info', [EndEventController::class, 'paymentInfo']);
 
     // Roles:  free routes
     Route::get('/settings/roles', [EndSettingsController::class, 'viewRole']);
@@ -46,12 +46,16 @@ Route::prefix('v2')->group(function () {
     Route::post('/authentication/logout', [EndAuthenticationController::class, 'logout']);
 
     // CLient signing up for the first time
-    Route::post('/event/client/event-author', [EndEventController::class, 'eventWithAuthor'])->name('event.event-with-author');
+    Route::post('/event/client/event-author', [EndEventController::class, 'eventWithAuthor']);
     Route::get('/events/types/get', [EndEventController::class, 'getEventType']);
 
-
+    // payment
+    Route::post('/subcription/initialize-payment', [EndEventController::class, 'paymentInitializeSubcription']);
+    Route::post('/subscription/verify-payment', [EndEventController::class, 'verifyPaymentLocally']);
 
     // End of free routes    =====================================================================================
+
+
 
     Route::middleware([CheckApiKey::class, 'auth:sanctum'])->group(function () {
 

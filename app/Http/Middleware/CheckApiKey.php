@@ -28,9 +28,7 @@ class CheckApiKey
             return response()->json(['message' => 'Missing API key or user key'], 403);
         }
 
-        $isValid = DB::table('user_api_tokens')
-            ->where('raw_token', $decryptedToken)
-            ->exists();
+        $isValid = DB::table('user_api_tokens')->where('raw_token', $decryptedToken)->exists();
 
         if (!$isValid) {
             return response()->json(['message' => 'Invalid API key or user key'], 403);

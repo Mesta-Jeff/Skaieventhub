@@ -3,7 +3,7 @@
 <footer>
     <div class="footer-area footer-bg">
 
-        @if (Request::is('en/create-event', 'en/subscription'))
+        @if (Request::is('en/create-event', 'en/subscription', 'en/subscription-callback'))
 
         @else
             @includeIf('includes.frontend.en.footer-topbar')
@@ -14,7 +14,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-12">
                         <div class="copyright-text">
-                            <p>Copyright © 2022 {{ env('APP_NAME')}}. All Rights Reserved By <span>Skai Team</span></p>
+                            <p>Copyright © 2022 {{ env('APP_NAME')}}. All Rights Reserved By <a href="javascript:(void)"><span>Skai Team</span></a></p>
                         </div>
                     </div>
 

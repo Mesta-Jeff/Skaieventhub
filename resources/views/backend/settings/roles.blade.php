@@ -114,7 +114,7 @@
                         </div>
                         <div class="form-outline col-md-12 fv-row mb-2">
                             <label class="form-label" for="ides">Role Description</label>
-                            <textarea id="description" class="form-control form-control-lg" rows="3" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" onkeydown="return /^([a-zA-Z]+[\s]*)*$/i.test(event.target.value + event.key)"></textarea>
+                            <textarea id="description" class="form-control" rows="3" autocomplete="off"></textarea>
                         </div>
                         <div class="mb-1" style="display: none;" id="state-view">
                             <label for="status" class="form-label">Select Status</label>

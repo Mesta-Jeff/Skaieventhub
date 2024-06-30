@@ -17,14 +17,24 @@ use App\Models\EventComment;
 use App\Models\UserApiToken;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Services\ArkeselSmsService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class EndEventController extends Controller
 {
+
+    protected $arkeselsmsService;
+
+    public function __construct(ArkeselSmsService $arkeselsmsService)
+    {
+        $this->arkeselsmsService = $arkeselsmsService;
+    }
+
     // Authors
     public function viewAuthor()
     {
@@ -1424,6 +1434,179 @@ class EndEventController extends Controller
             ]);
         }
     }
+
+    //subscription initialize
+    public function paymentInitializeSubcription(Request $request)
+    {
+        // Validate the request inputs
+        try {
+            $data = $request->validate([
+                'event_title' => 'required|string',
+                'callback' => 'required|string',
+                'email' => 'required|email|exists:authors,email'
+            ]);
+
+            // Retrieve author information along with event and event type details
+            $authorEventInfo = DB::table('authors as a')
+                ->join('events as e', 'a.id', '=', 'e.creator_id')
+                ->join('event_types as es', 'es.id', '=', 'e.event_type_id')
+                ->select('a.acc_num', 'a.acc_host', 'a.phone', 'e.id as event_id', 'es.price')
+                ->where('a.email', $data['email'])->first();
+
+            if (!$authorEventInfo) {
+                return response()->json(['success' => false, 'message' => 'Account details are not valid or information not found.'], 404);
+            }
+
+            // Generate reference number of 25 characters long
+            $refNumber = 'STS00000' . date('YmdHis') . random_int(10000, 99999);
+            $amountInPesewas = intval($authorEventInfo->price * 100);
+
+            // Send the request to Paystack for payment
+            $paystackResponse = $this->sendPaystackPrompt($refNumber, $data['email'], $amountInPesewas, $authorEventInfo->acc_num, $data['callback'], $data['event_title']);
+
+            Log::info('Paystack response', $paystackResponse);
+
+            if (!$paystackResponse['status']) {
+                return response()->json(['success' => false, 'message' => 'Unable to initiate payment.'], 500);
+            }
+
+            // Create subscription entry in the database
+            try {
+                DB::table('subscriptions')->insert([
+                    'amount' => $authorEventInfo->price,
+                    'acc_number' => $authorEventInfo->acc_num,
+                    'ref_number' => $refNumber,
+                    'acc_host' => $authorEventInfo->acc_host,
+                    'reason' => $data['event_title'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Payment prompt has been sent to your phone. Check your phone to complete the process.',
+                    'url' => $paystackResponse['data']['authorization_url'],
+                ], 201);
+            } catch (\Exception $e) {
+                Log::error('Failed to create subscription', ['message' => $e->getMessage()]);
+                return response()->json(['success' => false, 'message' => 'Failed to create subscription.'], 500);
+            }
+        } catch (ValidationException $e) {
+            Log::info('Validation failed: ', ['errors' => $e->errors()]);
+            return response()->json(['success' => false, 'message' => 'Validation failed: ' . json_encode($e->errors())], 422);
+        } catch (\Exception $e) {
+            Log::info('An error occurred: ', ['message' => $e->getMessage()]);
+            return response()->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
+
+    // Send Paystack request
+    public function sendPaystackPrompt($refNumber, $email, $amount, $phone, $url, $label)
+    {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('PAYSTACK_SECRET_KEY'),
+            'Content-Type' => 'application/json',
+        ])->post(env('PAYSTACK_PAYMENT_URL') . '/transaction/initialize', [
+            'reference' => $refNumber, 
+            'email' => $email, 
+            'amount' => $amount,
+            'currency' => 'GHS',
+            'channels' => ['mobile_money'],
+            'phone' => $phone,
+            'label' => $label,
+            'callback_url' => $url,
+        ]);
+
+        return $response->json();
+    }
+
+    // Verify payment from Paystack
+    public function handlePaymentCallback(Request $request)
+    {
+        $reference = $request->query('reference');
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . env('PAYSTACK_SECRET_KEY'),
+            'Content-Type' => 'application/json',
+        ])->get(env('PAYSTACK_PAYMENT_URL') . '/transaction/verify/' . $reference);
+
+        $body = $response->json();
+
+        if ($body['status'] && $body['data']['status'] == 'success') {
+            $paymentDetails = $body['data'];
+
+        } else {
+            
+        }
+    }
+
+    // Verify payment from locally
+    public function verifyPaymentLocally(Request $request)
+    {
+        try {
+            $data = $request->validate(['reference' => 'required|string']);
+
+            // Retrieve subscription details including phone and amount
+            $subscription = DB::table('subscriptions')->where('ref_number', $data['reference'])->first(['acc_number', 'amount', 'status']);
+
+            if (!$subscription) {
+                return response()->json(['success' => false, 'message' => 'Invalid reference number.'], 404);
+            }
+
+            switch ($subscription->status) {
+                case 'Paid':
+                    return response()->json(['success' => false, 'message' => 'Reference number has been used by another user already.'], 400);
+                
+                case 'Pending':
+                    // Update subscription status to 'Paid'
+                    DB::table('subscriptions')->where('ref_number', $data['reference'])->update(['status' => 'Paid']);
+
+                    // Prepare SMS details
+                    $maskedPhoneNumber = substr($subscription->acc_number, 0, 2) . '******' . substr($subscription->acc_number, -2);
+                    $sender = env('ARKESEL_SENDER_2');
+                    $message = 'Payment successful. You have paid GH₵' . $subscription->amount . ' for event subscription, your Reference Number is ' . $data['reference'] .' Keep it confidential, as it is required in the verification process. Thank you.';
+                    $recipients = [$subscription->acc_number];
+
+                    // Call the useArkesel function to send SMS
+                    $smsResponse = $this->useArkesel($sender, $recipients, $message);
+                    Log::info('useArkesel response ', [$smsResponse]);
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Payment made successfully. Your event is still under review, be assured that management will get back to you as soon as the review is complete. We have sent you the payment details to ' . $maskedPhoneNumber . '. Please keep them confidential, as they are required in the verification process. Stay connected. Thank you.'
+                    ], 201);
+
+                default:
+                    return response()->json(['success' => false, 'message' => 'Unexpected status found.'], 400);
+            }
+        } catch (ValidationException $e) {
+            return response()->json(['success' => false, 'message' => 'Validation failed: ' . json_encode($e->errors())], 422);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'An error occurred: ' . $e->getMessage()], 500);
+        }
+    }
+
+
+
+
+
+    // Using Arksel to send messages
+    public function useArkesel($sender, $recipients, $message)
+    {
+        $baseUrl = env('ARKESEL_BASE_URL', 'https://sms.arkesel.com/api/v2/sms/send');
+        $apiKey = env('ARKESEL_API_KEY');
+        $response = $this->arkeselsmsService->sendSms($sender, $message, $recipients, $baseUrl, $apiKey);
+
+        if ($response['status'] === 'success') {
+            $responseData = $response['data'];
+            $invalidNumbers = isset($response['invalid_numbers']) ? $response['invalid_numbers'] : [];
+            return response()->json(['message' => 'SMS sent successfully!', 'data' => $responseData, 'invalid_numbers' => $invalidNumbers], 200);
+        } else {
+            Log::error('Failed to send SMS', ['response' => $response]);
+            return response()->json(['message' => 'Failed to send SMS.', 'data' => $response['data']], 500);
+        }
+    }
+
+
 
 
 

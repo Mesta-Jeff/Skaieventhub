@@ -111,7 +111,7 @@
                         </div>
                         <div class="form-outline col-md-12 fv-row mb-2">
                             <label class="form-label" for="ides">Event Description</label>
-                            <textarea id="description" class="form-control form-control-lg" rows="3" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" onkeydown="return /^([a-zA-Z]+[\s]*)*$/i.test(event.target.value + event.key)"></textarea>
+                            <textarea id="description" class="form-control" rows="3"></textarea>
                         </div>
                         <div class="col-md-12 mb-2">
                             <label for="status" class="form-text">How much will somenoe pay to signup</label>
@@ -211,7 +211,13 @@
                 },
                 { data: 'event' },
                 { data: 'price' },
-                { data: 'description' },
+                {
+                    data: 'description',
+                    render: function(data, type, row) {
+                        return data.length > 50 ? data.substring(0, 50) + '...' : data;
+                    }
+                },
+
                 { data: 'status' },
                 {
                     data: 'created_at',

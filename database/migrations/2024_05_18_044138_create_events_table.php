@@ -26,7 +26,7 @@ return new class extends Migration
             $table->foreignId('event_type_id')->constrained()->onDelete('cascade');
             $table->date('start_date');
             $table->date('end_date');
-            $table->string('alises', 15)->nullable();
+            $table->string('aliases', 15)->nullable();
             $table->string('venue', 100);
             $table->string('banner', 100)->nullable();
             $table->string('large_image', 100)->nullable();

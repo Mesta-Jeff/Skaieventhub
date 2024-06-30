@@ -224,8 +224,7 @@
                     href="/#" role="button" aria-haspopup="false"
                     aria-expanded="false" style="background-color: white !important; border-width: 0px">
                     <span class="account-user-avatar">
-                        <img src="{{ session('image') ? asset(session('image')) : asset('root/hyp/assets/images/users/avatar-1.jpg') }}"
-                            alt="user" width="32" class="rounded-circle">
+                        <img src="{{ session('image') ? session('image') : asset('root/hyp/assets/images/users/avatar-1.jpg') }}" alt="#" width="32" class="rounded-circle">
                     </span>
                     <span class="d-lg-flex flex-column gap-1 d-none" data-bs-toggle="tooltip" data-bs-placement="left" title="As {{ session('role') ?? 'User' }}">
                         {{ session('name') ?? 'User' }}

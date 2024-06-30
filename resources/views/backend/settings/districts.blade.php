@@ -103,7 +103,7 @@
                     <div class="row g-9">
 
                         <div class="col-md-12 mb-2">
-                            <label for="status" class="form-text">Provide your prefered Region</label>
+                            <label for="status" class="form-text">Provide your prefered District</label>
                             <input type="text" class="form-control" placeholder="eg. Menya Krobo East" id="district" onselectstart="return false" onpaste="return false;" oncopy="return false" oncut="return false" ondrag="return false" ondrop="return false" autocomplete="off" required/>
                         </div>
                         <div class="col-md-12 fv-row">

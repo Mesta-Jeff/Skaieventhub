@@ -88,7 +88,7 @@ class EndUserController extends Controller
 
             DB::commit();
 
-            $filePath = $file->storeAs('public/images/users', $filename. '.png');
+            $filePath = $file->storeAs('/images/users', $filename. '.png');
 
             return response()->json([
                 'success' => true,

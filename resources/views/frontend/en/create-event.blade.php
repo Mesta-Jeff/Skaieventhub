@@ -545,15 +545,15 @@
                             <h2 class="widget-title" id="price-title">Breakdown of the charges</h2>
                             <ul class="flight-info">
                                 <li>
-                                    <p>Subscription <span id="maintenancePrice">GH00.00</span></p>
+                                    <p>Subscription <span id="maintenancePrice">&#8373;00.00</span></p>
                                 </li>
                                 <li>
-                                    <p>Set-Up <span id="setUPprice">GH00.00</span></p>
+                                    <p>Set-Up <span id="setUPprice">&#8373;00.00</span></p>
                                 </li>
                             </ul>
                             <hr>
                             <div class="text-center" style="margin-top: -20px, margin-bottom: 2px">
-                                <a>Total: <h2 id="totalPrice">GH00.00</h2></a>
+                                <a>Total: <h2 id="totalPrice">&#8373;00.00</h2></a>
                             </div>
                         </div>
                         <div class="widget">
@@ -789,9 +789,9 @@
         $('#event_type').change(function() {
             var selectedOption = $(this).find('option:selected');
             var prices = selectedOption.data('prices');
-            $('#totalPrice').text('GH' + prices);
-            $('#maintenancePrice').text('GH' + (prices - 10).toFixed(2));
-            $('#setUPprice').text('GH' + 10.00.toFixed(2));
+            $('#totalPrice').text('₵' + prices);
+            $('#maintenancePrice').text('₵' + (prices - 10).toFixed(2));
+            $('#setUPprice').text('₵' + 10.00.toFixed(2));
 
         });
 

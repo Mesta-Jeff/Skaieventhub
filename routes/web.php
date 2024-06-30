@@ -30,6 +30,9 @@ Route::middleware([CsrfExempt::class])->group(function () {
     Route::get('en/create-event', [WebEventController::class, 'enCreateEvent'])->name('en.event');
     Route::get('en/index', [WebEventController::class, 'enCreateEventIndex'])->name('en.event-Index');
     Route::get('en/subscription', [WebEventController::class, 'ensubscribe'])->name('en.event.subscribe');
+    Route::get('en/subscription-callback', [WebEventController::class, 'subscriptionCallback'])->name('subscription.callback');
+    // payment
+    Route::post('/subcription/initializePayment', [WebEventController::class, 'paymentInitializeSubcription'])->name('events.subscription.initializePayment');
 
     Route::get('/', [FrontEndController::class, 'index'])->name('index');
     Route::get('/contact-us', [FrontEndController::class, 'contact_us'])->name('contact-us');

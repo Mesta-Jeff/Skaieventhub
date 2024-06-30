@@ -13,7 +13,6 @@ return new class extends Migration
     {
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->bigIncrements('id')->startingValue(1080);
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->decimal('amount', 8, 2);
             $table->string('acc_number', 20);
             $table->string('ref_number', 30);

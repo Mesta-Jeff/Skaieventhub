@@ -136,20 +136,16 @@ class WebEventController extends Controller
                 return response()->json([
                     'success' => true,
                     'message' => $data['message'] ?? 'Operation Performed',
+                    'url' => $data['url'] ?? '',
                 ], 201);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => $data['message'] ?? 'Failed to perform transaction',
-                    'errors' => $data['errors'] ?? [],
+                    'message' => $data['message'] ?? 'Failed to perform transaction','errors' => $data['errors'] ?? [],
                 ], $response->getStatusCode());
             }
         } catch (\Exception $e) {
-            // Return a JSON response with error details
-            return response()->json([
-                'success' => false,
-                'message' => 'An error occurred: ' . $e->getMessage()
-            ], 500);
+            return response()->json(['success' => false,'message' => 'An error occurred: ' . $e->getMessage()], 500);
         }
     }
 
@@ -893,6 +889,7 @@ class WebEventController extends Controller
         return view('frontend.en.regulations');
     }
 
+    // View the subscription page
     public function ensubscribe(Request $request)
     {
         $event_id = session('event_id');
@@ -924,13 +921,67 @@ class WebEventController extends Controller
         // Log::info('got: ' . $event_id);
 
         if ($request->ajax()) {
-
             return response()->json(['info' => $idata]);
         }
-
+        
         return view('frontend.en.subscription-payment', ['info' => $idata[0] ?? []]);
     }
 
+    // Initializing payment for subscription
+    public function paymentInitializeSubcription(Request $request)
+    {
+        // Validate the request inputs
+        $validator = Validator::make($request->all(), [
+            'title' => 'required|string',
+            'email' => 'required|string',
+        ]);
+
+        if ($validator->fails()) {
+            Log::error('Validation failed', ['message' => $validator->errors()]);
+            return response()->json([
+                'success' => false,
+                'message' => $validator->errors()
+            ], 422);
+        }
+
+        $endpoint = '/subcription/initialize-payment';
+        $method = 'POST';
+        $body = [
+            'email' => $request->input('email'),
+            'event_title' => $request->input('title'),
+            'callback' => route('subscription.callback'),
+        ];
+        $sending_status = "free";
+        return $this->handleApiRequest($endpoint, $method, $body, $sending_status);
+    }
+
+    // the callback page for subscription
+    public function subscriptionCallback(Request $request)
+    {
+        // Extract the reference from the URL
+        $reference = $request->query('reference');
+        if (!$reference) {
+            return redirect()->route('en.event.subscribe');
+        }
+
+        // Prepare the API request
+        $endpoint = '/subscription/verify-payment';
+        $method = 'POST';
+        $body = ['reference' => $reference];
+        $sending_status = "free";
+
+        $apiResponse = $this->handleApiRequest($endpoint, $method, $body, $sending_status);
+        $apiResponseData = $apiResponse->getData(true);
+        Log::info('Api response One ', [$apiResponseData]);
+
+        // Check the status of the API response
+        if ($apiResponseData['success']) {
+            return view('frontend.en.subscription-callback', ['message' => $apiResponseData['message'], 'success' => true]);
+        } else {
+            //return view('frontend.en.subscription-payment');
+            return redirect()->route('en.event.subscribe');
+        }
+    }
 
 
 }
